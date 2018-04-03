@@ -1,13 +1,12 @@
 <template>
   <div id="app">
     <!-- div -->
-    <!-- <div></div> -->
     <router-view/>
   </div>
 </template>
 
 <script>
-  
+
 export default {
   name: 'App',
   data(){
@@ -29,5 +28,5 @@ export default {
 .mint-cell{
   z-index: 0 !important;
 }
-a{ text-decoration:none; } 
+a{ text-decoration:none; }
 </style>
