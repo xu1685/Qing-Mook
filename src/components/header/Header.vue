@@ -29,7 +29,7 @@ export default {
   color: gray;
   font-size: 18px;
   height: 40px;
-  z-index: 10;
+  z-index: 100 !important;
 }
 .smallImg{
   margin-top: 20px;

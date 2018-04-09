@@ -1,7 +1,7 @@
 <template>
   <div class="play">
     <MyHeader :pageName="course" pagePath=""></MyHeader>
-    <Player></Player>
+    <Player :message="selected"></Player>
     <mt-navbar v-model="selected" class="bar">
       <mt-tab-item id="commentBar"><span style="font-size: 16px;">评论</span></mt-tab-item>
       <mt-tab-item id="wordsBar"><span style="font-size: 16px;">字幕</span></mt-tab-item>
@@ -33,9 +33,14 @@ export default {
      selected:'commentBar'
     }
   },
-  beforeCreated(){
-    
-  },
+  // watch:{
+  //   selected(){
+  //     console.log(this.selected);
+  //     if(this.selected == 'wordsBar'){
+
+  //     }
+  //   }
+  // },
   components: {
       MyHeader,
       Player,
@@ -54,7 +59,7 @@ export default {
   width: 100%;
 }
 .bar{
-  position: fixed;
+ /* position: fixed;*/
   width: 100%;
   background-color: white;
   z-index: 1;

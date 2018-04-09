@@ -41,7 +41,8 @@ a { text-decoration:none; }
 	text-align: left;
 	height: 50px;
 	width: 90%;
-	margin-top: 35px;
+	/*margin-top: 35px;*/
+	margin-top: 5px;
 	margin-left: 5%;
 	background-color: white;
 	border-bottom: 1px solid lightgray;

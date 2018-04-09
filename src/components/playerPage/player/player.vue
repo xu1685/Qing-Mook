@@ -1,9 +1,9 @@
 <template>
 	<div id="playerContainer"  ref="element">
-		<div id="myplayer" @timechange="handleTimechange">
+		<div id="myplayer" :class="{isfixed:!isnone}" @timechange="handleTimechange">
 			
 		</div>
-		<div id="block" :style="{height: this.Height +'px'}"></div>
+		<div :class="{block:true, none: isnone}"  :style="{height: this.Height +'px'}" ></div>
 	</div>
 </template>
 
@@ -13,16 +13,26 @@
   import Bus from '../bus.js'; 
 	export default{
 		name:'Player',
+		props:['message'],
 		data(){
       return{
         Height:0,
-        currentTime: ''
+        currentTime: '',
+        isnone:true
       }
 		},
 		watch:{
 			currentTime(){
 				Bus.$emit('startTime', this.currentTime);     
-			}
+			},
+      message(){
+        
+        if(this.message == 'wordsBar'){
+          this.isnone = false
+        }else{
+        	this.isnone = true
+        }
+      }
 		},
 		mounted(){
 			this.pageInit();
@@ -61,13 +71,20 @@
 }
 #myplayer{
 	width: 100%; 
-	position: fixed !important;
+	/*position: fixed !important;*/
 	margin-top: 40px;
   background-color: white;
-  z-index:1;
+ /* z-index:1;*/
 }
-#block{
+.isfixed{
+	position: fixed !important;
+	z-index:1;
+}
+.block{
   background-color: white;
   z-index: 1;
+}
+.none{
+	display: none;
 }
 </style>
