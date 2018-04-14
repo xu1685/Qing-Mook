@@ -1,6 +1,6 @@
 <template>
 	<div id="playerContainer"  ref="element">
-		<div id="myplayer" :class="{isfixed:!isnone}" @timechange="handleTimechange">
+		<div id="myplayer" :class="{isfixed:!isnone}" @subtitlechange="handleTimechange">
 			
 		</div>
 		<div :class="{block:true, none: isnone}"  :style="{height: this.Height +'px'}" ></div>
@@ -13,17 +13,17 @@
   import Bus from '../bus.js'; 
 	export default{
 		name:'Player',
-		props:['message'],
+		props:['message','docId'],
 		data(){
       return{
         Height:0,
-        currentTime: '',
+        subtitleIndex: '',
         isnone:true
       }
 		},
 		watch:{
-			currentTime(){
-				Bus.$emit('startTime', this.currentTime);     
+			subtitleIndex(){
+				Bus.$emit('subtitleIndex', this.subtitleIndex);     
 			},
       message(){
         
@@ -38,26 +38,51 @@
 			this.pageInit();
 			this.Width = this.$refs.element.offsetWidth;
 			this.Height = this.Width * 0.75 + 40;
-      console.log(this.Height,'mounted');
+      // console.log(this.Height,'mounted');
 		},
 		methods:{
 			pageInit(){
-				const actionUrl = 'http://120.78.175.118:1000/jsons/d55c581a15606633d494c2b311916068.json';
-				const audioUrl = 'http://120.78.175.118:1000/recordings/cf5e6d87ea235d3dab8d719c5b52795d.mp3';
-				const imageUrl = 'http://120.78.175.118:1000/pictures/df7324f9134131ad5ec17825ee3c3c83.zip'; 
+				this.$http.get('/docs/'+this.docId)
+					.then(res=>{
+						this.defaultAction = res.data.doc.defaultAction;
+						this.action = res.data.doc.action;
+						this.imageUrl = res.data.doc.pictures;
+						this.defaultAction = "5ad0acc9052ee15191c73022"; //记得删除
+						console.log(this.action)
+						for(var item in this.action){
+							if(this.defaultAction == this.action[item].id){
+								this.playAction = this.action[item];
+								break;
+							}
+						}
+						this.subtitle = this.playAction.subtitle;
+						Bus.$emit('subtitle', this.subtitle);
+					}).then(() => {
+						var actionUrl = 'http://120.78.175.118:1000/jsons/d55c581a15606633d494c2b311916068.json';
+						// this.playAction.json;
+						var audioUrl = 'http://120.78.175.118:1000/recordings/cf5e6d87ea235d3dab8d719c5b52795d.mp3';
+						// this.playAction.recording;
+						var imageUrl = 'http://120.78.175.118:1000/pictures/df7324f9134131ad5ec17825ee3c3c83.zip';
+						var subtitles = this.subtitle;
+						// this.imageUrl;
+						var player = new Player({
+						  actionUrl,
+						  audioUrl,
+						  imageUrl,
+						  subtitles,
+						  element: document.getElementById('myplayer')
+						});
+						console.log(player,'player')
+					})
 
-				var player = new Player({
-				  actionUrl,
-				  audioUrl,
-				  imageUrl,
-				  element: document.getElementById('myplayer')
-				})
-        // document.getElementById('myplayer').addEventListener("timechange",this.handleTimechange);
+
+				// const actionUrl = 'http://120.78.175.118:1000/jsons/d55c581a15606633d494c2b311916068.json';
+				// const audioUrl = 'http://120.78.175.118:1000/recordings/cf5e6d87ea235d3dab8d719c5b52795d.mp3';
+				// const imageUrl = 'http://120.78.175.118:1000/pictures/df7324f9134131ad5ec17825ee3c3c83.zip'; 
+
 			},
 			handleTimechange(e){
-				
-				this.currentTime = Math.floor(e.detail.time);
-        // console.log(this.currentTime,'time')
+				this.subtitleIndex = e.detail.subtitleIndex;
 			}
 		}
 	}

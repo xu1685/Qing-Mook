@@ -1,7 +1,7 @@
 <template>
   <div class="play">
     <MyHeader :pageName="course" pagePath=""></MyHeader>
-    <Player :message="selected"></Player>
+    <Player :message="selected" :docId="docId"></Player>
     <mt-navbar v-model="selected" class="bar">
       <mt-tab-item id="commentBar"><span style="font-size: 16px;">评论</span></mt-tab-item>
       <mt-tab-item id="wordsBar"><span style="font-size: 16px;">字幕</span></mt-tab-item>
@@ -9,10 +9,10 @@
     <mt-tab-container v-model="selected">
       <mt-tab-container-item id="commentBar">
         <Score></Score>
-        <Comment></Comment>
+        <Comment :docId="docId"></Comment>
       </mt-tab-container-item>
       <mt-tab-container-item id="wordsBar">
-        <Words></Words>
+        <Words :docId="docId"></Words>
       </mt-tab-container-item>
     </mt-tab-container>
   </div>
@@ -30,7 +30,8 @@ export default {
   data () {
     return {
      course: '课程名称',
-     selected:'commentBar'
+     selected:'commentBar',
+     docId:'5acdd29fe19858d7acebaef8'
     }
   },
   // watch:{

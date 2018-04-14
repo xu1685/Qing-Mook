@@ -1,8 +1,8 @@
 <template>
 	<div class="words">
-		<div class="textline" v-for="(item,index) in textlines" :class="{onshow: startArr[index] < time && time <startArr[index+1]}">
-			<span class="start">{{timeArr[index]}}</span>
-			<span class="wordstext">{{item}}</span>
+		<div class="textline" v-for="(item,index) in subtitle" :class="{onshow: index == subtitleIndex }">
+			<span class="start">{{item.beginTime}}</span>
+			<span class="wordstext">{{item.text}}</span>
   	</div>
 	</div>
 </template>
@@ -14,6 +14,7 @@
 
 	export default{
 		name:'Words',
+		props:['docId'],
 		data(){
 			return{
         text:'',
@@ -23,7 +24,9 @@
         time:'',
         onshow:'',
         scroll:'',
-        count: 0
+        count: 0,
+        subtitle:[],
+        subtitleIndex:-1
 			}
 		},
 		created(){
@@ -33,22 +36,21 @@
 	      for(var i=0;i<this.startArr.length;i++){
 	        this.timeArr.push(this.formatDuring(this.startArr[i]))	
 	      } 
-	      
 		},
 		mounted(){
-        this.$nextTick(() => {
-        	let words = document.querySelector('.words')
-          this.scroll = new BScroll(words);
-        })
-         
+     
 		},
 		methods:{
 			pageInit(){
-				Bus.$on('startTime', time =>{
-					this.changeActive(time)
+				Bus.$on('subtitleIndex', subtitleIndex =>{
+					this.changeActive(subtitleIndex)
+				});
+        Bus.$on('subtitle', subtitle =>{
+					this.changeSubtitle(subtitle);
 					// console.log(time,'words');
-				});  
-
+				});
+        
+					
 			},
 			formatDuring(mss) {
 			    var minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
@@ -61,40 +63,53 @@
 			    }
 			    return  minutes + ":" + seconds ;
 			},
-			changeActive(time){
-				 this.time = time;
-				 if(this.startArr[this.count] < time && time < this.startArr[this.count+1]){
-					 	this.count = this.count + 1;
-					 	this.onshow = document.querySelector('.onshow');
-					 	if(this.onshow){
+			changeActive(index){
+				console.log(index,'index')
+				 this.subtitleIndex = index;
+				 this.onshow = document.querySelector('.onshow');
+				
+				 if(this.onshow){
 					 		var nowH = this.onshow.offsetTop
 					    console.log(nowH,'show');
 						  if(nowH > 100){
 						  	window.scrollTo(0,this.onshow.offsetTop - 100)
 						  }
-					 	}
-				 }else if(time < this.startArr[this.count-1]){
-				  	console.log('time<star')
-				 	  for(var i=this.count; i>0; i--){
-				 	  	console.log(i)
-              if(this.startArr[i] < time){
-              	this.count = i;
-              	break;
-              }
-				 	  }
-				 }else if(time > this.startArr[this.count] ){
-				 	 console.log('time>star')
-				 	 var len = this.startArr.length;
-				 	  for(var i=this.count; i<len; i++){
-				 	  	console.log(i)
-              if(this.startArr[i+1] > time){
-              	this.count = i;
-              	break;
-              }
-				 	  }
-				 }
+					}
+				 // if(this.startArr[this.count] < time && time < this.startArr[this.count+1]){
+					//  	this.count = this.count + 1;
+					//  	this.onshow = document.querySelector('.onshow');
+					//  	if(this.onshow){
+					//  		var nowH = this.onshow.offsetTop
+					//     console.log(nowH,'show');
+					// 	  if(nowH > 100){
+					// 	  	window.scrollTo(0,this.onshow.offsetTop - 100)
+					// 	  }
+					//  	}
+				 // }else if(time < this.startArr[this.count-1]){
+				 //  	console.log('time<star')
+				 // 	  for(var i=this.count; i>0; i--){
+				 // 	  	console.log(i)
+     //          if(this.startArr[i] < time){
+     //          	this.count = i;
+     //          	break;
+     //          }
+				 // 	  }
+				 // }else if(time > this.startArr[this.count] ){
+				 // 	 console.log('time>star')
+				 // 	 var len = this.startArr.length;
+				 // 	  for(var i=this.count; i<len; i++){
+				 // 	  	console.log(i)
+     //          if(this.startArr[i+1] > time){
+     //          	this.count = i;
+     //          	break;
+     //          }
+				 // 	  }
+				 // }
 			},
-
+      changeSubtitle(subtitle){
+      	this.subtitle = subtitle;
+      	console.log(this.subtitle,'subtitle')
+      }
 
 		}
 	}

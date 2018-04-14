@@ -1,7 +1,7 @@
 /* 这是整个播放器的容器，宽高由JS设置 */
 .player-image-container {
-  /*position: relative;
-*/  overflow: hidden;
+  position: relative;
+  overflow: hidden;
   width: 100%;
   height: 100%;
   user-select: none;
@@ -159,4 +159,14 @@
 .mask > i {
   font-size: 100px;
   color: white;
+}
+
+/* 草稿纸 */
+.draft {
+  background: yellow;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 96;
+  width: 0;
 }

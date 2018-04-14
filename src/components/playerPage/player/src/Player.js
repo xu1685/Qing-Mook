@@ -39,20 +39,35 @@ export default class Player {
       // 使用这个取消注册的动画
       animation: null,
       // 使用这个注册动画
-      animationObj: null, // {points:[],start:num,delay:num}
+      animationObj: null,
       // 播放器处于暂停或播放状态
       halt: true,
+      // 是否处于网页全屏
+      pageFullscreen:false,
       // 音频时长 s
       duration: 0,
+      // 播放器将挂载在移动端或者桌面端
+      mode: source.mode||'desktop',
+      // 草稿纸是否处于打开状态
+      draftOpen:false,
+      // 当前使用的草稿纸编号，从1开始
+      draftNum:1,
+      // 保存所有canvas的context，一个是在课件上绘制笔迹的canvas，其余为草稿纸canvas
+      contexts:[],
+      // 保存课件canvas和草稿纸canvas使用的比例
+      propotions:[],
+      // 当前使用的比例
+      propotion:1,
+      // 当前使用的context
+      ctx:null,
+      playingSubtitleIndex:0
     }
-    // 显示画布和原始画布的比例
-    this.propotion=1
     // html模板
     this.template = {
       playerControl: `<div class="player-main">
         <div class="player-section-left">
           <div class="player-section player-play player-button">
-            <i class="fa fa-play"></i>
+            <i class="fa fa-play" title="播放"></i>
           </div>
           <div class="player-section player-time">
             <span class="current-time">%{currentTime}%</span>
@@ -61,8 +76,11 @@ export default class Player {
           </div>
         </div>
         <div class="player-section-right">
+          <div class="player-section player-button player-page-fullscreen">
+            <i class="fa fa-angle-double-up" title="网页全屏"></i>
+          </div>
           <div class="player-section player-button player-fullscreen">
-            <i class="fa fa-expand"></i>
+            <i class="fa fa-expand" title="进入全屏"></i>
           </div>
         </div>
         <div class="player-progress-control">
@@ -79,9 +97,10 @@ export default class Player {
       shade: `<div class="shade"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>`,
       mask: `<div class="mask">
         <i class="fa fa-play-circle-o"></i>
-      </div>`
+      </div>`,
+      draft: `<canvas class="draft"></canvas>`
     }
-    // 播放器的初始宽度
+    // 播放器的初始宽度，用于退出全屏时进行恢复
     this.initialWidth=this.domRefs.mountNode.style.width
     this.fetchActions()
   }
@@ -128,9 +147,6 @@ export default class Player {
     container.style.width = `${containerWidth}px`
     container.style.height = `${containerHeight}px`
     this.domRefs.imageContainer = container
-    // 记录下同原始画布的缩放比例，之后画点的位置需乘上这个比例
-    /* 按理来说这两个值是相同的，因为播放器的宽高比与录制区域的宽高比相同 */
-    this.propotion = containerWidth / windowWidth
     // 渲染正在加载的提示
     const template = document.createElement('template')
     template.innerHTML = this.template.shade
@@ -229,8 +245,16 @@ export default class Player {
       /* 图片和语音都已经加载完成，可以初始化页面的 HTML 结构了 */
       this.initHtml()
       this.bindEvents()
+      this.setDrawTarget()
+      /* 去除正在加载的提示 */
       const shade = this.domRefs.shade
       shade.parentNode.removeChild(shade)
+      /* 将播放进度调整到开头 */
+      this.changeCurrentTime(0)
+      this.showPlayerControl()
+      if (this.options.autoPlay) {
+        this.togglePlay()
+      }
     }
   }
 
@@ -239,6 +263,7 @@ export default class Player {
     this.renderCanvas()
     this.renderPlayerControl()
     this.renderAudio()
+    this.renderDraft()
   }
 
   renderImages() {
@@ -261,23 +286,16 @@ export default class Player {
       fragment.appendChild(section)
     })
     imageContainer.appendChild(fragment)
-    /* container 节点在前面初始化缓冲图标的时候已经添加到文档中了 */
-    // mountNode.appendChild(container)
   }
 
   renderCanvas() {
     const canvas = document.createElement('canvas')
-    const offscreenCanvas=document.createElement('canvas')
     this.domRefs.canvas = canvas
-    this.domRefs.offscreenCanvas=offscreenCanvas
-    this.offscreenCtx=offscreenCanvas.getContext('2d')
     const {
       imageContainer,
     } = this.domRefs
     // canvas的宽和高等于底图容器，注意这里需修改canvas的width和height，而非style
     this.setCanvasSize(imageContainer.offsetWidth)
-    offscreenCanvas.width=canvas.width
-    offscreenCanvas.height=canvas.height
     canvas.classList.add('player-canvas')
     imageContainer.appendChild(canvas)
     /* 在 canvas 元素添加到文档中以后，再将遮罩元素添加到文档中，作为开始按钮 */
@@ -286,8 +304,10 @@ export default class Player {
     /* 将遮罩元素也添加到 domRefs 中 */
     this.domRefs.mask = template.content.firstChild
     imageContainer.appendChild(this.domRefs.mask)
-    this.ctx = canvas.getContext('2d')
-    this.ctx.lineCap = 'round'
+    const ctx= canvas.getContext('2d')
+    ctx.lineCap = 'round'
+    this.state.contexts.push(ctx)
+    this.setPropotions()
   }
 
   renderAudio() {
@@ -297,12 +317,6 @@ export default class Player {
     } = this.domRefs
     /* 将音频元素添加到文档中 */
     mountNode.appendChild(audio)
-    /* 将播放进度调整到开头 */
-    this.changeCurrentTime(0)
-    this.showPlayerControl()
-    if (this.options.autoPlay) {
-      this.togglePlay()
-    }
   }
 
   renderPlayerControl() {
@@ -312,6 +326,7 @@ export default class Player {
     } = this.domRefs
     const {
       duration,
+      mode
     } = this.state
     const template = document.createElement('template')
     const templateStr = this.template.playerControl
@@ -332,12 +347,27 @@ export default class Player {
     this.domRefs.playerControl = content.firstChild
     this.domRefs.playState = content.querySelector('.player-play').firstElementChild
     this.domRefs.fullscreen = content.querySelector('.player-fullscreen').firstElementChild
+    this.domRefs.pageFullscreen= content.querySelector('.player-page-fullscreen').firstElementChild
     this.domRefs.duration = content.querySelector('.duration')
     this.domRefs.currentTime = content.querySelector('.current-time')
     this.domRefs.progressbar = content.querySelector('.player-progressbar')
     this.domRefs.preview = content.querySelector('.player-preview')
     this.domRefs.progressHandle = content.querySelector('.player-progressbar-handle')
+    if(this.mode=='mobile'){
+      this.domRefs.pageFullscreen.style.display='none'
+    }
     mountNode.appendChild(this.domRefs.playerControl)
+  }
+
+  renderDraft(){
+    const {imageContainer}=this.domRefs
+    const template=document.createElement('template')
+    template.innerHTML=this.template.draft
+    const draft=this.domRefs.draft=template.content.querySelector('.draft')
+    const ctx=draft.getContext('2d')
+    ctx.lineCap='round'
+    this.state.contexts.push(ctx)
+    imageContainer.appendChild(draft)
   }
 
   bindEvents() {
@@ -345,6 +375,7 @@ export default class Player {
       audio,
       canvas,
       fullscreen,
+      pageFullscreen,
       mask,
       playState,
       progressbarWrapper,
@@ -363,6 +394,9 @@ export default class Player {
     canvas.addEventListener('click', this.togglePlay)
     mask.addEventListener('click', this.togglePlay)
     fullscreen.addEventListener('click', this.toggleFullscreen.bind(this))
+    if(this.state.mode=='desktop'){
+      pageFullscreen.addEventListener('click',this.togglePageFullscreen.bind(this))
+    }
     fscreen.addEventListener('fullscreenchange', this.handleFullscreenChange.bind(this))
     playState.addEventListener('click', this.togglePlay)
     progressbarWrapper.addEventListener('click', this.handleProgressbarClick.bind(this))
@@ -421,9 +455,9 @@ export default class Player {
   getFullscreenSize() {
     // 重设播放器的高宽，使之撑满屏幕
     const {
-        height,
+      height,
       width
-      } = window.screen
+      } = screen
     const propotion1 = height / width
     const {
         windowHeight,
@@ -452,6 +486,7 @@ export default class Player {
   handleFullscreenChange() {
     const {
       fullscreen,
+      pageFullscreen,
       mountNode,
       canvas,
     } = this.domRefs
@@ -463,13 +498,29 @@ export default class Player {
       mountNode.style.width = `${fullscreenSize}px`
       this.resizePlayer(fullscreenSize);
       fullscreen.className = 'fa fa-compress'
+      fullscreen.title='退出全屏'
+      if(this.state.mode=='desktop'){
+        pageFullscreen.style.display='none'
+      }
     } else {
       document.removeEventListener('click', this.handleFullscreenClick)
       canvas.addEventListener('click', this.togglePlay)
       mountNode.style.width=this.initialWidth
       this.resizePlayer(this.playerSize)
       fullscreen.className = 'fa fa-expand'
+      fullscreen.title='进入全屏'
+      if(this.state.mode=='desktop'){
+        pageFullscreen.style.display='inline'
+      }
     }
+  }
+
+  setPropotions(){
+    const {windowWidth,draftHeight}=this.source.actionData
+    const {imageContainer}=this.domRefs
+    const {propotions}=this.state
+    propotions[0]=imageContainer.offsetWidth/windowWidth
+    propotions[1]=imageContainer.offsetHeight/draftHeight
   }
 
   // 根据mountNode的宽度设置播放器各部件大小
@@ -478,14 +529,13 @@ export default class Player {
       audio,
       mountNode,
       playerControl,
+      draft
     } = this.domRefs
     const {
       windowWidth,
       windowHeight
     } = this.source.actionData
     const containerHeight = windowHeight / windowWidth * containerWidth
-    // 修改播放器size后与原始大小的比例发生了变化
-    this.propotion = containerWidth / windowWidth
     // 如果全屏，播放器控制条占满宽度
     let translateX = 0,
       controlWidth = containerWidth
@@ -498,6 +548,13 @@ export default class Player {
     playerControl.style.transform = `translateX(${-translateX}px)`
     this.setContainerSize(containerWidth, containerHeight)
     this.setCanvasSize(containerWidth)
+    if(this.state.draftOpen){
+      draft.style.transition=''
+      this.setDraftSize()
+    }
+    // 修改播放器size后与原始大小的比例发生了变化
+    this.setPropotions()
+    this.setDrawTarget()
     this.changeCurrentTime(audio.currentTime * 1000)
   }
 
@@ -514,6 +571,20 @@ export default class Player {
     }
   }
 
+  togglePageFullscreen(){
+    const {mountNode,pageFullscreen}=this.domRefs
+    this.state.pageFullscreen=!this.state.pageFullscreen
+    if(this.state.pageFullscreen){
+      pageFullscreen.className="fa fa-angle-double-up"
+      mountNode.style.width='100%'
+      this.resizePlayer(mountNode.offsetWidth)
+    } else {
+      pageFullscreen.className="fa fa-angle-double-down"
+      mountNode.style.width='494px'
+      this.resizePlayer(mountNode.offsetWidth)
+    }
+  }
+
   setContainerSize(width, height) {
     const {
       imageContainer
@@ -524,24 +595,34 @@ export default class Player {
 
   /* 修改 canvas 元素的尺寸，其中宽度与播放器的宽度相同，高度设置为与图集中最大高度的图片的 */
   /* 高度相同 */
-  /* 修改 canvas 元素的尺寸，不是通过设置 CSS 属性，而是直接在 canvas 元素上设置 width */
-  /* 和 height 两个特性实现的 */
   setCanvasSize(width) {
     const {
       images,
       canvas,
-      offscreenCanvas
+      draft
     } = this.domRefs
-    canvas.width=offscreenCanvas.width = width
-    canvas.height=offscreenCanvas.height = images.reduce((max, cur) => Math.max(max, cur.offsetHeight), 0)
+    canvas.width = width
+    canvas.height= images.reduce((max, cur) => Math.max(max, cur.offsetHeight), 0)
+  }
+
+  setDraftSize(){
+    const {draft,imageContainer}=this.domRefs
+    const {draftWidth}=this.source.actionData
+    const {propotions}=this.state
+    const height=imageContainer.offsetHeight
+    const width=draftWidth*propotions[1]
+    draft.width=width
+    draft.height=height
+    draft.style.width=`${width}px`
+    draft.style.height=`${height}px`
   }
 
   handleTimeUpdate(e) {
     const {mountNode}=this.domRefs
+    const {subtitles}=this.source
     this.rerenderTimeInfo()
     const time = e.target.currentTime * 1000
-    const event = new CustomEvent('timechange', { detail: { time } })
-    mountNode.dispatchEvent(event)
+    this.updateSubtitles(subtitles,time)
   }
 
   rerenderTimeInfo() {
@@ -638,6 +719,7 @@ export default class Player {
     }
     this.state.halt = !(this.state.halt)
     playState.className = this.state.halt ? 'fa fa-play' : 'fa fa-pause'
+    playState.title=this.state.halt?'播放':'暂停'
     if (this.state.halt) {
       this.domRefs.mask.style.opacity = 1
       this.domRefs.mask.classList.add('mask-show')
@@ -649,8 +731,6 @@ export default class Player {
     if(e){
       e.stopPropagation()
     }
-    const event=new CustomEvent('playtoggle',{detail:{playing:!this.state.halt}});
-    mountNode.dispatchEvent(event);
   }
 
   // 移动进度条时调用的函数，time单位为ms
@@ -688,8 +768,7 @@ export default class Player {
     }
     // 重新渲染播放器控制条
     this.rerenderTimeInfo()
-    const event=new CustomEvent('timechange',{detail:{time}});
-    mountNode.dispatchEvent(event);
+    this.updateSubtitles(this.source.subtitles,time)
   }
 
   registerNextAction() {
@@ -714,10 +793,9 @@ export default class Player {
       const {
         points,
         next,
-        delay,
-        step
+        duration,
       } = this.state.animationObj
-      this.drawPoint(points, next, delay,step)
+      this.drawPoint(points, next, duration)
     }
   }
 
@@ -748,6 +826,9 @@ export default class Player {
       case 'eliminate':
         this.eliminate(nextAction)
         break
+      case 'draft':
+        this.draft(nextAction)
+        break
     }
     // 注册下一个动作
     if (needRegist && this.state.nextActionIndex < actions.length - 1) {
@@ -758,9 +839,11 @@ export default class Player {
 
   handleActions(actions, time) {
     const {
-      nextActionIndex
+      nextActionIndex,
+      ctx,
+      propotion
     } = this.state
-    const {canvas}=this.domRefs
+    const canvas=ctx.canvas
     actions.forEach((action, i) => {
       if (i === actions.length - 1 && action.type === 'path') {
         const {
@@ -771,26 +854,27 @@ export default class Player {
         const {
           options: {
             pen
-          },ctx
+          }
         } = this
         const duration = endTime - startTime
+        const {length}=points
         // 计算有多少点出现在time时刻前，将这些点直接绘出，其余点需通过动画
-        let cnt = Math.floor((time - startTime) /duration*points.length)
-        this.offscreenCtx.clearRect(0,0,canvas.width,canvas.height)
-        this.offscreenCtx.drawImage(canvas,0,0)
+        let cnt = Math.floor((time - startTime) /duration*length)
+        // 记录笔迹动画开始前的canvas数据，动画的每一帧都要恢复一次
+        this.backgroundData=ctx.getImageData(0,0,canvas.width,canvas.height)
         ctx.strokeStyle=action.color
-        ctx.lineWidth=this.propotion*action.width
+        ctx.lineWidth=propotion*action.width
         this.drawPoints(points, cnt)
-        if (cnt >= points.length) {
+        if (cnt >= length) {
           // 所有的点都在time时刻前出现，无需注册动画
           this.state.animationObj = null
         } else {
-          const {delay,step}=this.getAnimationDelay(action)
+          const animationDuration=duration*((length-cnt)/length)
+          const {delay,step}=this.getAnimationDelay(length-cnt,animationDuration)
           this.state.animationObj = {
             points,
-            next: Math.min(points.length-1,cnt+step-1),
-            delay,
-            step
+            next: Math.min(length-1,cnt+step-1),
+            duration:animationDuration-delay
           }
         }
       } else {
@@ -801,28 +885,27 @@ export default class Player {
     this.state.nextActionIndex = nextActionIndex
   }
 
-  getAnimationDelay(action){
-    const {points,startTime,endTime}=action
-    let duration = endTime - startTime
-    let delay = duration /points.length
+  getAnimationDelay(n,duration){
+    let delay = duration / n
     let step=1
     let gap=20
     if(delay<gap){
-      step=Math.ceil(gap/delay) 
+      step=Math.ceil(gap/delay)
       delay=gap
     }
     return {step,delay}
   }
 
-  // 绘制points[0-end]
+  // 绘制points[0-end)
   drawPoints(points, end) {
     const {
-      ctx
-    } = this
+      ctx,
+      propotion
+    } = this.state
     ctx.beginPath()
     points.slice(0, end).forEach((point, i) => {
-      const x = point[0] * this.propotion,
-        y = point[1] * this.propotion
+      const x = point[0] * propotion,
+        y = point[1] * propotion
       if (i === 0) {
         ctx.moveTo(x, y)
       } else {
@@ -841,50 +924,47 @@ export default class Player {
       endTime
     } = action
     const {
-      ctx,
-      offscreenCtx,
       options: {
         pen
       },
-      domRefs:{
-        canvas
-      }
     } = this
-    if (points.length < 1) {
+    const {ctx,propotion} =this.state
+    if (!points.length) {
       return
     }
     ctx.lineWidth = width || pen.width
-    ctx.lineWidth*=this.propotion
+    ctx.lineWidth*=propotion
     ctx.strokeStyle = color || pen.color
     // 无动画绘制路径
     if (!animate) {
       this.drawPoints(points, points.length - 1)
     } else {
       // 有动画绘制路径
-      const {delay,step}=this.getAnimationDelay(action)
+      const duration=endTime-startTime
+      const {delay,step}=this.getAnimationDelay(points.length,duration)
       /* 保存在绘制路径前canvas的数据 */
-      offscreenCtx.clearRect(0,0,canvas.width,canvas.height)
-      offscreenCtx.drawImage(canvas,0,0)
-      this.drawPoint(points, Math.min(points.length-1,step-1), delay,step)
+      this.backgroundData=ctx.getImageData(0,0,ctx.canvas.width,ctx.canvas.height)
+      this.drawPoint(points, Math.min(points.length-1,step-1), duration-delay)
     }
   }
 
-  drawPoint(points, i, delay,step) {
+  /* duration是这个动画过程还剩下的时间，每过一帧都会减少 */
+  drawPoint(points, i, duration) {
     if (i < 0 || i >= points.length) {
       return
     }
     const {
-      ctx
-    } = this
-    const {canvas,offscreenCanvas}=this.domRefs
+      ctx,
+      propotion
+    } = this.state
     /* 清空画布，再重绘背景 */
-    ctx.clearRect(0,0,canvas.width,canvas.height)
-    ctx.drawImage(offscreenCanvas,0,0)
+    ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height)
+    ctx.putImageData(this.backgroundData,0,0)
     ctx.beginPath()
     for(let k=0;k<=i;++k){
       const point=points[k]
-      const x= point[0]*this.propotion
-      const y=point[1]*this.propotion
+      const x= point[0]*propotion
+      const y=point[1]*propotion
       if(k===0){
         ctx.moveTo(x,y)
       } else {
@@ -893,15 +973,16 @@ export default class Player {
     }
     ctx.stroke()
     if (i < points.length - 1) {
+      /* 在每一帧重新计算动画的延迟和步数 */
+      const {delay,step}=this.getAnimationDelay(points.length-1-i,duration)
       const next=Math.min(i + step,points.length-1)
       this.state.animation = window.setTimeout(() => {
-        this.drawPoint(points, next, delay,step)
+        this.drawPoint(points, next, duration-delay)
       }, delay)
       this.state.animationObj = {
         points,
         next,
-        delay,
-        step
+        duration:duration-delay
       }
     } else {
       this.state.animation = null
@@ -911,79 +992,85 @@ export default class Player {
 
   drawArrow(action) {
     const {
-      propotion
-    } = this
-    // 结束点到箭头背部的长度
-    const d = 15
-    // 箭头侧边与箭杆成的角度
-    const angle = Math.PI / 6
+      propotion,ctx
+    } = this.state
     const {
       points
     } = action
+    ctx.lineWidth = action.width*propotion
+    ctx.fillStyle = action.color
     // 起始点
     const x1 = points[0][0] * propotion,
       y1 = points[0][1] * propotion
     // 结束点
     const x2 = points[1][0] * propotion,
       y2 = points[1][1] * propotion
-    // 箭杆的角度
-    const lineAngle = Math.atan2(y2 - y1, x2 - x1)
-    // 箭头侧边的长度
-    const h = Math.abs(d / Math.cos(angle))
-    // 箭头上侧边的角度
-    const angle1 = lineAngle + Math.PI + angle
-    const topX = x2 + Math.cos(angle1) * h
-    const topY = y2 + Math.sin(angle1) * h
-    // 箭头下侧边的角度
-    const angle2 = lineAngle + Math.PI - angle
-    const botX = x2 + Math.cos(angle2) * h
-    const botY = y2 + Math.sin(angle2) * h
-    // 绘制箭头
-    // const initAlpha=animate?0:1;
-    this._drawArrow(action, x1, y1, x2, y2, topX, topY, botX, botY)
-  }
-
-  _drawArrow(action, x1, y1, x2, y2, topX, topY, botX, botY) {
-    const {
-      ctx,
-      options: {
-        pen,
-      },
-    } = this
-
-    ctx.lineWidth = action.width ? action.width : pen.width
-    ctx.lineWidth*=this.propotion
-    ctx.strokeStyle = action.color ? action.color : pen.color
-    ctx.fillStyle = ctx.strokeStyle
-    // 绘制箭杆
+    // 箭杆长度
+    const r=Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2))
+    const aX=x2-(10*propotion*(y1-y2)/r)
+    const aY=y2-(10*propotion*(x2-x1)/r)
+    const bX=x2+(20*propotion*(x2-x1)/r)
+    const bY=y2-(20*propotion*(y1-y2)/r)
+    const cX=x2+(10*propotion*(y1-y2)/r)
+    const cY=y2+(10*propotion*(x2-x1)/r)
+    const dX=x2-(5*propotion*(y1-y2)/r)
+    const dY=y2-(5*propotion*(x2-x1)/r)
+    const eX=x2+(5*propotion*(y1-y2)/r)
+    const eY=y2+(5*propotion*(x2-x1)/r)
     ctx.beginPath()
-    ctx.moveTo(x1, y1)
-    ctx.lineTo((topX + botX) / 2, (topY + botY) / 2)
-    ctx.stroke()
-    // 绘制箭头
-    ctx.moveTo(x2, y2)
-    ctx.lineTo(topX, topY)
-    ctx.lineTo(botX, botY)
+    ctx.moveTo(x1,y1)
+    ctx.lineTo(dX,dY)
+    ctx.lineTo(aX,aY)
+    ctx.lineTo(bX,bY)
+    ctx.lineTo(cX,cY)
+    ctx.lineTo(eX,eY)
     ctx.fill()
   }
 
   clear() {
-    const {
-      canvas
-    } = this.domRefs
-    this.ctx.clearRect(0, 0, canvas.width, canvas.height)
+    const {ctx}=this.state
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
   }
 
   // 清除一些线
   eliminate(action){
     const currentPage=this.getPageByTime(action.startTime)
-    this.handlePageActions(aucrrentPage,action.startTime+1)
+    this.handlePageActions(currentPage,action.startTime+1)
   }
 
   // 撤销当前页的上一个绘制操作
   withdraw(action) {
     const currentPage = this.getPageByTime(action.startTime)
     this.handlePageActions(currentPage, action.startTime + 1)
+  }
+
+  draft(action){
+    const {status}=action
+    const {draft,imageContainer}=this.domRefs
+    draft.style.transition='width 0.2s linear'
+    if(status=='open'){
+      this.setDraftSize()
+      this.state.draftOpen=true
+    } else {
+      draft.style.width='0'
+      draft.width=0
+      this.state.draftOpen=false
+    }
+    /* 切换用于绘制的canvas，草稿纸或者课件 */
+    this.setDrawTarget()
+  }
+
+  /* 根据草稿纸是否打开，切换当前使用的canvas及比例 */
+  setDrawTarget(){
+    const {draftOpen,draftNum,propotions,contexts}=this.state
+    let ctxIndex=0
+    let propIndex=0
+    if(draftOpen){
+      ctxIndex=draftNum
+      propIndex=1
+    }
+    this.state.ctx=contexts[ctxIndex]
+    this.state.propotion=propotions[propIndex]
   }
 
   scroll(action, animate) {
@@ -994,17 +1081,18 @@ export default class Player {
     const {
       scrollDuration
     } = this.options
+    const {propotion}=this.state
     const currentPage = this.getPageByTime(action.startTime)
     const image = images[currentPage]
     // 移动图片和canvas
-    const offsetY = action.yDistance * this.propotion
+    const offsetY = action.yDistance * propotion
     let orginOffset = 0
     let tmp = image.style.transform.match(/translateY\(-(.*)px\)/)
     if (tmp) {
       orginOffset = window.parseInt(tmp[1], 10)
     }
     const dist = Math.abs(orginOffset - offsetY)
-    const duration = dist / image.offsetHeight * this.propotion * scrollDuration
+    const duration = dist / image.offsetHeight * propotion * scrollDuration
     if (animate) {
       canvas.style.transition = image.style.transition = `transform ${duration}s linear`
     } else {
@@ -1029,11 +1117,12 @@ export default class Player {
 
   handlePageActions(page, time) {
     const {
-      canvas,
       images
     } = this.domRefs
+    const {ctx}=this.state
+    const canvas=ctx.canvas
     // 重做该页之前发生过的所有动作
-    this.ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
     // 因为之后要重做在page页上发生的动作（包括滚动），所以这里将该页的图片和canvas的垂直偏移置为0
     images[page].style.transform = canvas.style.transform = `translateY(0px)`
     const actions = this.getDrawActionsOnPage(page, time)
@@ -1078,7 +1167,7 @@ export default class Player {
       const action = actions[i]
       // 只收集在page上进行的移动和绘制操作
       if (includeTypes.indexOf(action.type) != -1) {
-        // 判断这个操作是否被之后的撤销操作撤销了 
+        // 判断这个操作是否被之后的撤销操作撤销了
         let withdraw = false
         if (withdrawTypes.indexOf(action.type)!=-1) {
           // 若cnt变为0，则说明这个动作被撤销了
@@ -1107,7 +1196,7 @@ export default class Player {
       }
     }
     return res.filter((action)=>{
-      !action.id||eliminatedIds.indexOf(action.id)==-1
+      return !action.id||eliminatedIds.indexOf(action.id)==-1
     })
   }
 
@@ -1149,6 +1238,8 @@ export default class Player {
     // 画布宽高改成整数
     actionData.windowWidth = window.parseInt(actionData.windowWidth, 10)
     actionData.windowHeight = window.parseInt(actionData.windowHeight, 10)
+    actionData.draftWidth=window.parseInt(actionData.draftWidth,10)
+    actionData.draftHeight=window.parseInt(actionData.draftHeight,10)
     actionData.actions.forEach((action, index) => {
       // 每个action加上id
       action.actionId = index
@@ -1201,5 +1292,40 @@ export default class Player {
     }
     res += seconds
     return res
+  }
+
+  updateSubtitles(subtitles,currentTime){
+    const {mountNode} = this.domRefs
+    let playingSubtitleIndex
+    if (subtitles.length) {
+      playingSubtitleIndex = this.state.playingSubtitleIndex
+      let currentSubtitleStartTime = subtitles[playingSubtitleIndex].beginTime
+      let prevSubtitleStartTime = playingSubtitleIndex > 0 ? subtitles[playingSubtitleIndex - 1].beginTime : undefined
+      let nextSubtitleStartTime = playingSubtitleIndex + 1 < subtitles.length ? subtitles[playingSubtitleIndex + 1].beginTime : undefined
+      if (currentTime > window.parseFloat(currentSubtitleStartTime)) {
+        /* undefined == null true */
+        while (nextSubtitleStartTime != undefined && currentTime > window.parseFloat(nextSubtitleStartTime)) {
+          playingSubtitleIndex += 1
+          nextSubtitleStartTime = playingSubtitleIndex + 1 < subtitles.length ? subtitles[playingSubtitleIndex + 1].beginTime : undefined
+        }
+      } else if (currentTime < window.parseFloat(currentSubtitleStartTime) && playingSubtitleIndex > 0) {
+        /* undefined == null true */
+        /* 这里使用 do-while 语句是因为，只要当前的播放进度比当前的字幕进度慢，那么当前的字幕就不应该显示，而是显示在此之前的字幕 */
+        do {
+          playingSubtitleIndex -= 1
+          prevSubtitleStartTime = playingSubtitleIndex > 0 ? subtitles[playingSubtitleIndex - 1].beginTime : undefined
+        } while (prevSubtitleStartTime != undefined && currentTime < window.parseFloat(prevSubtitleStartTime))
+      }
+      this.state.playingSubtitleIndex = playingSubtitleIndex
+      const beginTime = subtitles[playingSubtitleIndex].beginTime
+      const endTime = subtitles[playingSubtitleIndex].endTime
+      if (currentTime > window.parseFloat(endTime) || currentTime < window.parseFloat(beginTime)) {
+        playingSubtitleIndex = -1
+      }
+    } else {
+      playingSubtitleIndex = -1
+    }
+    const event = new CustomEvent('subtitlechange', { detail: {subtitleIndex : playingSubtitleIndex} })
+    mountNode.dispatchEvent(event)
   }
 }

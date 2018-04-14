@@ -154,13 +154,13 @@ import { Indicator } from 'mint-ui';
 import Viewer from 'viewerjs'
 	export default{
 		name:'Comment',
+		props:['docId'],
 		data(){
 			return{
 				commentId: '',
 				approveList: [],
 				index: -1,
 			  commentList:[],
-			  docId:'5aa0aa7fc0e49073dd463132',//'5aa0a44dc6131105279d0799'
 			  showIndex: [],
 			  replyList:[],
 			  approveCount: [],
@@ -190,18 +190,14 @@ import Viewer from 'viewerjs'
 			'popup':Popup
 		},
 		mounted(){
-			// console.log(this.docId,'id')
 			this.$nextTick(() => {
 				this.pageinit();
 			})
 			this.$http.get('/docs/'+this.docId)
 			.then(res=>{
 				this.commentList = res.data.comments;
-				console.log(this.commentList,'mounted')
+				console.log(this.commentList,'comment')
 			})
-		},
-		created(){
-      
 		},
 		methods:{
 			pageinit(){
