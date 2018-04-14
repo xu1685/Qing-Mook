@@ -53,9 +53,9 @@
 		  	style="font-size: 70px;margin-left: 5%;" v-if=" preview2 == '' "></i>
 		  	<input id="uploadImg" @change="handleInputChange" type="file" :value="inputimg" accept="image/*" style="display: none">
         <div style="height: 40px;"></div>
-		  	<div style="position: absolute;bottom: 0px;left:0;width: 100%;">
-		  		<mt-button @click="comfirmUpload" style="width: 49%;">确定</mt-button>
-		  		<mt-button @click="cancleUpload" style="width: 49%;float:right">取消</mt-button>
+		  	<div style="position: absolute;bottom: 15px;left:0;width: 100%;">
+		  		<mt-button @click="comfirmUpload" style="width: 40%;margin-left: 5%">确定</mt-button>
+		  		<mt-button @click="cancleUpload" style="width: 40%;float:right;margin-right: 5%">取消</mt-button>
 		  	</div>
 		  </div>
 		</popup>
@@ -128,9 +128,9 @@
 			  	style="font-size: 70px;margin-left: 5%;" v-if=" preview2 == '' "></i>
 			  	<input id="uploadImg" @change="handleInputChange" type="file" :value="inputimg" accept="image/*" style="display: none">
 		    </div>
-		  	<div style="position: absolute;bottom: 0px;left:0;width: 100%;">
-		  		<mt-button @click="confirmReply" style="width: 48%;margin-left: 1%;float: left">确定</mt-button>
-		  	  <mt-button @click="cancleReply" style="width: 48%;margin-right: 1%;float:right">取消</mt-button>
+		  	<div style="position: absolute;bottom:15px;left:0;width: 100%;">
+		  		<mt-button @click="confirmReply" style="width: 40%;margin-left: 5%;float: left">确定</mt-button>
+		  	  <mt-button @click="cancleReply" style="width: 40%;margin-right: 5%;float:right">取消</mt-button>
 		  	</div>
 		 </popup>
 
@@ -330,6 +330,8 @@ import Viewer from 'viewerjs'
 			confirmReply(){
 				this.iconIs = 1;
 				this.rrVisible = false;
+				this.comfirmUpload();
+				console.log(this.uploadFile,'replyupload')
 				for (var i = 0; i < this.uploadFile.length; i++) {
 				  this.replyFormData.append('files', this.uploadFile[i])
 				}
@@ -468,7 +470,7 @@ p{
 	  bottom: 0px;
 	  left: 0px;
 	  width: 100%;
-
+    z-index: 100 !important;
 	}
 	.showImg{
 		width: 80%;
@@ -539,7 +541,7 @@ p{
 			}
 			.reply{
 				width: 90%;
-				height: 200px;
+				height: 230px;
 				margin-right: 5%;
 			}
 			.replyInput{
