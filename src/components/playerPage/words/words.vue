@@ -1,7 +1,7 @@
 <template>
 	<div class="words">
 		<div class="textline" v-for="(item,index) in subtitle" :class="{onshow: index == subtitleIndex }">
-			<span class="start">{{item.beginTime}}</span>
+			<span class="start">{{formatDuring(item.beginTime)}}</span>
 			<span class="wordstext">{{item.text}}</span>
   	</div>
 	</div>
