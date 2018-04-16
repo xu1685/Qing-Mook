@@ -1,11 +1,5 @@
 <template>
   <div id="app">
-    <!-- div -->
-
-
-    <!-- <div></div> -->
-   
-
 
     <router-view/>
   </div>
@@ -31,8 +25,6 @@ export default {
   text-align: center;
   width: 100%;
 }
-.mint-cell{
-  z-index: 0 !important;
-}
+
 a{ text-decoration:none; }
 </style>

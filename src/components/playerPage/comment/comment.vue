@@ -80,6 +80,7 @@
 							<!-- 点赞 -->
 							<i @click="approveHandle(-1,0,1)" :id="'approvepop' + commentObj.id" class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size: 20px;"></i>
 							<span>{{this.approveL}}</span>
+							<span class="replyBtn" @click="replyHandle(-1,0,1)">回复</span>
 						</div>
 					  <div style="clear:both;"></div>
 		    	</div>
@@ -464,7 +465,7 @@ p{
   margin: 10px;
   margin-bottom: 60px;
 }
-	.commentInput{
+	a.commentInput{
 	  border-top:1px solid lightgray;
 	  position: fixed;
 	  bottom: 0px;

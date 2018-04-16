@@ -146,7 +146,7 @@
 	}
 	.onshow{
 		color: black;
-		background-color: #80808029;
+		background-color: hsla(0, 0%, 50%, 0.1607843137254902);
 		transition: background-color 0.1s;
 	}
 </style>

@@ -1,7 +1,12 @@
 <template>
 	<div class="myPage">
 		<MyHeader :pageName="title" pagePath=""></MyHeader>
-
+		<div class="container">
+			<router-link to='/player'>
+    	<span>课程页面入口</span>
+    </router-link>
+		</div>
+    
 	</div>
 </template>
 
@@ -22,6 +27,9 @@
 
 <style>
 	.mypage{
+		margin-top: 40px;
+	}
+	.container{
 		margin-top: 40px;
 	}
 </style>

@@ -14,7 +14,7 @@ module.exports = {
     httpUrl: '/api/v1',
     proxyTable: {
         '/api/v1': {
-            target:'https://qingmooc.cmimo.org/api/v1',
+            target:'https://mobile.qingmooc.com/api/v1',
             changeOrigin: true,
             secure: false,
             pathRewrite:{
@@ -24,7 +24,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: '192.168.3.138', // can be overwritten by process.env.HOST localhost
+    host: '192.168.43.67', // can be overwritten by process.env.HOST localhost
     port: 3000, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
