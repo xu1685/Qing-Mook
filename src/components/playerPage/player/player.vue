@@ -59,12 +59,11 @@
 						Bus.$emit('subtitle', this.subtitle);
 					}).then(() => {
 						var actionUrl = this.playAction.json;
-						// 'http://120.78.175.118:1000/jsons/d55c581a15606633d494c2b311916068.json';
-						// this.playAction.json;
+						
 						var audioUrl = this.playAction.recording;
-						// 'http://120.78.175.118:1000/recordings/cf5e6d87ea235d3dab8d719c5b52795d.mp3';
+						
 						var imageUrl = this.imageUrl;
-						// 'http://120.78.175.118:1000/pictures/df7324f9134131ad5ec17825ee3c3c83.zip';
+						
 						var subtitles = this.subtitle;
 						var mode = 'mobile';
 						var player = new Player({
