@@ -147,7 +147,7 @@
 </template>
 
 <script>
-import	"../../../assets/font-awesome/css/font-awesome.min.css"
+import	"../../../../dist/assets/font-awesome/css/font-awesome.min.css"
 import { MessageBox } from 'mint-ui';
 import { Toast } from 'mint-ui';
 import { Popup }   from 'mint-ui';

@@ -10,7 +10,7 @@
 <script>
 	import Player from './src/Player.js'
 	import './src/Player.css'
-  import Bus from '../bus.js'; 
+  import Bus from '../../../bus.js'; 
 	export default{
 		name:'Player',
 		props:['message','docId'],
@@ -66,15 +66,19 @@
 						
 						var subtitles = this.subtitle;
 						var mode = 'mobile';
+						var duration = 0;
 						var player = new Player({
 						  actionUrl,
 						  audioUrl,
 						  imageUrl,
 						  subtitles,
 						  mode,
+						  duration,
 						  element: document.getElementById('myplayer')
 						});
 						console.log(player,'player')
+					}).catch(() => {
+						alert('docId错误')
 					})
 
 			},

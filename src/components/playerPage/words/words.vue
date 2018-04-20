@@ -9,7 +9,7 @@
 
 <script>
 	import MockData from './mock'
-	import Bus from '../bus.js';  
+	import Bus from '../../../bus.js';  
 	import BScroll from 'better-scroll'
 
 	export default{

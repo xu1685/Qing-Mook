@@ -24,6 +24,7 @@ import Comment from './comment/comment.vue'
 import Player from './player/player.vue'
 import Score from './score/score.vue'
 import Words from './words/words.vue'
+import Bus from '../../bus.js'; 
 import { Navbar, TabItem } from 'mint-ui';
 export default {
   name: 'PlayerPage',
@@ -31,8 +32,18 @@ export default {
     return {
      course: '课程名称',
      selected:'commentBar',
-     docId:'5acdd29fe19858d7acebaef8'
+     docId: '0000'
     }
+  },
+  created(){
+    if(this.$route.params.id == undefined){
+      alert('id错误')
+    }
+    console.log(this.$route.params.id,'created');
+    this.docId = this.$route.params.id;
+  },
+  methods:{
+  
   },
   // watch:{
   //   selected(){

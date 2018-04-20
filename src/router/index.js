@@ -9,7 +9,12 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/player',
+      path: '/player/:id',
+      name: 'playerPage',
+      component: PlayerPage
+    },
+    {
+      path: '/player/',
       name: 'playerPage',
       component: PlayerPage
     },

@@ -2,8 +2,8 @@
 	<div class="myPage">
 		<MyHeader :pageName="title" pagePath=""></MyHeader>
 		<div class="container">
-			<router-link to='/player'>
-    	<span>课程页面入口</span>
+			<router-link :to="{ path: '/player/'+docId }" >
+    	<span @click="sendId">课程页面入口</span>
     </router-link>
 		</div>
     
@@ -12,12 +12,20 @@
 
 <script>
 	import MyHeader from '../header/Header.vue'
+	import Bus from '../../bus.js'; 
 	export default {
 		name: 'MyPage',
 		data(){
 			return {
-        title: "我的主页"
+        title: "我的主页",
+        docId:'5acdd29fe19858d7acebaef8'
 			}
+		},
+		methods:{
+			sendId(){
+				// console.log('send')
+        // Bus.$emit('sendDocId', this.docId);
+			},
 		},
 		components:{
 			MyHeader
