@@ -92,13 +92,12 @@
 
 <style>
 #playerContainer{
+		margin-top: 40px;
 	width: 100%;
 	background-color: #5d5d5d;
 }
 #myplayer{
 	width: 100%;
-	/*position: fixed !important;*/
-	margin-top: 40px;
   background-color: white;
  /* z-index:1;*/
 }
