@@ -178,7 +178,7 @@ export default class Player {
   fetchAudio(audioUrl) {
     this.state.srcNum += 1
     const audio = this.domRefs.audio = document.createElement('audio')
-    audio.addEventListener('loadeddata', this.handleSrcLoaded.bind(this))
+    audio.addEventListener('loadedmetadata', this.handleSrcLoaded.bind(this))
     audio.src = audioUrl
     this.state.audioLoading = true
   }
@@ -785,9 +785,9 @@ export default class Player {
     // 转到time时刻所在的页面
     const page = this.getPageByTime(time)
     this.pageTo(page)
-    // 恢复课件在time时刻的状态 
+    // 恢复课件在time时刻的状态
     this.setPageState(page, time)
-    // 恢复草稿纸在time时刻的状态 
+    // 恢复草稿纸在time时刻的状态
     this.setDraftState(time)
     // 设置下一个要注册的动作
     const next = this.getNextAction(time)
@@ -1069,7 +1069,7 @@ export default class Player {
   }
 
   draft(action){
-    this.toggleDraft(action.status=='open',true) 
+    this.toggleDraft(action.status=='open',true)
   }
 
   toggleDraft(open,animate){
@@ -1171,7 +1171,7 @@ export default class Player {
   /* 将草稿纸恢复到time时刻的状态 */
   setDraftState(time){
     /* 将草稿纸设置成打开的状态 */
-    this.state.isdraftOpen=true 
+    this.state.isdraftOpen=true
     this.setDrawTarget()
     /* 重新绘制草稿纸上的笔迹 */
     const {ctx}=this.state
@@ -1192,7 +1192,7 @@ export default class Player {
       if(action.type=='draft'){
         isdraftOpen=action.status
       }
-    } 
+    }
     return isdraftOpen
   }
 
@@ -1239,7 +1239,7 @@ export default class Player {
 
   // 获得time时刻前在page上进行过的所有未被撤销、未被清除的移动和绘制操作
   getDrawActionsOnPage(page, time) {
-    return this.filterActions(this.getActionsOnPage(page, time)) 
+    return this.filterActions(this.getActionsOnPage(page, time))
   }
 
   // 根据撤销和消除操作对actions进行过滤

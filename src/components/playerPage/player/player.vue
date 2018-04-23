@@ -1,7 +1,7 @@
 <template>
 	<div id="playerContainer"  ref="element">
 		<div id="myplayer" :class="{isfixed:!isnone}" @subtitlechange="handleTimechange">
-			
+
 		</div>
 		<div :class="{block:true, none: isnone}"  :style="{height: this.Height +'px'}" ></div>
 	</div>
@@ -10,7 +10,7 @@
 <script>
 	import Player from './src/Player.js'
 	import './src/Player.css'
-  import Bus from '../../../bus.js'; 
+  import Bus from '../../../bus.js';
 	export default{
 		name:'Player',
 		props:['message','docId'],
@@ -23,10 +23,10 @@
 		},
 		watch:{
 			subtitleIndex(){
-				Bus.$emit('subtitleIndex', this.subtitleIndex);     
+				Bus.$emit('subtitleIndex', this.subtitleIndex);
 			},
       message(){
-        
+
         if(this.message == 'wordsBar'){
           this.isnone = false
         }else{
@@ -38,17 +38,14 @@
 			this.pageInit();
 			this.Width = this.$refs.element.offsetWidth;
 			this.Height = this.Width * 0.75 + 40;
-      // console.log(this.Height,'mounted');
 		},
 		methods:{
 			pageInit(){
 				this.$http.get('/docs/'+this.docId)
-					.then(res=>{
+					.then((res) => {
 						this.defaultAction = res.data.doc.defaultAction;
 						this.action = res.data.doc.action;
 						this.imageUrl = res.data.doc.pictures;
-						this.defaultAction = "5ad0acc9052ee15191c73022"; //记得删除
-						console.log(this.action)
 						for(var item in this.action){
 							if(this.defaultAction == this.action[item].id){
 								this.playAction = this.action[item];
@@ -59,14 +56,12 @@
 						Bus.$emit('subtitle', this.subtitle);
 					}).then(() => {
 						var actionUrl = this.playAction.json;
-						
 						var audioUrl = this.playAction.recording;
-						
 						var imageUrl = this.imageUrl;
-						
 						var subtitles = this.subtitle;
 						var mode = 'mobile';
-						var duration = 0;
+						var duration = this.playAction.duration;
+
 						var player = new Player({
 						  actionUrl,
 						  audioUrl,
@@ -76,7 +71,6 @@
 						  duration,
 						  element: document.getElementById('myplayer')
 						});
-						console.log(player,'player')
 					}).catch(() => {
 						alert('docId错误')
 					})
@@ -87,7 +81,7 @@
 			}
 		}
 	}
-	
+
 </script>
 
 <style>
@@ -96,7 +90,7 @@
 	background-color: #5d5d5d;
 }
 #myplayer{
-	width: 100%; 
+	width: 100%;
 	/*position: fixed !important;*/
 	margin-top: 40px;
   background-color: white;
