@@ -261,6 +261,8 @@ export default class Player {
     this.renderCaptions()
     this.renderAudio()
     this.renderDraft()
+    const event = new CustomEvent('load')
+    this.domRefs.mountNode.dispatchEvent(event)  
   }
 
   renderImages() {
@@ -516,7 +518,9 @@ export default class Player {
   handleRotateScreen(){
     // 若旋转了屏幕且此时处于全屏状态，需变更播放器尺寸
     if(fscreen.fullscreenElement){
-      this.resizePlayer(this.getFullscreenSize())
+      const width=this.getFullscreenSize()
+      this.domRefs.mountNode.style.width=`${width}px`
+      this.resizePlayer(width)
     }
   }
 
@@ -584,11 +588,10 @@ export default class Player {
     playerControl.style.transform = `translateX(${-translateX}px)`
     this.setContainerSize(containerWidth, containerHeight)
     this.setCanvasSize(containerWidth)
-    draft.style.transition='none'
-    this.setDraftSize()
     // 修改播放器size后与原始大小的比例发生了变化
     this.setPropotions()
     this.setDrawTarget()
+    this.setDraftSize()
     this.changeCurrentTime(audio.currentTime * 1000)
   }
 
@@ -890,13 +893,13 @@ export default class Player {
         cnt=Math.min(cnt,length)
         ctx.strokeStyle=action.color
         ctx.lineWidth=propotion*action.width
+        // 记录笔迹动画开始前的canvas数据，动画的每一帧都要恢复一次
+        this.backgroundData=ctx.getImageData(0,0,canvas.width,canvas.height)
         this.drawPoints(points, cnt)
         if (cnt >= length) {
           // 所有的点都在time时刻前出现，无需注册动画
           this.state.animationObj = null
         } else {
-          // 记录笔迹动画开始前的canvas数据，动画的每一帧都要恢复一次
-          this.backgroundData=ctx.getImageData(0,0,canvas.width,canvas.height)
           const elaspedTime=duration*(cnt/length)
           this.state.animationObj = {
             points,
@@ -1051,7 +1054,7 @@ export default class Player {
   // 清除一些线
   eliminate(action){
     if(this.state.isdraftOpen){
-      this.setDraftState(actions.startTime+1)
+      this.setDraftState(action.startTime+1)
     } else{
       const currentPage=this.getPageByTime(action.startTime)
       this.setPageState(currentPage,action.startTime+1)
