@@ -1177,7 +1177,7 @@ export default class Player {
     const {ctx}=this.state
     ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height)
     const draftActions=this.getActionsOnDraft(time)
-    this.handleActions(draftActions)
+    this.handleActions(draftActions,time)
     /* 设置time时刻草稿纸的状态 */
     this.state.isdraftOpen=this.getDraftStatus(time)=='open'
     this.toggleDraft(this.state.isdraftOpen,false)
