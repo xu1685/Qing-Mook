@@ -47,7 +47,6 @@
 				});
         Bus.$on('subtitle', subtitle =>{
 					this.changeSubtitle(subtitle);
-					// console.log(time,'words');
 				});
         
 					
@@ -64,13 +63,13 @@
 			    return  minutes + ":" + seconds ;
 			},
 			changeActive(index){
-				console.log(index,'index')
+				// console.log(index,'index')
 				 this.subtitleIndex = index;
 				 this.onshow = document.querySelector('.onshow');
 				
 				 if(this.onshow){
 					 		var nowH = this.onshow.offsetTop
-					    console.log(nowH,'show');
+					    // console.log(nowH,'show');
 						  if(nowH > 100){
 						  	window.scrollTo(0,this.onshow.offsetTop - 100)
 						  }
@@ -108,7 +107,7 @@
 			},
       changeSubtitle(subtitle){
       	this.subtitle = subtitle;
-      	console.log(this.subtitle,'subtitle')
+      	// console.log(this.subtitle,'subtitle')
       }
 
 		}
@@ -117,7 +116,7 @@
 
 <style scoped>
 	.words{
-		margin-top: 5px;
+		margin-top: 40px;
 		
 	}
 	.textline{

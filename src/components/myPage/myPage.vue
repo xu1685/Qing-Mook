@@ -3,7 +3,7 @@
 		<MyHeader :pageName="title" pagePath=""></MyHeader>
 		<div class="container">
 			<router-link :to="{ path: '/player/'+docId }" >
-    	<span @click="sendId">课程页面入口</span>
+    	<span>课程页面入口</span>
     </router-link>
 		</div>
     
@@ -22,10 +22,6 @@
 			}
 		},
 		methods:{
-			sendId(){
-				// console.log('send')
-        // Bus.$emit('sendDocId', this.docId);
-			},
 		},
 		components:{
 			MyHeader

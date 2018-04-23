@@ -1,6 +1,6 @@
 <template>
-	<div id="playerContainer"  ref="element">
-		<div id="myplayer" :class="{isfixed:!isnone}" @subtitlechange="handleTimechange">
+	<div id="playerContainer" >
+		<div id="myplayer" ref="element" :class="{isfixed:!isnone}" @subtitlechange="handleTimechange">
 
 		</div>
 		<div :class="{block:true, none: isnone}"  :style="{height: this.Height +'px'}" ></div>
@@ -36,8 +36,10 @@
 		},
 		mounted(){
 			this.pageInit();
+			
 			this.Width = this.$refs.element.offsetWidth;
-			this.Height = this.Width * 0.75 + 40;
+			this.Height = this.Width*0.75 + 40;
+			console.log(this.Height)
 		},
 		methods:{
 			pageInit(){
@@ -71,6 +73,10 @@
 						  duration,
 						  element: document.getElementById('myplayer')
 						});
+					}).then(() => {
+						var ele = document.querySelector('.player-image-container')
+						// document.getElementsByClassName(');
+						console.log(ele)
 					}).catch(() => {
 						alert('docId错误')
 					})

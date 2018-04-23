@@ -147,7 +147,6 @@
 </template>
 
 <script>
-import	"../../../../dist/assets/font-awesome/css/font-awesome.min.css"
 import { MessageBox } from 'mint-ui';
 import { Toast } from 'mint-ui';
 import { Popup }   from 'mint-ui';
@@ -197,7 +196,7 @@ import Viewer from 'viewerjs'
 			this.$http.get('/docs/'+this.docId)
 			.then(res=>{
 				this.commentList = res.data.comments;
-				console.log(this.commentList,'comment')
+				// console.log(this.commentList,'comment')
 			})
 		},
 		methods:{
@@ -219,7 +218,7 @@ import Viewer from 'viewerjs'
 					this.$http.post('/comments/',formData)
 					.then(res=>{
 						this.commentList.unshift(res.data);
-						console.log(res.data,'res')
+						// console.log(res.data,'res')
 					}).then(()=>{
 						Indicator.close();
 						Toast({
@@ -236,7 +235,7 @@ import Viewer from 'viewerjs'
 						});
 					})
 					
-					console.log(this.commentList)
+					// console.log(this.commentList)
 					this.myComment = '';
 					this.cancleImage();
 					this.iconIs = 1;
@@ -250,9 +249,7 @@ import Viewer from 'viewerjs'
 			},
 			//转换文件类型
 			handleInputChange(e){
-				console.log(e)
         this.files.push(event.target.files[0]);
-        console.log(this.files)
         // 检查文件类型
 		    if(['jpeg', 'png', 'gif', 'jpg'].indexOf(event.target.files[0].type.split("/")[1]) < 0){
 		        // 自定义报错方式
@@ -276,15 +273,13 @@ import Viewer from 'viewerjs'
         }else{
           this.preview2 = URL.createObjectURL(file);
         }
-        console.log(this.preview0,'0');
-        console.log(this.preview1,'1')
 			},
 			// 确认上传图片
 			comfirmUpload(){
 				this.visible = false;
 				this.uploadFile = this.files;
 				this.iconIs = 2;
-				console.log(this.uploadFile,'upload')
+				// console.log(this.uploadFile,'upload')
 			},
 			// 取消上传图片
 			cancleUpload(){
@@ -309,7 +304,6 @@ import Viewer from 'viewerjs'
 				if(index !== -1){
 					this.index = index;
 				}else{
-					console.log(this.index,'this')
 					index = this.index;
 				}
 			  this.commentObj = this.commentList[index];
@@ -319,7 +313,7 @@ import Viewer from 'viewerjs'
 				this.rrVisible = true;
 			  this.replyFormData = new FormData()
 				this.replyFormData.append('commentId',this.commentList[index].id);
-				console.log(i,'i')
+			
 				if(type === 1){
 					this.replyFormData.append('sourceId',this.commentList[index].accountId);
 				}else{
@@ -332,7 +326,7 @@ import Viewer from 'viewerjs'
 				this.iconIs = 1;
 				this.rrVisible = false;
 				this.comfirmUpload();
-				console.log(this.uploadFile,'replyupload')
+				// console.log(this.uploadFile,'replyupload')
 				for (var i = 0; i < this.uploadFile.length; i++) {
 				  this.replyFormData.append('files', this.uploadFile[i])
 				}
@@ -347,7 +341,6 @@ import Viewer from 'viewerjs'
 					this.$http.post('/comments/' + this.commentList[this.replyIndex].id + '/reply',
 						this.replyFormData)
 					.then(res=>{
-						console.log(res.data,'res')
 						this.replyList = res.data.replies;
 						this.commentList[this.index].replies = res.data.replies;
 						this.cancleImage();
@@ -371,14 +364,13 @@ import Viewer from 'viewerjs'
 			},
 			// 取消回复
 			cancleReply(){
-				console.log('reject');
+				// console.log('reject');
 				this.cancleImage();
 				this.rrVisible = false;
 				this.replyText = '';
 			},
 			// 显示回复列表
 			showReply(index){
-        // console.log(this.showIndex,'before')
         if(this.showIndex.indexOf(index) !== -1){
         	let i = this.showIndex.indexOf(index);
         	this.showIndex.splice(i,1)
@@ -400,21 +392,19 @@ import Viewer from 'viewerjs'
         	this.accountId = this.commentList[index].replies[i].accountId;
         	this.approveList = this.commentList[index].replies[i].approve;
         }
-        console.log(document.getElementById("approvepop"+this.commentId),'doc')
+        // console.log(document.getElementById("approvepop"+this.commentId),'doc')
         //检查此评论是否被点赞过（查找list中有没有这个accountId）
         if(this.approveList.indexOf(this.accountId) == -1){
         	  document.getElementById("approve"+this.commentId).style.color = "#2196F3";
         	  if(document.getElementById("approvepop"+this.commentId)){
         	  	document.getElementById("approvepop"+this.commentId).style.color = "#2196F3";
         	  }
-        	  console.log('ok')
 	        	this.approveList.push(this.accountId);
 	        	if(type === 1){
 	        		this.approveL = this.approveList.length;
 	        	}
 	        	this.$http.put('/comments/' + this.commentId+ '/approve',{approve:true}).then((res)=>{
-	        		console.log(res);
-	        		console.log(this.commentList[index])
+	        		// console.log(this.commentList[index])
         	})
         }else{
         	let cancleIndex = this.approveList.indexOf(this.accountId);

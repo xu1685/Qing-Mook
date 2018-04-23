@@ -60,11 +60,11 @@
 			}
 		},
 		created(){
-			console.log(this.$route.params.id);
+			// console.log(this.$route.params.id);
       this.$http.get('/accounts/docs')
       .then(res=>{
         
-        console.log(res,'res')
+        // console.log(res,'res')
       })
 		},
 		components:{

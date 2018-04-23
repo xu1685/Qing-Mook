@@ -2,7 +2,7 @@
   <div class="play">
     <MyHeader :pageName="course" pagePath=""></MyHeader>
     <Player :message="selected" :docId="docId"></Player>
-    <mt-navbar v-model="selected" class="bar">
+    <mt-navbar v-model="selected" class="bar" :class="{isfixed: selected == 'wordsBar'}">
       <mt-tab-item id="commentBar"><span style="font-size: 16px;">评论</span></mt-tab-item>
       <mt-tab-item id="wordsBar"><span style="font-size: 16px;">字幕</span></mt-tab-item>
     </mt-navbar>
@@ -39,20 +39,12 @@ export default {
     if(this.$route.params.id == undefined){
       alert('id错误')
     }
-    console.log(this.$route.params.id,'created');
+    // console.log(this.$route.params.id,'created');
     this.docId = this.$route.params.id;
   },
   methods:{
   
   },
-  // watch:{
-  //   selected(){
-  //     console.log(this.selected);
-  //     if(this.selected == 'wordsBar'){
-
-  //     }
-  //   }
-  // },
   components: {
       MyHeader,
       Player,
@@ -71,10 +63,12 @@ export default {
   width: 100%;
 }
 .bar{
- /* position: fixed;*/
   width: 100%;
   background-color: white;
   z-index: 1;
+}
+.isfixed{
+  position: fixed !important;
 }
 .mint-navbar .mint-tab-item{
   padding: 7px !important
