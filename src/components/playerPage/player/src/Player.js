@@ -1,8 +1,7 @@
 import axios from 'axios'
-import fscreen from './fscreen'
-import {
-  Zlib
-} from './unzip.min.js'
+import Hammer from 'hammerjs'
+import { Zlib } from '../lib/unzip.min.js'
+import fscreen from '../lib/fscreen'
 
 export default class Player {
   constructor(source) {
@@ -262,7 +261,7 @@ export default class Player {
     this.renderAudio()
     this.renderDraft()
     const event = new CustomEvent('load')
-    this.domRefs.mountNode.dispatchEvent(event)  
+    this.domRefs.mountNode.dispatchEvent(event)
   }
 
   renderImages() {
@@ -385,19 +384,22 @@ export default class Player {
       playerControl,
       progressHandle,
       toggleCaptionsButton,
-      captions
+      captions,
+      draft
     } = this.domRefs
     this.togglePlay = this.togglePlay.bind(this)
     this.handleFullscreenClick = this.handleFullscreenClick.bind(this)
     this.handleCaptionsMove=this.handleCaptionsMove.bind(this)
+    this.showPlayerControl=this.showPlayerControl.bind(this)
 
     audio.addEventListener('timeupdate', this.handleTimeUpdate.bind(this))
     audio.addEventListener('ended', this.handleEnded.bind(this))
     playerControl.addEventListener('mouseenter', this.showPlayerControl.bind(this))
     playerControl.addEventListener('mousemove', this.showPlayerControl.bind(this))
-    canvas.addEventListener('mouseenter', this.showPlayerControl.bind(this))
-    canvas.addEventListener('mousemove', this.showPlayerControl.bind(this))
+    canvas.addEventListener('mouseenter', this.showPlayerControl)
+    canvas.addEventListener('mousemove', this.showPlayerControl)
     canvas.addEventListener('click', this.togglePlay)
+    draft.addEventListener('click',this.togglePlay)
     fullscreen.addEventListener('click', this.toggleFullscreen.bind(this))
     if(this.state.mode=='desktop'){
       pageFullscreen.addEventListener('click',this.togglePageFullscreen.bind(this))
@@ -414,6 +416,17 @@ export default class Player {
     window.addEventListener('resize',this.handleWindowResize.bind(this))
     captions.addEventListener('mousedown',this.handleCaptionsDown.bind(this))
     captions.addEventListener('mouseup',this.handleCaptionsUp.bind(this))
+    /* 添加移动端事件 */
+    this.handleCanvasTap=this.handleCanvasTap.bind(this)
+    const canvasHammer=new Hammer(canvas)
+    canvasHammer.on('tap',this.handleCanvasTap)
+    const draftHammer=new Hammer(draft)
+    draftHammer.on('tap',this.handdleCanvasTap)
+  }
+
+  handleCanvasTap(e){
+    e.preventDefault()
+    this.showPlayerControl()
   }
 
   handleCaptionsDown(e){
@@ -533,8 +546,10 @@ export default class Player {
     } = this.domRefs
     if (fscreen.fullscreenElement) {
       // 点击整个屏幕都可以暂停/播放
-      document.addEventListener('click', this.handleFullscreenClick)
-      canvas.removeEventListener('click', this.togglePlay)
+      if(this.state.mode=='desktop'){
+        document.addEventListener('click', this.handleFullscreenClick)
+        canvas.removeEventListener('click', this.togglePlay)
+      }
       const fullscreenSize=this.getFullscreenSize()
       mountNode.style.width = `${fullscreenSize}px`
       this.resizePlayer(fullscreenSize)
@@ -544,8 +559,10 @@ export default class Player {
         pageFullscreen.style.display='none'
       }
     } else {
-      document.removeEventListener('click', this.handleFullscreenClick)
-      canvas.addEventListener('click', this.togglePlay)
+      if(this.state.mode=='desktop'){
+        document.removeEventListener('click', this.handleFullscreenClick)
+        canvas.addEventListener('click', this.togglePlay)
+      }
       mountNode.style.width=this.initialWidth
       this.resizePlayer(this.playerSize)
       fullscreen.firstElementChild.className = 'fa fa-expand'
@@ -892,7 +909,7 @@ export default class Player {
         let cnt = Math.floor((time - startTime) /duration*length)
         cnt=Math.min(cnt,length)
         ctx.strokeStyle=action.color
-        ctx.lineWidth=propotion*action.width
+        ctx.lineWidth=Math.max(propotion*action.width,1.5)
         // 记录笔迹动画开始前的canvas数据，动画的每一帧都要恢复一次
         this.backgroundData=ctx.getImageData(0,0,canvas.width,canvas.height)
         this.drawPoints(points, cnt)
@@ -953,6 +970,7 @@ export default class Player {
       return
     }
     ctx.lineWidth = width*propotion
+    ctx.lineWidth=Math.max(1.5,ctx.lineWidth)
     ctx.strokeStyle = color
     if (!animate) {
       this.drawPoints(points, points.length - 1)
@@ -1436,5 +1454,13 @@ export default class Player {
     const node = template.content.firstElementChild
     parent.appendChild(node)
     return node
+  }
+
+  /* 将播放器节点从dom树中移除 */
+  unmount(){
+    const {mountNode}=this.domRefs
+    while(mountNode.firstElementChild){
+      mountNode.removeChild(mountNode.firstElementChild)
+    }
   }
 }
