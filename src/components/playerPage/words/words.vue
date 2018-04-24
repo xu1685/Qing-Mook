@@ -116,7 +116,7 @@
 
 <style scoped>
 	.words{
-		margin-top: 40px;
+		margin-top: 5px;
 		
 	}
 	.textline{
