@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "better-scroll": "^1.9.1",
+    "hammerjs": "^2.0.8",
     "mint-ui": "^2.2.13",
     "mockjs": "^1.0.1-beta3",
     "viewerjs": "^1.0.0-rc.1",
