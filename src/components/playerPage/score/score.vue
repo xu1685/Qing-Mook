@@ -1,17 +1,27 @@
 <template>
 	<div class="score">
 		 <div class="overAll">
-		 	<mt-cell style="color: #626262" title="综合评分">
+		 	<div class="left">
+		 		<span style="margin-left: 10px;">综合评分</span>
+		 		<span class="overAllScore">8.6</span>
+		 	</div>
+		 	<!-- <mt-cell style="color: #626262" title="综合评分">
 		 	  <span class="overAllScore">8.6</span>
-			</mt-cell>
+			</mt-cell> -->
 		 </div>
 		 <!-- 跳转到老师页面 -->
 		 <div class="theTeacher">
 		 	<router-link :to="'/teacher/' + teacherName">
-		 		<mt-cell :title="teacherName" style="color: #494848" is-link>
+		 		<div class="right">
+			 		<img src="./logo.png" class="teacherPhoto">
+			 		<span style="line-height: 15px;">{{teacherName}}</span>
+			 		<span style="font-size: 13px;margin-left: 15px;line-height: 15px;">更多</span>
+			 		<i class="fa fa-angle-right" aria-hidden="true" style="margin-left: 10px;color:gray"></i>
+			 	</div>
+		 	<!-- 	<mt-cell :title="teacherName" style="color: #494848" is-link>
 				  <img slot="icon" src="./logo.png" class="teacherPhoto">
 				  <span style="font-size: 13px;">更多</span>
-				</mt-cell>
+				</mt-cell> -->
 		 	</router-link>
 		 	 
 		 </div>
@@ -46,11 +56,13 @@ a { text-decoration:none; }
 	background-color: white;
 	border-bottom: 1px solid lightgray;
 	border-top: 1px solid lightgray;
+	display: flex;
+	align-items: center;
 }
 .overAll{
 	display: inline-block;
-	width: 40%;
-	line-height: 39px;
+	width: 43%;
+	
 }
 .overAllScore{
 	font-size: 24px;
@@ -58,7 +70,13 @@ a { text-decoration:none; }
 }
 .theTeacher{
 	display: inline-block;
-	width: 58%;
+	width: 55%;
+	line-height: 39px;
+}
+.right{
+	display: flex;
+	align-items: center;
+	color: #494848;
 	line-height: 39px;
 }
   .teacherPhoto{

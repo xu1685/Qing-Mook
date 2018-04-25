@@ -85,6 +85,7 @@
 	.words{
 		margin-top: 35px;
 		position: relative;
+		height: 
 	}
 	.textline{
 		text-align: left;

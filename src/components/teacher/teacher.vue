@@ -1,7 +1,7 @@
 
 <template>
 	<div class="teacher">
-		<MyHeader :pageName="title" pagePath="player"></MyHeader>
+		<MyHeader :pageName="title" :pagePath=" 'player/' + id "></MyHeader>
     <div style="height: 200px;">
       <!-- 头像背景 -->
     	<div class="bg bg-blur"></div>
@@ -51,6 +51,7 @@
 		data(){
 			return {
         title: this.$route.params.id,
+        id:'5acf24ca897a186f4028d9e7',
         courseList:[
         {name:'课程名称',img:'./teacher.jpeg',content:'这里是课程介绍'},
         {name:'课程名称',img:'./teacher.jpeg',content:'这里是课程介绍'},
