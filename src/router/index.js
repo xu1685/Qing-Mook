@@ -7,6 +7,7 @@ import Teacher from '../components/teacher/Teacher'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/player/:id',

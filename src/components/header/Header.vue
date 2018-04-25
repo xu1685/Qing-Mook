@@ -1,9 +1,6 @@
 
 <template>
   <div>
-    <!-- <mt-cell class="header" :title="pageName" is-link>
-        <img slot="icon" src="../../assets/logo.png" width="24" height="24" />
-    </mt-cell> -->
     <mt-header fixed class="header" :title="pageName">
       <router-link :to="'/' + pagePath" slot="left">
         <mt-button icon="back"></mt-button>
@@ -29,7 +26,7 @@ export default {
   color: gray;
   font-size: 18px;
   height: 40px;
-  z-index: 100 !important;
+  z-index: 120 !important;
 }
 .smallImg{
   margin-top: 20px;

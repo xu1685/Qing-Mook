@@ -53,9 +53,9 @@
 						this.subtitle = this.playAction.subtitle;
 						Bus.$emit('subtitle', this.subtitle);
 					}).then(() => {
-						var actionUrl = this.playAction.json;
+						var actionUrl = this.playAction.json + '?platform=mobile';
 						var audioUrl = this.playAction.recording;
-						var imageUrl = this.imageUrl;
+						var imageUrl = this.imageUrl + '?platform=mobile';
 						var subtitles = this.subtitle;
 						var mode = 'mobile';
 						var duration = this.playAction.duration;

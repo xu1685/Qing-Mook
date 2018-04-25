@@ -418,10 +418,24 @@ export default class Player {
     captions.addEventListener('mouseup',this.handleCaptionsUp.bind(this))
     /* 添加移动端事件 */
     this.handleCanvasTap=this.handleCanvasTap.bind(this)
+    this.handleProgressPan=this.handleProgressPan.bind(this)
     const canvasHammer=new Hammer(canvas)
     canvasHammer.on('tap',this.handleCanvasTap)
     const draftHammer=new Hammer(draft)
     draftHammer.on('tap',this.handdleCanvasTap)
+    const handleHammer=new Hammer(progressHandle)
+    handleHammer.on('pan',this.handleProgressPan)
+  }
+
+  handleProgressPan(e){
+    const {progressbarWrapper,audio}=this.domRefs
+    const {duration}=this.state
+    let percent=e.deltaX/progressbarWrapper.offsetWidth
+    const deltaTime=duration*percent
+    let time=audio.currentTime+deltaTime
+    time=Math.min(duration,time)
+    time=Math.max(0,time)
+    this.changeCurrentTime(time)
   }
 
   handleCanvasTap(e){
@@ -1423,15 +1437,21 @@ export default class Player {
     /* 如果当前时间比现在字幕的时间小，则从索引0开始查，否则从当前索引开始查 */
     let begin=parseFloat(subtitles[currentSubtitleIndex].beginTime)>currentTime?0:currentSubtitleIndex
     let res=-1
-    for(let i=begin;i<subtitles.length&&parseFloat(subtitles[i].beginTime)<=currentTime;++i){
+    let hasSubtitle=false
+    let i
+    for(i=begin;i<subtitles.length&&parseFloat(subtitles[i].beginTime)<=currentTime;++i){
       if(parseFloat(subtitles[i].endTime)>=currentTime){
+        hasSubtitle=rue
         res=i
         break
       }
     }
+    if(!hasSubtitle){
+      res=Math.min(subtitles.length-1,i)
+    }
     /* 更新播放器字幕节点文本内容 */
     if (isCaptionsOpen) {
-      if (res != -1) {
+      if (hasSubtitle) {
         captions.style.display = 'block'
         captions.textContent = subtitles[res].text
       } else {
@@ -1440,11 +1460,12 @@ export default class Player {
     }
     const event = new CustomEvent('subtitlechange', {
       detail: {
+        hasSubtitle,
         subtitleIndex: res
       }
     })
     mountNode.dispatchEvent(event)
-    this.state.currentSubtitleIndex=res==-1?0:res
+    this.state.currentSubtitleIndex=res
   }
 
   /* 渲染string表示的html，返回根节点 */

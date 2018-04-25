@@ -2,7 +2,7 @@
   <div class="play">
     <MyHeader :pageName="course" pagePath=""></MyHeader>
     <Player :message="selected" :docId="docId"></Player>
-    <mt-navbar v-model="selected" class="bar" >
+    <mt-navbar v-model="selected" class="bar" :class="{isfixed: selected == 'wordsBar'}">
       <!-- :class="{isfixed: selected == 'wordsBar'}" -->
       <mt-tab-item id="commentBar"><span style="font-size: 16px;">评论</span></mt-tab-item>
       <mt-tab-item id="wordsBar"><span style="font-size: 16px;">字幕</span></mt-tab-item>
