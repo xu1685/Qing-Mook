@@ -18,7 +18,7 @@
 		data(){
 			return {
         title: "我的主页",
-        docId:'5acdd29fe19858d7acebaef8'
+        docId:'5acf24ca897a186f4028d9e7'
 			}
 		},
 		methods:{

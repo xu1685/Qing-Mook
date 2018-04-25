@@ -64,6 +64,7 @@ export default {
   width: 100%;
 }
 .bar{
+  margin-top: -1px;
   width: 100%;
   background-color: white;
   z-index: 1;

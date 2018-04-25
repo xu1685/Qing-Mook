@@ -38,13 +38,12 @@
 	      } 
 		},
 		updated(){
-			console.log('updated');
+			// console.log('updated');
 			this.onshow = document.querySelector('.onshow');
       	if(this.onshow){
 			 		var nowH = this.onshow.offsetTop;
-			    console.log(nowH,this.onshow,'offsetTop');
+			    // console.log(nowH,this.onshow,'offsetTop');
 				  if(nowH > 100){
-				  	console.log('>100')
 				  	window.scrollTo(0,this.onshow.offsetTop -100)
 				  }
 				}
