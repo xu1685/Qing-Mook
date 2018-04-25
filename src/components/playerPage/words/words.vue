@@ -37,8 +37,17 @@
 	        this.timeArr.push(this.formatDuring(this.startArr[i]))	
 	      } 
 		},
-		mounted(){
-     
+		updated(){
+			console.log('updated');
+			this.onshow = document.querySelector('.onshow');
+      	if(this.onshow){
+			 		var nowH = this.onshow.offsetTop;
+			    console.log(nowH,this.onshow,'offsetTop');
+				  if(nowH > 100){
+				  	console.log('>100')
+				  	window.scrollTo(0,this.onshow.offsetTop -100)
+				  }
+				}
 		},
 		methods:{
 			pageInit(){
@@ -47,9 +56,7 @@
 				});
         Bus.$on('subtitle', subtitle =>{
 					this.changeSubtitle(subtitle);
-				});
-        
-					
+				});					
 			},
 			formatDuring(mss) {
 			    var minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
@@ -63,47 +70,8 @@
 			    return  minutes + ":" + seconds ;
 			},
 			changeActive(index){
-				// console.log(index,'index')
-				 this.subtitleIndex = index;
-				 this.onshow = document.querySelector('.onshow');
-				
-				 if(this.onshow){
-					 		var nowH = this.onshow.offsetTop
-					    // console.log(nowH,'show');
-						  if(nowH > 100){
-						  	window.scrollTo(0,this.onshow.offsetTop - 100)
-						  }
-					}
-				 // if(this.startArr[this.count] < time && time < this.startArr[this.count+1]){
-					//  	this.count = this.count + 1;
-					//  	this.onshow = document.querySelector('.onshow');
-					//  	if(this.onshow){
-					//  		var nowH = this.onshow.offsetTop
-					//     console.log(nowH,'show');
-					// 	  if(nowH > 100){
-					// 	  	window.scrollTo(0,this.onshow.offsetTop - 100)
-					// 	  }
-					//  	}
-				 // }else if(time < this.startArr[this.count-1]){
-				 //  	console.log('time<star')
-				 // 	  for(var i=this.count; i>0; i--){
-				 // 	  	console.log(i)
-     //          if(this.startArr[i] < time){
-     //          	this.count = i;
-     //          	break;
-     //          }
-				 // 	  }
-				 // }else if(time > this.startArr[this.count] ){
-				 // 	 console.log('time>star')
-				 // 	 var len = this.startArr.length;
-				 // 	  for(var i=this.count; i<len; i++){
-				 // 	  	console.log(i)
-     //          if(this.startArr[i+1] > time){
-     //          	this.count = i;
-     //          	break;
-     //          }
-				 // 	  }
-				 // }
+				this.subtitleIndex = index;
+				// console.log(this.subtitleIndex,'change')
 			},
       changeSubtitle(subtitle){
       	this.subtitle = subtitle;
@@ -117,7 +85,7 @@
 <style scoped>
 	.words{
 		margin-top: 35px;
-		
+		position: relative;
 	}
 	.textline{
 		text-align: left;

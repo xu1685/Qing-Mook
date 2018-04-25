@@ -1441,7 +1441,7 @@ export default class Player {
     let i
     for(i=begin;i<subtitles.length&&parseFloat(subtitles[i].beginTime)<=currentTime;++i){
       if(parseFloat(subtitles[i].endTime)>=currentTime){
-        hasSubtitle=rue
+        hasSubtitle=true
         res=i
         break
       }
