@@ -51,7 +51,7 @@
 		  	aria-hidden="true" 
 		  	@click="upLoad" 
 		  	style="font-size: 70px;margin-left: 5%;" v-if=" preview2 == '' "></i>
-		  	<input id="uploadImg" @change="handleInputChange" type="file" :value="inputimg" accept="image/*" style="display: none">
+		  	<input id="uploadImg" @change="handleInputChange" type="file" :value="inputimg" accept="image/*" style="display: none" multiple>
         <div style="height: 40px;"></div>
 		  	<div style="position: absolute;bottom: 15px;left:0;width: 100%;">
 		  		<mt-button @click="comfirmUpload" style="width: 40%;margin-left: 5%">确定</mt-button>
@@ -86,7 +86,9 @@
 		    	</div>
 		    	<!-- 头部内容分割 -->
 					<p class="text">{{this.commentObj.text}}</p>
-					<img :src="commentObj.image" width="100px;">
+					<div class="imgBox">
+						<img @click="showImg(img)" v-for="(img,index) in commentObj.images" class="textImg" :src="img" width="60px" height="60px">
+				  </div>
 		    </div>
 		    <hr>
 		    <p style="color: gray;padding: 5px;">共{{this.replyList.length}}条回复</p>
@@ -127,7 +129,7 @@
 			  	aria-hidden="true" 
 			  	@click="upLoad" 
 			  	style="font-size: 70px;margin-left: 5%;" v-if=" preview2 == '' "></i>
-			  	<input id="uploadImg" @change="handleInputChange" type="file" :value="inputimg" accept="image/*" style="display: none">
+			  	<input id="uploadImg" @change="handleInputChange" type="file" :value="inputimg" accept="image/*" style="display: none" multiple>
 		    </div>
 		  	<div style="position: absolute;bottom:15px;left:0;width: 100%;">
 		  		<mt-button @click="confirmReply" style="width: 40%;margin-left: 5%;float: left">确定</mt-button>
@@ -249,30 +251,45 @@ import Viewer from 'viewerjs'
 			},
 			//转换文件类型
 			handleInputChange(e){
-        this.files.push(event.target.files[0]);
+				this.files = [];
+				console.log(e.target.files,'files');
+				var len = e.target.files.length - 1;
+				for(var i=len;i > len-3;i--){
+					if(event.target.files[i]){
+						this.files.push(event.target.files[i]);
+					}
+				}
+				console.log(this.files)
         // 检查文件类型
 		    if(['jpeg', 'png', 'gif', 'jpg'].indexOf(event.target.files[0].type.split("/")[1]) < 0){
 		        // 自定义报错方式
 		        Toast.error("文件类型仅支持 jpeg/png/gif！", 2000, undefined, false);
 		        return;
 		    }
-		    this.transformToDataUrl(event.target.files[0]);
+		    this.transformToDataUrl(this.files);
 			},
-			transformToDataUrl(file){
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function(e) {
-          let base64 = this.result;
-          let img = new Image();
-          img.src = base64;
+			transformToDataUrl(files){
+        for(var i=0;i<3;i++){
+          let reader = new FileReader();
+          if(files[i]){
+          	reader.readAsDataURL(files[i]);
+		        reader.onload = function(e) {
+		          let base64 = this.result;
+		          let img = new Image();
+		          img.src = base64;
+		        }
+		        if(this.preview0 == ''){
+		        	this.preview0 = URL.createObjectURL(files[i]);
+		        }else if(this.preview1 == ''){
+		        	this.preview1 = URL.createObjectURL(files[i]);
+		        }else{
+		          this.preview2 = URL.createObjectURL(files[i]);
+		        }
+          }
+        	
         }
-        if(this.preview0 == ''){
-        	this.preview0 = URL.createObjectURL(file);
-        }else if(this.preview1 == ''){
-        	this.preview1 = URL.createObjectURL(file);
-        }else{
-          this.preview2 = URL.createObjectURL(file);
-        }
+        
+        
 			},
 			// 确认上传图片
 			comfirmUpload(){
@@ -307,6 +324,7 @@ import Viewer from 'viewerjs'
 					index = this.index;
 				}
 			  this.commentObj = this.commentList[index];
+			  console.log(this.commentObj)
 			  this.approveL = this.commentObj.approve.length;
 			  this.replyList = this.commentList[index].replies;
 				this.replyVisible = true;
