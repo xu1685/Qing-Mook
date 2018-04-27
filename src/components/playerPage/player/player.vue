@@ -53,10 +53,9 @@
 						this.subtitle = this.playAction.subtitle;
 						Bus.$emit('subtitle', this.subtitle);
 					}).then(() => {
-						var actionUrl = this.playAction.json;
-						// + '?platform=mobile'
+						var actionUrl = this.playAction.json + (process.env.NODE_ENV === 'production' ? '' : '?platform=mobile');
 						var audioUrl = this.playAction.recording;
-						var imageUrl = this.imageUrl;
+						var imageUrl = this.imageUrl + (process.env.NODE_ENV === 'production' ? '' : '?platform=mobile');
 						var subtitles = this.subtitle;
 						var mode = 'mobile';
 						var duration = this.playAction.duration;
@@ -71,7 +70,7 @@
 						  element: document.getElementById('myplayer')
 						});
 					}).catch(() => {
-						alert('docId错误')
+						alert('获取数据错误，请检查访问地址是否正确')
 					})
 
 			},
