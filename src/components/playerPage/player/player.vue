@@ -1,6 +1,6 @@
 <template>
 	<div id="playerContainer" >
-		<div id="myplayer" ref="element" :class="{isfixed:!isnone}" @subtitlechange="handleTimechange" @load="loaded">
+		<div id="myplayer" :class="{isfixed: !isnone}" @subtitlechange="handleTimechange" @load="loaded" >
 
 		</div>
 		<div :class="{block:true, none: isnone}"  :style="{height: this.Height +'px'}" ></div>
@@ -18,7 +18,9 @@
       return{
         Height:0,
         subtitleIndex: '',
-        isnone:true
+        isnone:true,
+        screenWidth: document.body.clientWidth,
+        screenHeight: window.innerHeight
       }
 		},
 		watch:{
@@ -26,16 +28,39 @@
 				Bus.$emit('subtitleIndex', this.subtitleIndex);
 			},
       message(){
-
         if(this.message == 'wordsBar'){
           this.isnone = false
         }else{
         	this.isnone = true
         }
+      },
+      screenWidth(){
+      	setTimeout(() => {
+      		var ele = document.querySelector('.player-image-container');
+				this.Height = ele.offsetHeight;
+				console.log(this.Height)
+			},100)
+      	
+				// if(this.Height > this.screenHeight - 100){
+				// 	this.isnone = true;
+				// 	alert('hquxiao fix')
+				// 	// Bus.$emit('barfix', false);
+				// }else{
+				// 	this.isnone = false;
+
+				// 	// Bus.$emit('barfix', true);
+				// }
       }
 		},
 		mounted(){
 			this.pageInit();
+			const that = this
+      window.onresize = () => {
+          return (() => {
+              window.screenWidth = document.body.clientWidth
+              that.screenWidth = window.screenWidth;
+          })()
+      }
 		},
 		methods:{
 			pageInit(){
@@ -70,6 +95,11 @@
 						  duration,
 						  element: document.getElementById('myplayer')
 						});
+					}).then(() => {
+						
+						document.getElementById("body").addEventListener("onunload", function(){
+						    // unmount();
+						});
 					}).catch(() => {
 						alert('docId错误')
 					})
@@ -81,7 +111,9 @@
 			loaded(){
 				var ele = document.querySelector('.player-image-container');
 				this.Height = ele.offsetHeight;
-				console.log(ele)
+			},
+			change(){
+				console.log('change')
 			}
 		}
 	}
@@ -90,7 +122,7 @@
 
 <style>
 #playerContainer{
-		margin-top: 40px;
+	margin-top: 40px;
 	width: 100%;
 	background-color: #5d5d5d;
 }

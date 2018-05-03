@@ -2,8 +2,7 @@
   <div class="play">
     <MyHeader :pageName="course" pagePath=""></MyHeader>
     <Player :message="selected" :docId="docId"></Player>
-    <mt-navbar v-model="selected" class="bar" :class="{isfixed: selected == 'wordsBar'}">
-      <!-- :class="{isfixed: selected == 'wordsBar'}" -->
+    <mt-navbar v-model="selected" class="bar" :class="{isfixed: selected == 'wordsBar' && barfix}">
       <mt-tab-item id="commentBar"><span style="font-size: 16px;">评论</span></mt-tab-item>
       <mt-tab-item id="wordsBar"><span style="font-size: 16px;">字幕</span></mt-tab-item>
     </mt-navbar>
@@ -33,7 +32,8 @@ export default {
     return {
      course: '课程名称',
      selected:'commentBar',
-     docId: '0000'
+     docId: '0000',
+     barfix: true
     }
   },
   created(){
@@ -43,8 +43,16 @@ export default {
     // console.log(this.$route.params.id,'created');
     this.docId = this.$route.params.id;
   },
+  updated(){
+    Bus.$on('barfix', barfix =>{
+          console.log(barfix)
+          this.barfix = barfix;
+        });
+  },
   methods:{
-  
+    pageInit(){
+      
+    }
   },
   components: {
       MyHeader,

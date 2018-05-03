@@ -47,6 +47,7 @@
   text-shadow: none;
   background:transparent;
   color: #fff;
+  fill: #fff;
   margin: 0;
   padding: 0;
   outline: none;
@@ -59,10 +60,16 @@
   opacity: .5;
   font-size: 1.5em;
 }
-
-.player-button>i:hover {
+.player-button>svg {
+  opacity: .5;
+  height: 1.5em;
+}
+.player-button>i:hover,.player-button>svg:hover {
   cursor: pointer;
   opacity: 1;
+}
+.page-fullscreen-exit {
+  display: none;
 }
 .player-progress-control {
   position: absolute;
@@ -210,12 +217,19 @@
   opacity: 1;
 }
 
-@media screen and (max-width:480px){
+@media screen and (max-width:720px){
   .player-progress-control {
     font-size: 16px;
     top:-0.5em;
   }   
   .player-button>i{
     font-size: 2em;
+  }
+  .player-button>svg {
+    height: 2em;
+  }
+  .player-captions {
+    font-size: 10px;
+    padding:4px 5px 4px 5px;
   }
 }
