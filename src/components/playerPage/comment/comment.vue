@@ -479,7 +479,7 @@ p{
 	  bottom: 0px;
 	  left: 0px;
 	  width: 100%;
-    z-index: 100 !important;
+    z-index: 103;
 	}
 	.showImg{
 		width: 80%;

@@ -21,7 +21,17 @@
         docId:'5acf24ca897a186f4028d9e7'
 			}
 		},
+		created(){
+      this.pageInite();
+		},
 		methods:{
+			pageInite(){
+        this.$http.get('/accounts/docs')
+					.then((res) => {
+						this.libraries = res.data.libraries;
+						console.log(this.libraries,'lib')
+					})
+			}
 		},
 		components:{
 			MyHeader

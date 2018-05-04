@@ -1,6 +1,6 @@
 <template>
 	<div id="playerContainer" >
-		<div id="myplayer" :class="{isfixed: !isnone}" @subtitlechange="handleTimechange" @load="loaded" >
+		<div id="myplayer" :class="{isfixed: !isnone}" @subtitlechange="handleTimechange" @actionsLoaded="loaded" >
 
 		</div>
 		<div :class="{block:true, none: isnone}"  :style="{height: this.Height +'px'}" ></div>
@@ -96,9 +96,13 @@
 						});
 					}).then(() => {
 						
-						document.getElementById("body").addEventListener("onunload", function(){
+						document.getElementById("body").addEventListener("onbeforeunload", function(){
 						    // unmount();
-						});
+						    debugger
+						    return 'aletr'
+						    event.returnValue = '你确定要离开？';
+					     
+						},false);
 					}).catch(() => {
 						alert('获取数据错误，请检查访问地址是否正确')
 					})

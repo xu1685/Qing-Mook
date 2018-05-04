@@ -1,8 +1,6 @@
 import axios from 'axios'
 import Hammer from 'hammerjs'
-import {
-  Zlib
-} from '../lib/unzip.min'
+import { Zlib } from '../lib/unzip.min'
 import fscreen from '../lib/fscreen'
 
 export default class Player {
@@ -157,7 +155,7 @@ export default class Player {
       this.renderShade()
       this.fetchSource()
     }).catch((error) => {
-      throw new Error(error)
+      throw error
     })
   }
 
@@ -188,6 +186,8 @@ export default class Player {
     container.appendChild(shade)
     mountNode.appendChild(container)
     this.domRefs.shade = shade
+    const event = new CustomEvent('actionsLoaded')
+    mountNode.dispatchEvent(event)
   }
 
   fetchSource() {
@@ -205,7 +205,7 @@ export default class Player {
     this.state.srcNum += 1
     this.domRefs.audio = document.createElement('audio')
     const {
-      audio
+      audio,
     } = this.domRefs
     audio.addEventListener('loadedmetadata', this.handleSrcLoaded.bind(this))
     audio.src = audioUrl
@@ -222,14 +222,14 @@ export default class Player {
       reader.onload = this.unzipImages.bind(this)
       reader.readAsArrayBuffer(res.data)
     }).catch((error) => {
-      throw new Error(error)
+      throw error
     })
   }
 
   unzipImages(event) {
     const unzip = new Zlib.Unzip(new Uint8Array(event.target.result))
     const filenames = unzip.getFilenames()
-    /* 将文件名按照p1,p2,p3的顺序进行排序*/
+    /* 将文件名按照p1,p2,p3的顺序进行排序 */
     filenames.sort((s1, s2) => {
       const pattern = /p([0-9]+)\./i
       const num1 = parseInt(s1.match(pattern)[1])
@@ -299,8 +299,6 @@ export default class Player {
     this.renderCaptions()
     this.renderAudio()
     this.renderDraft()
-    const event = new CustomEvent('load')
-    this.domRefs.mountNode.dispatchEvent(event)
   }
 
   renderImages() {
@@ -373,7 +371,7 @@ export default class Player {
       }
     })
     const {
-      content
+      content,
     } = template
     const progressbar = content.querySelector('.player-progressbar')
     progressbar.style.width = `${audio.currentTime / duration * 100}%`
@@ -402,7 +400,7 @@ export default class Player {
     } = this.domRefs
     const captionsNode = Player.renderString(mountNode, this.template.captions)
     const top = mountNode.offsetHeight - captionsNode.offsetHeight - playerControl.offsetHeight
-    captionsNode.style.top = `${top/mountNode.offsetHeight*100}%`
+    captionsNode.style.top = `${top / mountNode.offsetHeight * 100}%`
     if (!this.state.isCaptionsOpen) {
       captionsNode.style.display = 'none'
     }
@@ -417,7 +415,7 @@ export default class Player {
     template.innerHTML = this.template.draft
     this.domRefs.draft = template.content.querySelector('.draft')
     const {
-      draft
+      draft,
     } = this.domRefs
     const ctx = draft.getContext('2d')
     ctx.lineCap = 'round'
@@ -488,19 +486,19 @@ export default class Player {
     handleHammer.on('panleft panright', this.handleProgressPanMove)
     const captionsHammer = new Hammer(captions)
     captionsHammer.get('pan').set({
-      direction: Hammer.DIRECTION_ALL
+      direction: Hammer.DIRECTION_ALL,
     })
     captionsHammer.get('press').set({
-      time: 500
+      time: 500,
     })
     captionsHammer.on('press', this.handleCaptionsPress)
     captionsHammer.on('panleft panright panup pandown', this.handleCaptionsPanMove)
     captionsHammer.on('panend', this.handleCaptionsPressUp)
   }
 
-  handleCaptionsPress(e) {
+  handleCaptionsPress() {
     const {
-      captions
+      captions,
     } = this.domRefs
     /* 长按字幕可以拖动 */
     this.canCaptionsMove = true
@@ -513,9 +511,6 @@ export default class Player {
   }
 
   handleCaptionsPanMove(e) {
-    const {
-      capitons
-    } = this.domRefs
     if (this.canCaptionsMove) {
       const left = this.captionsStartX + e.deltaX
       const top = this.captionsStartY + e.deltaY
@@ -523,10 +518,10 @@ export default class Player {
     }
   }
 
-  handleProgressPanStart(e) {
+  handleProgressPanStart() {
     /* 当滑动开始时，记录下起始的时间 */
     const {
-      audio
+      audio,
     } = this.domRefs
     this.panStartTime = audio.currentTime
   }
@@ -534,7 +529,6 @@ export default class Player {
   handleProgressPanMove(e) {
     const {
       progressbarWrapper,
-      audio,
     } = this.domRefs
     const {
       duration,
@@ -570,8 +564,8 @@ export default class Player {
   handleCaptionsMove(e) {
     const distX = e.clientX - this.cursorStartX
     const distY = e.clientY - this.cursorStartY
-    let left = this.captionsStartX + distX
-    let top = this.captionsStartY + distY
+    const left = this.captionsStartX + distX
+    const top = this.captionsStartY + distY
     this.setCaptionsOffset(left, top)
   }
 
@@ -730,6 +724,7 @@ export default class Player {
       audio,
       playerControl,
       captions,
+      mountNode,
     } = this.domRefs
     const {
       windowWidth,
@@ -754,9 +749,9 @@ export default class Player {
     this.setDraftSize()
     this.changeCurrentTime(audio.currentTime * 1000)
     // 重新调整字幕位置
-    const captionsLeft=parseFloat(captions.style.left)/100*mountNode.offsetWidth
-    const captionsTop=parseFloat(captions.style.top)/100*mountNode.offsetHeight
-    this.setCaptionsOffset(captionsLeft,captionsTop)
+    const captionsLeft = parseFloat(captions.style.left) / 100 * mountNode.offsetWidth
+    const captionsTop = parseFloat(captions.style.top) / 100 * mountNode.offsetHeight
+    this.setCaptionsOffset(captionsLeft, captionsTop)
   }
 
   toggleFullscreen() {
@@ -1066,7 +1061,7 @@ export default class Player {
       propotion,
     } = this.state
     const {
-      canvas
+      canvas,
     } = ctx
     actions.forEach((action, i) => {
       if (i === actions.length - 1 && action.type === 'path') {
@@ -1378,7 +1373,7 @@ export default class Player {
       ctx,
     } = this.state
     const {
-      canvas
+      canvas,
     } = ctx
     // 重做该页之前发生过的所有动作
     ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -1542,7 +1537,7 @@ export default class Player {
     } = this
     for (let i = 0; i < actions.length; ++i) {
       const {
-        startTime
+        startTime,
       } = actions[i]
       if (startTime >= time) {
         return actions[i]
