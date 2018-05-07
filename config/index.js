@@ -14,7 +14,7 @@ module.exports = {
     httpUrl: '/api/v1',
     proxyTable: {
         '/api/v1': {
-            target:'https://mobile.qingmooc.com/api/v1',
+            target:'https://mobile.mamasousuo.com/api/v1',
             changeOrigin: true,
             secure: false,
             pathRewrite:{

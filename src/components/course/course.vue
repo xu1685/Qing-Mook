@@ -1,0 +1,147 @@
+<template>
+	<div class="coursePage">
+		<MyHeader :pageName="title" pagePath=""></MyHeader>
+		<div class="container">
+			  <div style="height: 200px;">
+			  	<div class="message">
+			    	<h2 style="margin-top: 40px;color: white">{{this.library.name}}</h2>
+			    	<span style="color: rgb(199, 199, 199)">共{{this.courseList.length}}个文档</span>
+			    	<p style="margin-top: 20px;color: rgb(199, 199, 199)">{{this.createTime}}</p>
+		      </div>
+		    	<!-- 黑色透明遮罩 -->
+			    <div class="black"></div>
+			    <img :src="this.library.cover" onerror="this.style.display='none'" width="100%" height="200px;">
+		      <!-- 内容：头像 信息 -->
+
+		    <!-- 课程卡片 -->
+		    </div>
+			  
+    		<div class="courseCell" @click="sendIndex" v-for="(course,index) in courseList" :key="index">
+    			<router-link :to="{ path: '/player/'+ courseIndex + course.id  }"  class="link">
+	    			<div class="imgcon">
+	    				<img :src="course.cover" class="classImg">
+	    			</div>
+		    		<span class="className">{{course.name}}</span>
+	    		</router-link>
+	    	</div>
+      
+		</div>
+	</div>
+</template>
+
+<script>
+	import MyHeader from '../header/Header.vue'
+	import Bus from '../../bus.js'; 
+	export default {
+		name: 'course',
+		data(){
+			return {
+        title: "课程列表",
+        courseList:[],
+        courseIndex: this.$route.params.id,
+        docs:[],
+        allDcos:[],
+        library:{},
+        cover:'',
+        createTime:''
+			}
+		},
+		created(){
+      this.pageInite();
+		},
+		mounted(){
+
+		},
+		methods:{
+			pageInite(){
+        this.$http.get('/accounts/docs')
+					.then((res) => {
+							console.log(res.data);
+						this.allDcos = res.data.docs;
+						this.library = res.data.libraries[this.courseIndex];
+						this.createTime = this.library.createTime;
+						this.createTime = this.createTime.replace('T',' ');
+						this.createTime = this.createTime.replace(/\.\w+/,'')
+						console.log(this.createTime);
+						console.log(this.library,'library')
+						this.docs = this.library.docs;
+						var len = this.allDcos.length;
+						for(var i = 0;i<len;i++){
+							if(this.docs.indexOf(this.allDcos[i].id) != -1 ){
+                this.courseList.push(this.allDcos[i])
+							}
+						}
+				  	console.log(this.courseList,'courseList')
+				})
+					
+			},
+			sendIndex(){
+				Bus.$emit('index', this.index);
+			}
+		},
+		components:{
+			MyHeader
+		}
+	}
+</script>
+
+<style>
+	.coursePage{
+		margin-top: 40px;
+	}
+	 .black{
+  	width: 100%;
+  	height: 200px;
+  	position: absolute;
+  	background-color:rgba(0, 0, 0, 0.48);
+  	/*-webkit-filter: blur(10px);
+    -moz-filter: blur(10px);
+    -o-filter: blur(10px);
+    -ms-filter: blur(10px);
+    filter: blur(10px);*/
+    z-index: 1;
+  }
+   .message{
+  	width: 100%;
+  	height: 200px;
+  	position: absolute;
+  	top: 40px;
+  	z-index: 3;
+  }
+	 .courseCell{
+  	width: 90%;
+  	background-color: rgba(212, 212, 212, 0.24);
+  	height: 100px;
+  	margin: 10px;
+  	margin-left: 5%;
+  	border-radius: 5px;
+  }
+  .imgcon{
+  	display: inline-block;
+    width: 68px;
+    height: 68px;
+    overflow: hidden;
+    margin: 10px;
+  }
+  .classImg{
+  	height: 70px;
+  	width: 70px;
+  	display: inline-block;
+  	float: left;
+  	display: inline-block;
+    background-position: 0px 1px;
+    margin: -1px;
+  }
+ .className{
+  	display: inline-block;
+  	position: relative;
+  	margin-top: 20px;
+  	color: black;
+  	width: 180px;
+    text-overflow: ellipsis;
+    overflow:hidden;
+    white-space: nowrap;
+  }
+
+
+</style>

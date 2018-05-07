@@ -11,7 +11,7 @@
 		 </div>
 		 <!-- 跳转到老师页面 -->
 		 <div class="theTeacher">
-		 	<router-link :to="'/teacher/' + teacherName">
+		 	<router-link :to="'/teacher/' + docId">
 		 		<div class="right">
 			 		<img src="./logo.png" class="teacherPhoto">
 			 		<span style="line-height: 15px;">{{teacherName}}</span>
@@ -32,6 +32,7 @@
 	// import Star from './star.vue'
 	export default {
 		name: 'Score',
+		props:['docId'],
 		data(){
 			return{
         done: false,

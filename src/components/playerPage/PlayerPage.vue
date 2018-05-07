@@ -1,6 +1,6 @@
 <template>
   <div class="play">
-    <MyHeader :pageName="course" pagePath=""></MyHeader>
+    <MyHeader :pageName="course" :pagePath="path"></MyHeader>
     <Player :message="selected" :docId="docId"></Player>
     <mt-navbar v-model="selected" class="bar" :class="{isfixed: selected == 'wordsBar' && barfix}">
       <mt-tab-item id="commentBar"><span style="font-size: 16px;">评论</span></mt-tab-item>
@@ -8,7 +8,7 @@
     </mt-navbar>
     <mt-tab-container v-model="selected">
       <mt-tab-container-item id="commentBar">
-        <Score></Score>
+        <Score :docId="pageIndex + docId"></Score>
         <Comment :docId="docId"></Comment>
       </mt-tab-container-item>
       <mt-tab-container-item id="wordsBar">
@@ -33,26 +33,24 @@ export default {
      course: '课程名称',
      selected:'commentBar',
      docId: '0000',
-     barfix: true
+     barfix: true,
+     pageIndex: -1,
+     path:'',
+     params:''
     }
   },
   created(){
     if(this.$route.params.id == undefined){
       alert('id错误')
     }
-    // console.log(this.$route.params.id,'created');
-    this.docId = this.$route.params.id;
-  },
-  updated(){
-    Bus.$on('barfix', barfix =>{
-          console.log(barfix)
-          this.barfix = barfix;
-        });
+    this.params = this.$route.params.id;
+    this.pageIndex = this.params.slice(0,1);
+    this.docId = this.params.slice(1);
+    this.path = 'course/' + this.pageIndex;
+    console.log(this.docId,'docId')
   },
   methods:{
-    pageInit(){
-      
-    }
+   
   },
   components: {
       MyHeader,

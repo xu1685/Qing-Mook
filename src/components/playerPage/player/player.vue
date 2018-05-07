@@ -20,7 +20,8 @@
         subtitleIndex: '',
         isnone:true,
         screenWidth: document.body.clientWidth,
-        screenHeight: window.innerHeight
+        screenHeight: window.innerHeight,
+        hasEle:false
       }
 		},
 		watch:{
@@ -62,6 +63,13 @@
           })()
       }
 		},
+		beforeDestroy(){
+			if(this.hasEle){
+				var p = Player.prototype;
+        p.unmount();
+			}
+      
+		},
 		methods:{
 			pageInit(){
 				this.$http.get('/docs/'+this.docId)
@@ -94,15 +102,11 @@
 						  duration,
 						  element: document.getElementById('myplayer')
 						});
-					}).then(() => {
 						
-						document.getElementById("body").addEventListener("onbeforeunload", function(){
-						    // unmount();
-						    debugger
-						    return 'aletr'
-						    event.returnValue = '你确定要离开？';
-					     
-						},false);
+            
+					}).then(() =>{
+							 this.hasEle = true;
+						
 					}).catch(() => {
 						alert('获取数据错误，请检查访问地址是否正确')
 					})
@@ -117,6 +121,9 @@
 			},
 			change(){
 				console.log('change')
+			},
+			unmount(){
+
 			}
 		}
 	}

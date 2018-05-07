@@ -48,6 +48,11 @@
 				  }
 				}
 		},
+  watch:{
+    subtitleIndex(){
+      console.log(this.subtitleIndex,'change')
+    }
+  },
 		methods:{
 			pageInit(){
 				Bus.$on('subtitleIndex', subtitleIndex =>{
