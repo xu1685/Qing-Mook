@@ -50,11 +50,6 @@
 				  }
 				}
 		},
-  watch:{
-    subtitleIndex(){
-      console.log(this.subtitleIndex,'change')
-    }
-  },
 		methods:{
 			pageInit(){
 				Bus.$on('subtitleIndex', subtitleIndex =>{
@@ -83,6 +78,8 @@
       	this.subtitle = subtitle;
       	if(this.subtitle.length == 0){
       		this.nowords = true;
+      	}else{
+      		this.nowords = false;
       	}
       	// console.log(this.subtitle,'subtitle')
       }

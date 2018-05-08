@@ -32,6 +32,7 @@
 <script>
 	import MyHeader from '../header/Header.vue'
 	import Bus from '../../bus.js'; 
+  import { Indicator } from 'mint-ui';
 	export default {
 		name: 'course',
 		data(){
@@ -54,16 +55,17 @@
 		},
 		methods:{
 			pageInite(){
+        Indicator.open();
         this.$http.get('/accounts/docs')
 					.then((res) => {
-							console.log(res.data);
+							// console.log(res.data);
 						this.allDcos = res.data.docs;
 						this.library = res.data.libraries[this.courseIndex];
 						this.createTime = this.library.createTime;
 						this.createTime = this.createTime.replace('T',' ');
 						this.createTime = this.createTime.replace(/\.\w+/,'')
-						console.log(this.createTime);
-						console.log(this.library,'library')
+						// console.log(this.createTime);
+						// console.log(this.library,'library')
 						this.docs = this.library.docs;
 						var len = this.allDcos.length;
 						for(var i = 0;i<len;i++){
@@ -71,7 +73,8 @@
                 this.courseList.push(this.allDcos[i])
 							}
 						}
-				  	console.log(this.courseList,'courseList')
+				  	// console.log(this.courseList,'courseList')
+            Indicator.close();
 				})
 					
 			},

@@ -201,6 +201,8 @@ import Viewer from 'viewerjs'
 				this.commentList = res.data.comments;
 				if(this.commentList.length == 0){
 					this.nocomment = true;
+				}else{
+					this.nocomment = false;
 				}
 				// console.log(this.commentList,'comment')
 			})

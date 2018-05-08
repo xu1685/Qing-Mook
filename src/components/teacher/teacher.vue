@@ -42,36 +42,41 @@
 </template>
 
 <script>
-    import MyHeader from '../header/Header.vue'
-    import { Swipe, SwipeItem } from 'mint-ui';
-    export default {
-        name: 'Teacher',
-        data(){
-            return {
+  import MyHeader from '../header/Header.vue'
+  import { Swipe, SwipeItem } from 'mint-ui';
+  import { Indicator } from 'mint-ui';
+
+  export default {
+    name: 'Teacher',
+    data(){
+      return {
         id: this.$route.params.id,
         libraries:[],
         title:'教师主页'
-            }
-        },
-        created(){
-            // console.log(this.$route.params.id);
-      this.pageInite();
-        },
-    methods:{
-      pageInite(){
-        this.$http.get('/accounts/docs')
-          .then((res) => {
-            this.libraries = res.data.libraries;
-            console.log(this.libraries,'lib')
-         })
       }
     },
-        components:{
-            MyHeader,
-            'mt-swipe': Swipe,
-            'mt-swipe-item': SwipeItem
-        }
+    created(){
+        // console.log(this.$route.params.id);
+       this.pageInite();
+    },
+  methods:{
+    pageInite(){
+      Indicator.open();
+      this.$http.get('/accounts/docs')
+        .then((res) => {
+          this.libraries = res.data.libraries;
+          // console.log(this.libraries,'lib')
+          Indicator.close();
+
+       })
     }
+  },
+      components:{
+          MyHeader,
+          'mt-swipe': Swipe,
+          'mt-swipe-item': SwipeItem
+      }
+  }
 </script>
 
 <style>
@@ -139,6 +144,6 @@
     font-size: 19px;
     margin-left: 10px;
     color: black;
-    
+
   }
 </style>

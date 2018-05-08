@@ -26,6 +26,8 @@ import Score from './score/score.vue'
 import Words from './words/words.vue'
 import Bus from '../../bus.js'; 
 import { Navbar, TabItem } from 'mint-ui';
+import { Indicator } from 'mint-ui';
+
 export default {
   name: 'PlayerPage',
   data () {
@@ -40,6 +42,7 @@ export default {
     }
   },
   created(){
+    // Indicator.open();
     if(this.$route.params.id == undefined){
       alert('id错误')
     }
@@ -47,7 +50,7 @@ export default {
     this.pageIndex = this.params.slice(0,1);
     this.docId = this.params.slice(1);
     this.path = 'course/' + this.pageIndex;
-    console.log(this.docId,'docId')
+    // console.log(this.docId,'docId')
   },
   methods:{
    
