@@ -4,6 +4,7 @@
 			<span class="start">{{formatDuring(item.beginTime)}}</span>
 			<span class="wordstext">{{item.text}}</span>
   	</div>
+  	<h3 style="color: gray;margin-top: 38px;" v-if="nowords">暂无字幕</h3>
 	</div>
 </template>
 
@@ -26,6 +27,7 @@
         scroll:'',
         count: 0,
         subtitle:[],
+        nowords:false,
         subtitleIndex:-1
 			}
 		},
@@ -79,6 +81,9 @@
 			},
       changeSubtitle(subtitle){
       	this.subtitle = subtitle;
+      	if(this.subtitle.length == 0){
+      		this.nowords = true;
+      	}
       	// console.log(this.subtitle,'subtitle')
       }
 

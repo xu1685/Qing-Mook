@@ -41,28 +41,28 @@
   background-color: rgba(0, 0, 0, 0.6);
 }
 .player-button {
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  text-shadow: none;
-  background:transparent;
-  color: #fff;
-  fill: #fff;
+  width: 3em;
   margin: 0;
   padding: 0;
+  color: #fff;
+  border: 0;
+  border-radius: 0;
   outline: none;
-  width: 3em;
+  background:transparent;
+  box-shadow: none;
+  text-shadow: none;
+  fill: #fff;
 }
 .player-button.is-active {
   color:#0ea6ec;
 }
 .player-button>i {
-  opacity: .5;
   font-size: 1.5em;
+  opacity: .5;
 }
 .player-button>svg {
-  opacity: .5;
   height: 1.5em;
+  opacity: .5;
 }
 .player-button>i:hover,.player-button>svg:hover {
   cursor: pointer;
@@ -73,13 +73,13 @@
 }
 .player-progress-control {
   position: absolute;
-  width:100%;
-  height: 10px;
   top:-0.7em;
   display: flex;
   justify-content:center;
-  align-content: center;
   align-items: center;
+  width:100%;
+  height: 10px;
+  align-content: center;
 }
 .player-progress-control:hover {
   font-size: 16px;
@@ -88,8 +88,8 @@
 .player-progressbar-wrap {
   position: relative;
   width: 100%;
-  margin: 0 10px;
   height: 0.4em;
+  margin: 0 10px;
   cursor: pointer;
   transition: all 0.2s;
   background: rgba(245,245,245,0.55);
@@ -98,10 +98,10 @@
   position: absolute;
   top: 0;
   left: 0;
-  height: 100%;
   width: 0;
-  padding: 0;
+  height: 100%;
   margin: 0;
+  padding: 0;
   background-color: #2ab573;
 }
 .player-progressbar-handle {
@@ -114,18 +114,18 @@
 }
 .player-section-left,.player-section-right {
   display: flex;
-  margin-right: 1em;
   align-items: center;
+  margin-right: 1em;
   align-content: center;
 }
 .player-section {
-  margin-left: 1em;
   height: 100%;
+  margin-left: 1em;
 }
 .player-time {
   display: flex;
-  align-content: center;
   align-items: center;
+  align-content: center;
 }
 .player-time>span {
   font-size:1.5em;
@@ -174,43 +174,43 @@
 
 /* 草稿纸 */
 .draft {
-  background: yellow;
   position: absolute;
+  z-index: 96;
   top: 0;
   right: 0;
-  z-index: 96;
   width: 0;
+  background: rgba(241, 221, 170, 0.98);
 }
 
 /* 字幕 */
 .player-captions {
   position:absolute;
-  width: 90%;
-  left:5%;
-  top:70%;
-  max-height: 60px;
-  box-sizing: border-box;
-  text-align:center;
-  border-radius: 4px;
-  padding:8px 10px 8px 30px;
-  background: rgba(0,0,0,0.75);
-  color:#e2c01f;
   z-index: 98;
+  top:70%;
+  left:5%;
+  box-sizing: border-box;
+  width: 90%;
+  max-height: 60px;
+  padding:8px 10px 8px 30px;
   user-select: none;
+  text-align:center;
+  color:#e2c01f;
+  border-radius: 4px;
+  background: rgba(0,0,0,0.75);
 }
 
 .player-captions:hover {
-  background: #000;
   cursor:move;
+  background: #000;
 }
 
 .player-captions>i {
   position: absolute;
+  top:50%;
+  left:20px;
+  transform:translateY(-50%);
   opacity: 0.5;
   color:#fff;
-  left:20px;
-  top:50%;
-  transform:translateY(-50%);
 }
 
 .player-captions:hover>i {
@@ -221,7 +221,7 @@
   .player-progress-control {
     font-size: 16px;
     top:-0.5em;
-  }   
+  }
   .player-button>i{
     font-size: 2em;
   }

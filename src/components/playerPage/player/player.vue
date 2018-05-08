@@ -21,7 +21,8 @@
         isnone:true,
         screenWidth: document.body.clientWidth,
         screenHeight: window.innerHeight,
-        hasEle:false
+        hasEle:false,
+        player:{}
       }
 		},
 		watch:{
@@ -64,11 +65,10 @@
       }
 		},
 		beforeDestroy(){
-			if(this.hasEle){
-				var p = Player.prototype;
-        p.unmount();
+			if(this.player && typeof this.player.unmount === 'function'){
+				
+        this.player.unmount();
 			}
-      
 		},
 		methods:{
 			pageInit(){
@@ -102,7 +102,7 @@
 						  duration,
 						  element: document.getElementById('myplayer')
 						});
-						
+						this.player = player;
             
 					}).then(() =>{
 							 this.hasEle = true;

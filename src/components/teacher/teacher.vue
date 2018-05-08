@@ -138,5 +138,7 @@
   .courseName{
     font-size: 19px;
     margin-left: 10px;
+    color: black;
+    
   }
 </style>

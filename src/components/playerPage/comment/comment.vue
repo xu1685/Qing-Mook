@@ -24,18 +24,18 @@
 					<!-- 点赞 -->
 					<i @click="approveHandle(index,0,1)" :id="'approve' + item.id" class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size: 20px;"></i>
 					<span>{{item.approve.length}}</span>
-        
-			</div>
+			  </div>
 
-      <!-- 评论内容 -->
-			<p class="text">{{item.text}}</p>
-      <div class="imgBox">
-				<img @click="showImg(img)" v-for="(img,index) in item.images" class="textImg" :src="img" width="60px" height="60px">
-		  </div>
-			<!-- 回复 -->
-			<span style="color: gray;font-size: 12px;">{{item.createTime.replace(/[T]/,' ').replace(/\.\S*/,'')}}</span>
-			<span class="replyBtn" @click="replyHandle(index,0,1)">回复({{ item.replies.length }})</span>
+	      <!-- 评论内容 -->
+				<p class="text">{{item.text}}</p>
+	      <div class="imgBox">
+					<img @click="showImg(img)" v-for="(img,index) in item.images" class="textImg" :src="img" width="60px" height="60px">
+			  </div>
+				<!-- 回复 -->
+				<span style="color: gray;font-size: 12px;">{{item.createTime.replace(/[T]/,' ').replace(/\.\S*/,'')}}</span>
+				<span class="replyBtn" @click="replyHandle(index,0,1)">回复({{ item.replies.length }})</span>
 		</div>
+		<h3 v-if="nocomment" style="color: gray">暂无评论，快来评论吧！</h3>
 
 		<!-- 图片上传弹框 -->
 		<popup
@@ -163,6 +163,7 @@ import Viewer from 'viewerjs'
 				approveList: [],
 				index: -1,
 			  commentList:[],
+			  nocomment:false,
 			  showIndex: [],
 			  replyList:[],
 			  approveCount: [],
@@ -198,6 +199,9 @@ import Viewer from 'viewerjs'
 			this.$http.get('/docs/'+this.docId)
 			.then(res=>{
 				this.commentList = res.data.comments;
+				if(this.commentList.length == 0){
+					this.nocomment = true;
+				}
 				// console.log(this.commentList,'comment')
 			})
 		},

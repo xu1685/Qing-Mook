@@ -1663,7 +1663,6 @@ export default class Player {
 
   /* 将播放器节点从dom树中移除 */
   unmount() {
-    // console.log('unun')
     const {
       mountNode,
     } = this.domRefs
