@@ -8,7 +8,7 @@
     </mt-navbar>
     <mt-tab-container v-model="selected">
       <mt-tab-container-item id="commentBar">
-        <Score :docId="pageIndex + docId"></Score>
+        <Score :docId="docId"></Score>
         <Comment :docId="docId"></Comment>
       </mt-tab-container-item>
       <mt-tab-container-item id="wordsBar">
@@ -36,7 +36,6 @@ export default {
      selected:'commentBar',
      docId: '0000',
      barfix: true,
-     pageIndex: -1,
      path:'',
      params:''
     }
@@ -46,11 +45,7 @@ export default {
     if(this.$route.params.id == undefined){
       alert('id错误')
     }
-    // this.params = this.$route.params.id;
-    // this.pageIndex = this.params.slice(0,1);
     this.docId = this.$route.params.id;
-    // this.path = 'course/' + this.pageIndex;
-    // console.log(this.docId,'docId')
   },
   methods:{
    

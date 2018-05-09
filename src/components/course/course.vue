@@ -73,7 +73,8 @@
                 this.courseList.push(this.allDcos[i]);
 							}
 						}
-				  	// console.log(this.courseList,'courseList')
+						this.courseList = this.courseList.reverse();
+				  	console.log(this.courseList,'courseList')
             Indicator.close();
 				})
 					
@@ -112,11 +113,11 @@
   	z-index: 3;
   }
 	 .courseCell{
-  	width: 90%;
+  	width: 100%;
   	background-color: rgba(212, 212, 212, 0.24);
   	height: 100px;
-  	margin: 10px;
-  	margin-left: 5%;
+  	margin-top: 10px;
+  	/*margin-left: 5%;*/
   	border-radius: 5px;
   }
   .imgcon{
@@ -125,6 +126,7 @@
     height: 68px;
     overflow: hidden;
     margin: 10px;
+    border: 1px solid gray;
   }
   .classImg{
   	height: 70px;

@@ -74,6 +74,7 @@
 			pageInit(){
 				this.$http.get('/docs/'+this.docId)
 					.then((res) => {
+						console.log(res.data.doc,'doc')
 						this.defaultAction = res.data.doc.defaultAction;
 						this.action = res.data.doc.action;
 						this.imageUrl = res.data.doc.pictures;

@@ -2,12 +2,10 @@
 	<div class="score">
 		 <div class="overAll">
 		 	<div class="left">
-		 		<span style="margin-left: 10px;">综合评分</span>
-		 		<span class="overAllScore">8.6</span>
+		 		<span>评分:</span>
+		 		<span style="font-size: 19px;font-weight: 600;color: rgb(71, 71, 71)">{{scorenum}}</span>
+		 		<span class="overAllScore"></span>
 		 	</div>
-		 	<!-- <mt-cell style="color: #626262" title="综合评分">
-		 	  <span class="overAllScore">8.6</span>
-			</mt-cell> -->
 		 </div>
 		 <!-- 跳转到老师页面 -->
 		 <div class="theTeacher">
@@ -15,13 +13,8 @@
 		 		<div class="right">
 			 		<img src="./logo.png" class="teacherPhoto">
 			 		<span style="line-height: 15px;">{{teacherName}}</span>
-			 		<span style="font-size: 13px;margin-left: 15px;line-height: 15px;">更多</span>
 			 		<i class="fa fa-angle-right" aria-hidden="true" style="margin-left: 10px;color:gray"></i>
 			 	</div>
-		 	<!-- 	<mt-cell :title="teacherName" style="color: #494848" is-link>
-				  <img slot="icon" src="./logo.png" class="teacherPhoto">
-				  <span style="font-size: 13px;">更多</span>
-				</mt-cell> -->
 		 	</router-link>
 		 	 
 		 </div>
@@ -36,7 +29,39 @@
 		data(){
 			return{
         done: false,
-        teacherName: '蜗牛老师'
+        teacherName: '蜗牛老师',
+        doc:{},
+        ratingStatis:[],
+        scorenum:0
+			}
+		},
+		created(){
+			this.pageInit()
+		},
+		methods:{
+			pageInit(){
+				this.$http.get('/docs/'+this.docId)
+					.then((res) => {
+						this.doc = res.data.doc;
+						this.ratingStatis = this.doc.ratingStatis;
+						console.log(this.ratingStatis,'ratingStatis');
+						this.scorenum = this.score(this.ratingStatis);
+						console.log(this.doc,'doc');
+					})
+			},
+			score(arr){
+				var len = arr.length;
+				var count = 0;
+				for(var i=0;i<len;i++){
+           count += arr[i];
+				}
+				if(count === 0){
+          var score = "暂无评分";
+				}else{
+					var score = (arr[0]*1 + arr[1]*2 + arr[2]*3 + arr[3]*4 + arr[4]*5)/count;
+				}
+				console.log(score,'score')
+				return score
 			}
 		}
 	}
@@ -63,7 +88,6 @@ a { text-decoration:none; }
 .overAll{
 	display: inline-block;
 	width: 43%;
-	
 }
 .overAllScore{
 	font-size: 24px;
@@ -79,6 +103,7 @@ a { text-decoration:none; }
 	align-items: center;
 	color: #494848;
 	line-height: 39px;
+	float: right;
 }
   .teacherPhoto{
   	width: 30px;

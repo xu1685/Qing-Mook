@@ -31,11 +31,12 @@
         </div>
         <div class="coursesCell" v-for="(course,index) in libraries">
           <!-- <div class="no" v-if="!course.isDefault" @click="pop"></div> -->
-          <router-link :to=" '/course/' + index " :class="{link:true}">
+          <router-link :to=" '/course/' + index " class="link">
             <div class="imgcontainer">
               <img class="image" :src="course.cover" width="50px" height="50px" >
             </div>
             <span class="courseName">{{course.name}}</span>
+            <p class="alt">共({{course.docs.length}}个文档)</p>
           </router-link>
         </div>
     </div>
@@ -66,7 +67,7 @@
       this.$http.get('/accounts/docs')
         .then((res) => {
           this.libraries = res.data.libraries;
-          // console.log(this.libraries,'lib')
+          console.log(this.libraries,'lib');
           Indicator.close();
 
        })
@@ -122,15 +123,12 @@
       width: 100%;
       height: 200px;
   }
-  .course{
-    margin:0 10px;
-  }
   .coursesCell{
-    width: 90%;
+    width: 100%;
     background-color: rgba(212, 212, 212, 0.24);
     height: 100px;
-    margin: 10px;
-    margin-left: 5%;
+    margin-top: 10px;
+    /*margin-left: 5%;*/
     border-radius: 5px;
   }
   .link{
@@ -147,7 +145,7 @@
     height: 48px;
     overflow: hidden;
     margin: 10px;
-    z-index: 1
+    border: 1px solid gray;
   }
   .image{
     display: inline-block;
@@ -158,6 +156,9 @@
     font-size: 19px;
     margin-left: 10px;
     color: black;
-
+  }
+  .alt{
+    margin-left: 5%;
+    color: gray
   }
 </style>
