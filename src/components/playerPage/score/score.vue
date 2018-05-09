@@ -11,7 +11,7 @@
 		 </div>
 		 <!-- 跳转到老师页面 -->
 		 <div class="theTeacher">
-		 	<router-link :to="'/teacher/' + docId">
+		 	<router-link :to="'/teacher/' ">
 		 		<div class="right">
 			 		<img src="./logo.png" class="teacherPhoto">
 			 		<span style="line-height: 15px;">{{teacherName}}</span>

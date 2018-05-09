@@ -25,7 +25,7 @@ export default new Router({
       component: Course
     },
     {
-      path: '/teacher/:id',
+      path: '/teacher/',
       name: 'teacher',
       component: Teacher
     },

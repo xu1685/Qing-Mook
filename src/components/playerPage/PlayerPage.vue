@@ -1,6 +1,6 @@
 <template>
   <div class="play">
-    <MyHeader :pageName="course" :pagePath="path"></MyHeader>
+    <MyHeader :pageName="course"></MyHeader>
     <Player :message="selected" :docId="docId"></Player>
     <mt-navbar v-model="selected" class="bar" :class="{isfixed: selected == 'wordsBar' && barfix}">
       <mt-tab-item id="commentBar"><span style="font-size: 16px;">评论</span></mt-tab-item>
@@ -46,10 +46,10 @@ export default {
     if(this.$route.params.id == undefined){
       alert('id错误')
     }
-    this.params = this.$route.params.id;
-    this.pageIndex = this.params.slice(0,1);
-    this.docId = this.params.slice(1);
-    this.path = 'course/' + this.pageIndex;
+    // this.params = this.$route.params.id;
+    // this.pageIndex = this.params.slice(0,1);
+    this.docId = this.$route.params.id;
+    // this.path = 'course/' + this.pageIndex;
     // console.log(this.docId,'docId')
   },
   methods:{

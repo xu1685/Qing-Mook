@@ -1,24 +1,24 @@
 
 <template>
     <div class="teacher">
-        <MyHeader :pageName="title" :pagePath=" 'player/' + id " v-if="id != undefined"></MyHeader>
+        <MyHeader :pageName="title" ></MyHeader>
     <div style="height: 200px;">
      
       <!-- 内容：头像 信息 -->
         <div class="message">
-            <mt-swipe class="mySwipe" :auto="0" :continuous="false">
-                  <mt-swipe-item>
-                      <img src="./teacher.jpeg" class="photo">
-                    <h3 style="color:#FFFFFF">蜗牛老师</h3>
-                    <h5 style="color:#c7c7c7">web前端工程师</h5>
-                  </mt-swipe-item>
-                  <mt-swipe-item>
-                      <h4 style="color: rgb(232, 232, 232)">这是一段介绍</h4>
-                      <p style="color: rgb(232, 232, 232);padding-top: 15px;">
-                          《Sass与Compass实战》共分为10章，旨在完整介绍两个工具：Sass和Compass，从而引领读者通过框架高效地构建样式表，创建动态页面。
-                    </p>
-                  </mt-swipe-item>
-                </mt-swipe>    
+          <mt-swipe class="mySwipe" :auto="0" :continuous="false">
+            <mt-swipe-item>
+                <img src="./teacher.jpeg" class="photo">
+              <h3 style="color:#FFFFFF">蜗牛老师</h3>
+              <h5 style="color:#c7c7c7">web前端工程师</h5>
+            </mt-swipe-item>
+            <mt-swipe-item>
+                <h4 style="color: rgb(232, 232, 232)">这是一段介绍</h4>
+                <p style="color: rgb(232, 232, 232);padding-top: 15px;">
+                    《Sass与Compass实战》共分为10章，旨在完整介绍两个工具：Sass和Compass，从而引领读者通过框架高效地构建样式表，创建动态页面。
+              </p>
+            </mt-swipe-item>
+          </mt-swipe>    
       </div>
       <!-- 黑色透明遮罩 -->
       <div class="black"></div>
@@ -30,7 +30,8 @@
             <span style="font-size: 18px;color: #3e3e3e;font-weight: 550;margin-top: 10px;display: block">所有课堂</span>
         </div>
         <div class="coursesCell" v-for="(course,index) in libraries">
-          <router-link :to=" '/course/' + index " class="link">
+          <!-- <div class="no" v-if="!course.isDefault" @click="pop"></div> -->
+          <router-link :to=" '/course/' + index " :class="{link:true}">
             <div class="imgcontainer">
               <img class="image" :src="course.cover" width="50px" height="50px" >
             </div>
@@ -45,7 +46,7 @@
   import MyHeader from '../header/Header.vue'
   import { Swipe, SwipeItem } from 'mint-ui';
   import { Indicator } from 'mint-ui';
-
+  import { Toast } from 'mint-ui';
   export default {
     name: 'Teacher',
     data(){
@@ -69,6 +70,13 @@
           Indicator.close();
 
        })
+    },
+    pop(){
+      Toast({
+        message: '该课程已关闭',
+        iconClass: 'icon',
+        position: 'bottom'
+      });
     }
   },
       components:{
@@ -117,16 +125,21 @@
   .course{
     margin:0 10px;
   }
-    .coursesCell{
-    text-align: left;
-    margin: 5px 0;
-    padding: 5px;
+  .coursesCell{
+    width: 90%;
     background-color: rgba(212, 212, 212, 0.24);
-    border-radius: 3px;
+    height: 100px;
+    margin: 10px;
+    margin-left: 5%;
+    border-radius: 5px;
   }
   .link{
     display: flex;
     align-items: center;
+    height: 100px;
+  }
+  .noclick{
+    pointer-events: none;
   }
   .imgcontainer{
     display: inline-block;
@@ -134,6 +147,7 @@
     height: 48px;
     overflow: hidden;
     margin: 10px;
+    z-index: 1
   }
   .image{
     display: inline-block;

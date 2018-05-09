@@ -17,7 +17,7 @@
 		    </div>
 			  
     		<div class="courseCell" @click="sendIndex" v-for="(course,index) in courseList" :key="index">
-    			<router-link :to="{ path: '/player/'+ courseIndex + course.id  }"  class="link">
+    			<router-link :to="{ path: '/player/'+ course.id  }"  class="link">
 	    			<div class="imgcon">
 	    				<img :src="course.cover" class="classImg">
 	    			</div>
@@ -69,8 +69,8 @@
 						this.docs = this.library.docs;
 						var len = this.allDcos.length;
 						for(var i = 0;i<len;i++){
-							if(this.docs.indexOf(this.allDcos[i].id) != -1 ){
-                this.courseList.push(this.allDcos[i])
+							if(this.docs.indexOf(this.allDcos[i].id) != -1 && this.allDcos[i].status == 'open'){
+                this.courseList.push(this.allDcos[i]);
 							}
 						}
 				  	// console.log(this.courseList,'courseList')

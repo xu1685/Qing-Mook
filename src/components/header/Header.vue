@@ -2,10 +2,9 @@
 <template>
   <div>
     <mt-header fixed class="header" :title="pageName">
-      <router-link :to="'/' + pagePath" slot="left">
+      <a @click="back" slot="left">
         <mt-button icon="back"></mt-button>
-      </router-link>
-      
+      </a>
     </mt-header>
   </div>
 </template>
@@ -13,7 +12,12 @@
 <script>
 export default {
   name:'MyHeader',
-  props:['pageName','pagePath']
+  props:['pageName','pagePath'],
+  methods:{
+    back(){
+      window.history.back();
+    }
+  }
 }
 </script>
 
