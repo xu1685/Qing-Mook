@@ -2,8 +2,8 @@
 	<div class="score">
 		 <div class="overAll">
 		 	<div class="left">
-		 		<span>评分:</span>
-		 		<span style="font-size: 19px;font-weight: 600;color: rgb(71, 71, 71)">{{scorenum}}</span>
+		 		<span style="margin-right: 15px;">评分:</span>
+		 		<span :class="{scorenum:true,noscore: scorenum == '暂无评分'}">{{scorenum}}</span>
 		 		<span class="overAllScore"></span>
 		 	</div>
 		 </div>
@@ -49,7 +49,8 @@
 						console.log(this.doc,'doc');
 					})
 			},
-			score(arr){
+			score(obj){
+				var arr = Object.values(obj);
 				var len = arr.length;
 				var count = 0;
 				for(var i=0;i<len;i++){
@@ -59,6 +60,7 @@
           var score = "暂无评分";
 				}else{
 					var score = (arr[0]*1 + arr[1]*2 + arr[2]*3 + arr[3]*4 + arr[4]*5)/count;
+					score = score.toFixed(1);
 				}
 				console.log(score,'score')
 				return score
@@ -92,6 +94,12 @@ a { text-decoration:none; }
 .overAllScore{
 	font-size: 24px;
 	color:black;
+}
+.scorenum{
+	font-size: 25px;font-weight: 600;color: rgb(71, 71, 71)
+}
+.noscore{
+	font-size: 19px;
 }
 .theTeacher{
 	display: inline-block;

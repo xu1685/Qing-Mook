@@ -1,6 +1,6 @@
 <template>
 	<div class="coursePage">
-		<MyHeader :pageName="title" pagePath=""></MyHeader>
+		<MyHeader :pageName="name" pagePath=""></MyHeader>
 		<div class="container">
 			  <div style="height: 200px;">
 			  	<div class="message">
@@ -21,7 +21,22 @@
 	    			<div class="imgcon">
 	    				<img :src="course.cover" class="classImg">
 	    			</div>
-		    		<span class="className">{{course.name}}</span>
+	    			<div style="color: black;width: 70%;text-align: left">
+	    				<div style="display: inline-block;">
+	    					<span class="className">{{course.name}}</span>
+	    				</div>
+	    				<div class="icons">
+                <i class="fa fa-star" aria-hidden="true">{{score(course.ratingStatis)}}</i>
+                 <!-- style="color:#ffb100;" -->
+
+	    				  <i style="margin-left: 15px;" class="fa fa-eye" aria-hidden="true"></i><span style="display: inline-block;width: 18px;">{{course.view}}</span>
+
+	    				  <i style="margin-left: 15px;" class="fa fa-commenting-o" aria-hidden="true"></i><span style="display: inline-block;width: 18px;">4</span>
+
+	    				</div>
+	    				
+	    			</div>
+		    		
 	    		</router-link>
 	    	</div>
       
@@ -44,9 +59,16 @@
         allDcos:[],
         library:{},
         cover:'',
-        createTime:''
+        createTime:'',
+        action:[],
+        name:''
 			}
 		},
+		// computed:{
+  //     star:function(){
+  //         return 
+  //     }
+  //   },
 		created(){
       this.pageInite();
 		},
@@ -61,6 +83,7 @@
 							// console.log(res.data);
 						this.allDcos = res.data.docs;
 						this.library = res.data.libraries[this.courseIndex];
+						this.name = this.library.name;
 						this.createTime = this.library.createTime;
 						this.createTime = this.createTime.replace('T',' ');
 						this.createTime = this.createTime.replace(/\.\w+/,'')
@@ -77,10 +100,25 @@
 				  	console.log(this.courseList,'courseList')
             Indicator.close();
 				})
-					
 			},
 			sendIndex(){
 				Bus.$emit('index', this.index);
+			},
+			score(obj){
+				var arr = Object.values(obj);
+				var len = arr.length;
+				var count = 0;
+				for(var i=0;i<len;i++){
+           count += arr[i];
+				}
+				if(count === 0){
+          var score = "暂无评分";
+				}else{
+					var score = (arr[0]*1 + arr[1]*2 + arr[2]*3 + arr[3]*4 + arr[4]*5)/count;
+					score = score.toFixed(1);
+				}
+				console.log(score,'score')
+				return score
 			}
 		},
 		components:{
@@ -120,6 +158,11 @@
   	/*margin-left: 5%;*/
   	border-radius: 5px;
   }
+  .link{
+    display: flex;
+    align-items: center;
+    height: 100px;
+  }
   .imgcon{
   	display: inline-block;
     width: 68px;
@@ -139,14 +182,19 @@
   }
  .className{
   	display: inline-block;
-  	position: relative;
-  	margin-top: 20px;
-  	color: black;
   	width: 180px;
     text-overflow: ellipsis;
     overflow:hidden;
     white-space: nowrap;
+    font-size: 18px;
+    margin-left: 15px;
   }
-
+.icons{
+	text-align:right;
+	color: gray;
+	/*margin-right: 20px;*/
+	margin-top: 10px;
+	width: 100%;
+}
 
 </style>

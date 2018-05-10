@@ -26,9 +26,6 @@
     <!-- 课程卡片 -->
     </div>
     <div class="course">
-        <div>
-            <span style="font-size: 18px;color: #3e3e3e;font-weight: 550;margin-top: 10px;display: block">所有课堂</span>
-        </div>
         <div class="coursesCell" v-for="(course,index) in libraries">
           <!-- <div class="no" v-if="!course.isDefault" @click="pop"></div> -->
           <router-link :to=" '/course/' + index " class="link">
@@ -36,7 +33,7 @@
               <img class="image" :src="course.cover" width="50px" height="50px" >
             </div>
             <span class="courseName">{{course.name}}</span>
-            <p class="alt">共({{course.docs.length}}个文档)</p>
+            <p class="alt">(共{{course.docs.length}}个文档)</p>
           </router-link>
         </div>
     </div>
@@ -135,6 +132,7 @@
     display: flex;
     align-items: center;
     height: 100px;
+    text-align: left;
   }
   .noclick{
     pointer-events: none;
@@ -153,12 +151,16 @@
     margin: -1px;
   }
   .courseName{
-    font-size: 19px;
-    margin-left: 10px;
+    display: inline-block;
+    width: 180px;
+    text-overflow: ellipsis;
+    overflow:hidden;
+    white-space: nowrap;
+    font-size: 18px;
+    padding-left: 20px;
     color: black;
   }
   .alt{
-    margin-left: 5%;
     color: gray
   }
 </style>
