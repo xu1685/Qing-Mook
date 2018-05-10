@@ -31,7 +31,7 @@
 
 	    				  <i style="margin-left: 15px;" class="fa fa-eye" aria-hidden="true"></i><span style="display: inline-block;width: 18px;">{{course.view}}</span>
 
-	    				  <i style="margin-left: 15px;" class="fa fa-commenting-o" aria-hidden="true"></i><span style="display: inline-block;width: 18px;">4</span>
+	    				  <i style="margin-left: 15px;" class="fa fa-commenting-o" aria-hidden="true"></i><span style="display: inline-block;width: 18px;">{{course.commentNums}}</span>
 
 	    				</div>
 	    				
