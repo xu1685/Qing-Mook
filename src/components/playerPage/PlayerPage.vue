@@ -1,7 +1,7 @@
 <template>
   <div class="play">
     <MyHeader :pageName="course"></MyHeader>
-    <Player :message="selected" :docId="docId"></Player>
+    <Player :message="selected" @myname="myname" :docId="docId"></Player>
     <mt-navbar v-model="selected" class="bar" :class="{isfixed: selected == 'wordsBar' && barfix}">
       <mt-tab-item id="commentBar"><span style="font-size: 16px;">评论</span></mt-tab-item>
       <mt-tab-item id="wordsBar"><span style="font-size: 16px;">字幕</span></mt-tab-item>
@@ -46,9 +46,13 @@ export default {
       alert('id错误')
     }
     this.docId = this.$route.params.id;
+
   },
   methods:{
-   
+     myname(data){
+          console.log('allData:',data);
+          this.course = data
+      }
   },
   components: {
       MyHeader,

@@ -1,10 +1,10 @@
 <template>
 	<div class="coursePage">
-		<MyHeader :pageName="name" pagePath=""></MyHeader>
+		<MyHeader :pageName="name"></MyHeader>
 		<div class="container">
 			  <div style="height: 200px;">
 			  	<div class="message">
-			    	<h2 style="margin-top: 40px;color: white">{{this.library.name}}</h2>
+			    	<h2 class="coursetitle">{{this.library.name}}</h2>
 			    	<span style="color: rgb(199, 199, 199)">共{{this.courseList.length}}个文档</span>
 			    	<p style="margin-top: 20px;color: rgb(199, 199, 199)">{{this.createTime}}</p>
 		      </div>
@@ -61,7 +61,7 @@
         cover:'',
         createTime:'',
         action:[],
-        name:''
+        name:'课堂主页'
 			}
 		},
 		// computed:{
@@ -83,7 +83,7 @@
 							// console.log(res.data);
 						this.allDcos = res.data.docs;
 						this.library = res.data.libraries[this.courseIndex];
-						this.name = this.library.name;
+						// this.name = this.library.name;
 						this.createTime = this.library.createTime;
 						this.createTime = this.createTime.replace('T',' ');
 						this.createTime = this.createTime.replace(/\.\w+/,'')
@@ -136,11 +136,6 @@
   	height: 200px;
   	position: absolute;
   	background-color:rgba(0, 0, 0, 0.48);
-  	/*-webkit-filter: blur(10px);
-    -moz-filter: blur(10px);
-    -o-filter: blur(10px);
-    -ms-filter: blur(10px);
-    filter: blur(10px);*/
     z-index: 1;
   }
    .message{
@@ -149,6 +144,13 @@
   	position: absolute;
   	top: 40px;
   	z-index: 3;
+  }
+  .coursetitle{
+    margin-top: 40px;
+    color: white;
+    text-overflow: ellipsis;
+    overflow:hidden;
+    white-space: nowrap;
   }
 	 .courseCell{
   	width: 100%;

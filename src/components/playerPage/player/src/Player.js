@@ -1,6 +1,8 @@
 import axios from 'axios'
 import Hammer from 'hammerjs'
-import { Zlib } from '../lib/unzip.min'
+import {
+  Zlib
+} from '../lib/unzip.min'
 import fscreen from '../lib/fscreen'
 
 export default class Player {
@@ -110,7 +112,7 @@ export default class Player {
                   c0,5.896,4.771,10.667,10.667,10.667H160c5.896,0,10.667-4.771,10.667-10.667V309.333
                   C170.667,303.437,165.896,298.667,160,298.667z"/>
               </g>
-            </svg> 
+            </svg>
           </button>
           <button class="player-section player-button player-fullscreen" title="进入全屏">
             <i class="fa fa-expand"></i>
@@ -442,6 +444,9 @@ export default class Player {
     this.handleFullscreenClick = this.handleFullscreenClick.bind(this)
     this.handleCaptionsMove = this.handleCaptionsMove.bind(this)
     this.showPlayerControl = this.showPlayerControl.bind(this)
+    this.handleCaptionsDown = this.handleCaptionsDown.bind(this)
+    this.handleCaptionsMove = this.handleCaptionsMove.bind(this)
+    this.handleCaptionsUp = this.handleCaptionsUp.bind(this)
     /* 添加PC端事件 */
     if (this.state.mode === 'desktop') {
       playerControl.addEventListener('mouseenter', this.showPlayerControl.bind(this))
@@ -456,8 +461,7 @@ export default class Player {
       progressbarWrapper.addEventListener('mouseleave', this.handleProgressbarleave.bind(this))
       progressbarWrapper.addEventListener('mousemove', this.handleProgressbarOver.bind(this))
       progressHandle.addEventListener('mousedown', this.handleSeekMousedown.bind(this))
-      captions.addEventListener('mousedown', this.handleCaptionsDown.bind(this))
-      captions.addEventListener('mouseup', this.handleCaptionsUp.bind(this))
+      captions.addEventListener('mousedown', this.handleCaptionsDown)
     }
     /* 添加公共事件 */
     audio.addEventListener('timeupdate', this.handleTimeUpdate.bind(this))
@@ -538,6 +542,7 @@ export default class Player {
     let time = this.panStartTime + deltaTime
     time = Math.min(duration, time)
     time = Math.max(0, time)
+    this.showPlayerControl()
     this.changeCurrentTime(time * 1000)
   }
 
@@ -551,6 +556,7 @@ export default class Player {
       captions,
     } = this.domRefs
     document.addEventListener('mousemove', this.handleCaptionsMove)
+    document.addEventListener('mouseup', this.handleCaptionsUp)
     this.captionsStartX = captions.offsetLeft
     this.captionsStartY = captions.offsetTop
     this.cursorStartX = e.clientX
@@ -559,6 +565,7 @@ export default class Player {
 
   handleCaptionsUp() {
     document.removeEventListener('mousemove', this.handleCaptionsMove)
+    document.removeEventListener('mouseup', this.handleCaptionsUp)
   }
 
   handleCaptionsMove(e) {
@@ -818,9 +825,11 @@ export default class Player {
     const {
       images,
       canvas,
+      mountNode,
     } = this.domRefs
     canvas.width = width
-    canvas.height = images.reduce((max, cur) => Math.max(max, cur.offsetHeight), 0)
+    const height = images.reduce((max, cur) => Math.max(max, cur.offsetHeight), 0)
+    canvas.height = Math.max(height, mountNode.offsetHeight)
   }
 
   setDraftSize() {
@@ -1666,8 +1675,6 @@ export default class Player {
     const {
       mountNode,
     } = this.domRefs
-    while (mountNode.firstElementChild) {
-      mountNode.removeChild(mountNode.firstElementChild)
-    }
+    mountNode.innerHTML = ''
   }
 }
