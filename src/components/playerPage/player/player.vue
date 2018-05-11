@@ -22,7 +22,8 @@
         screenWidth: document.body.clientWidth,
         screenHeight: window.innerHeight,
         hasEle:false,
-        player:{}
+        player:{},
+        library:''
       }
 		},
 		watch:{
@@ -94,6 +95,7 @@
 						var subtitles = this.subtitle;
 						var mode = 'mobile';
 						var duration = this.playAction.duration;
+						var size = this.playAction.totalSize;
 
 						var player = new Player({
 						  actionUrl,
@@ -102,6 +104,7 @@
 						  subtitles,
 						  mode,
 						  duration,
+						  size,
 						  element: document.getElementById('myplayer')
 						});
 						this.player = player;

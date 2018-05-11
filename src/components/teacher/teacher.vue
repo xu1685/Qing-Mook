@@ -1,14 +1,14 @@
 
 <template>
     <div class="teacher">
-        <MyHeader :pageName="title" ></MyHeader>
+        <MyHeader :pageName="title" pagePath="00"></MyHeader>
     <div style="height: 200px;">
      
       <!-- 内容：头像 信息 -->
         <div class="message">
           <mt-swipe class="mySwipe" :auto="0" :continuous="false">
             <mt-swipe-item>
-                <img src="./teacher.jpeg" class="photo">
+              <img src="./teacher.jpeg" class="photo">
               <h3 style="color:#FFFFFF">蜗牛老师</h3>
               <h5 style="color:#c7c7c7">web前端工程师</h5>
             </mt-swipe-item>
@@ -25,16 +25,24 @@
       <img src='./teacher.jpeg' onerror="this.style.display='none'" width="100%" height="200px;">
     <!-- 课程卡片 -->
     </div>
+    <hr class="hr1">
     <div class="course">
         <div class="coursesCell" v-for="(course,index) in libraries">
           <!-- <div class="no" v-if="!course.isDefault" @click="pop"></div> -->
           <router-link :to=" '/course/' + index " class="link">
             <div class="imgcontainer">
-              <img class="image" :src="course.cover" width="50px" height="50px" >
+             <div class="image">
+               <img class="image" :src="course.cover" onerror="this.style.display='none'">
+             </div>
+              
             </div>
-            <span class="courseName">{{course.name}}</span>
-            <p class="alt">(共{{course.docs.length}}个文档)</p>
+            <div class="msgcontainer">
+              <span class="courseName">{{course.name}}</span>
+              <p class="alt">{{course.docs.length}}个文档</p>
+            </div>
+            
           </router-link>
+          <hr class="hr1">
         </div>
     </div>
     </div>
@@ -94,11 +102,6 @@
     height: 200px;
     position: absolute;
     background-color:rgba(0, 0, 0, 0.48);
-   /* -webkit-filter: blur(10px);
-    -moz-filter: blur(10px);
-    -o-filter: blur(10px);
-    -ms-filter: blur(10px);
-    filter: blur(10px);*/
     z-index: 1;
   }
    .message{
@@ -122,11 +125,10 @@
   }
   .coursesCell{
     width: 100%;
-    background-color: rgba(212, 212, 212, 0.24);
+    /*background-color: rgba(212, 212, 212, 0.24);*/
     height: 100px;
-    margin-top: 10px;
-    /*margin-left: 5%;*/
-    border-radius: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
   .link{
     display: flex;
@@ -139,16 +141,36 @@
   }
   .imgcontainer{
     display: inline-block;
-    width: 48px;
-    height: 48px;
-    overflow: hidden;
+    width: 150px;
+    height: 100px;
     margin: 10px;
-    border: 1px solid gray;
+    border-radius: 5px;
+    background: gray;
   }
+ /* .msg{
+    position: absolute;
+    width: 148px;
+    height:20px; 
+    margin-top: 78px;
+    color: white;
+    border-radius: 5px;
+    background: -moz-linear-gradient(bottom, #0c0c0c4f 0%, #fff0 100%);
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0%,#0c0c0c4f), color-stop(100%,#fff0));
+    background: -webkit-linear-gradient(bottom, #0c0c0c4f 0%,#fff0 100%);
+    background: -o-linear-gradient(bottom, #0c0c0c4f 0%,#fff0 100%);
+    background: -ms-linear-gradient(bottom, #0c0c0c4f 0%,#fff0 100%);
+    background: linear-gradient(to top, #0c0c0c4f 0%,#fff0 100%);
+  }*/
   .image{
     display: inline-block;
     background-position: 0px 1px;
-    margin: -1px;
+    width:150px;
+    height:100px;
+    border-radius: 5px;
+  }
+  .msgcontainer{
+    height: 100px;
+    margin-left: 8px;
   }
   .courseName{
     display: inline-block;
@@ -156,11 +178,19 @@
     text-overflow: ellipsis;
     overflow:hidden;
     white-space: nowrap;
-    font-size: 18px;
-    padding-left: 20px;
+    font-size: 20px;
     color: black;
   }
   .alt{
-    color: gray
+    color: gray;
+    font-size: 15px;
+    margin-top: 48px;
   }
+.hr1{
+  height:1px;
+  border:none;
+  border-top:1px solid lightgray;
+  margin-top: 10px;
+  margin: 10px 10px 0 10px;
+} 
 </style>

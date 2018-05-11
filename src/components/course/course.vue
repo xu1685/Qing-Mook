@@ -1,11 +1,11 @@
 <template>
 	<div class="coursePage">
-		<MyHeader :pageName="name"></MyHeader>
+		<MyHeader :pageName="name" pagePath="c"></MyHeader>
 		<div class="container">
 			  <div style="height: 200px;">
 			  	<div class="message">
 			    	<h2 class="coursetitle">{{this.library.name}}</h2>
-			    	<span style="color: rgb(199, 199, 199)">共{{this.courseList.length}}个文档</span>
+			    	<span style="color: rgb(199, 199, 199)">共{{this.courseList.length}}个可读文档</span>
 			    	<p style="margin-top: 20px;color: rgb(199, 199, 199)">{{this.createTime}}</p>
 		      </div>
 		    	<!-- 黑色透明遮罩 -->
@@ -15,29 +15,33 @@
 
 		    <!-- 课程卡片 -->
 		    </div>
-			  
+	    	<hr class="hr1">
     		<div class="courseCell" @click="sendIndex" v-for="(course,index) in courseList" :key="index">
     			<router-link :to="{ path: '/player/'+ course.id  }"  class="link">
 	    			<div class="imgcon">
-	    				<img :src="course.cover" class="classImg">
+	    				<div class="msg">
+                <i style="color:white;font-size: 20px;width: 148px;text-align: center;margin-top: 38px;" class="fa fa-star" aria-hidden="true">{{score(course.ratingStatis)}}</i>
+              </div>
+              <div class="blackblock"></div>
+              <div class="classImg">
+              	<img class="classImg" :src="course.cover" onerror="this.style.display='none'" >
+              </div>
+	    				
 	    			</div>
-	    			<div style="color: black;width: 70%;text-align: left">
+	    			<div class="msgcontainer">
 	    				<div style="display: inline-block;">
 	    					<span class="className">{{course.name}}</span>
 	    				</div>
 	    				<div class="icons">
-                <i class="fa fa-star" aria-hidden="true">{{score(course.ratingStatis)}}</i>
-                 <!-- style="color:#ffb100;" -->
-
-	    				  <i style="margin-left: 15px;" class="fa fa-eye" aria-hidden="true"></i><span style="display: inline-block;width: 18px;">{{course.view}}</span>
-
-	    				  <i style="margin-left: 15px;" class="fa fa-commenting-o" aria-hidden="true"></i><span style="display: inline-block;width: 18px;">{{course.commentNums}}</span>
-
+	    					<i  class="fa fa-caret-square-o-right" aria-hidden="true"></i>
+                <span style="display: inline-block;margin-left: 5px;">{{course.view}}</span>
+                <i style="margin-left: 15px;" class="fa fa-commenting-o" aria-hidden="true"></i>
+                <span style="display: inline-block;margin-left: 5px;">{{course.commentNums}}</span>
+                
 	    				</div>
-	    				
 	    			</div>
-		    		
 	    		</router-link>
+	    		<hr class="hr1">
 	    	</div>
       
 		</div>
@@ -92,7 +96,7 @@
 						this.docs = this.library.docs;
 						var len = this.allDcos.length;
 						for(var i = 0;i<len;i++){
-							if(this.docs.indexOf(this.allDcos[i].id) != -1 && this.allDcos[i].status == 'open'){
+							if(this.docs.indexOf(this.allDcos[i].id) != -1 && this.allDcos[i].status == 'open' && this.allDcos[i].transformed == '1' && this.allDcos[i].hasAction){
                 this.courseList.push(this.allDcos[i]);
 							}
 						}
@@ -144,6 +148,7 @@
   	position: absolute;
   	top: 40px;
   	z-index: 3;
+  	text-align: center
   }
   .coursetitle{
     margin-top: 40px;
@@ -151,14 +156,15 @@
     text-overflow: ellipsis;
     overflow:hidden;
     white-space: nowrap;
+    width: 60%;
+    margin-left: 20%;
   }
 	 .courseCell{
   	width: 100%;
-  	background-color: rgba(212, 212, 212, 0.24);
+  	/*background-color: rgba(212, 212, 212, 0.24);*/
   	height: 100px;
-  	margin-top: 10px;
-  	/*margin-left: 5%;*/
-  	border-radius: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
   .link{
     display: flex;
@@ -167,36 +173,66 @@
   }
   .imgcon{
   	display: inline-block;
-    width: 68px;
-    height: 68px;
-    overflow: hidden;
+    width: 150px;
+    height: 100px;
     margin: 10px;
-    border: 1px solid gray;
+    border-radius: 5px;
+    background: gray;
+    z-index: 1;
   }
   .classImg{
-  	height: 70px;
-  	width: 70px;
   	display: inline-block;
-  	float: left;
+    width:150px;
+    height:100px;
+    z-index: 1;
+    border-radius: 5px;
+  }
+ 
+  .msg{
+    position: absolute;
+    width: 150px;
+    height: 100px; 
+    color: white;
+    border-radius: 5px;
+    text-align: left;
+    z-index: 3;
+  }
+  .blackblock{
   	display: inline-block;
-    background-position: 0px 1px;
-    margin: -1px;
+  	position: absolute;
+  	width: 150px;
+  	height: 100px;
+  	background-color: rgba(0, 0, 0, 0.28);
+  	z-index: 2;
+  	border-radius: 5px;
+  }
+  .msgcontainer{
+  	height: 100px;
+  	margin-left: 8px;
+  	margin-right: 10px;
+  	flex:1;
   }
  .className{
   	display: inline-block;
-  	width: 180px;
+  	width: 160px;
     text-overflow: ellipsis;
     overflow:hidden;
     white-space: nowrap;
     font-size: 18px;
-    margin-left: 15px;
+    color: black;
+    text-align:left;
   }
 .icons{
 	text-align:right;
 	color: gray;
-	/*margin-right: 20px;*/
-	margin-top: 10px;
+	margin-top: 50px;
 	width: 100%;
 }
-
+.hr1{
+  height:1px;
+  border:none;
+  border-top:1px solid lightgray;
+  margin-top: 10px;
+  margin: 10px 10px 0 10px;
+} 
 </style>

@@ -3,7 +3,9 @@
   <div>
     <mt-header fixed class="header" :title="pageName">
       <a @click="back" slot="left">
-        <mt-button icon="back"></mt-button>
+        <mt-button icon="back" v-if="pagePath !== '00' "></mt-button>
+        <router-link id="p" :to="{ path: '/course/' + courseIndex}"></router-link>
+        <router-link id="c" :to="{ path: '/teacher/'}"></router-link>
       </a>
     </mt-header>
   </div>
@@ -13,9 +15,47 @@
 export default {
   name:'MyHeader',
   props:['pageName','pagePath'],
+  data(){
+    return{
+      courseIndex:0,
+      libraries:[],
+      path:'',
+      library:''
+    }
+  },
+  created(){
+    this.path = this.pagePath;
+    console.log(this.path,this.pageName,'path')
+    if(this.path.slice(0,1) == 'p'){
+        this.docId = this.path.slice(1);
+        this.$http.get('/docs/'+this.docId).then((res)=>{
+          this.library = res.data.doc.library;
+        }).then(()=>{
+          this.$http.get('/accounts/docs')
+            .then((res) => {
+              this.libraries = res.data.libraries;
+              console.log(this.libraries,'lib');
+              // Indicator.close();
+              var len = this.libraries.length;
+              for(var i=0;i<len;i++){
+                if(this.library == this.libraries[i].id){
+                  this.courseIndex = i;
+                  break;
+                }
+              }
+           });
+        })
+        
+    }
+  },
   methods:{
     back(){
-      window.history.back();
+      if(this.path.slice(0,1) == 'p'){
+        document.getElementById("p").click();
+      }else if(this.path.slice(0,1) == 'c'){
+        document.getElementById("c").click();
+      }
+        
     }
   }
 }
@@ -36,5 +76,8 @@ export default {
   margin-top: 20px;
   width: 28px;
   height: 28px;
+}
+#p{
+  width: 0px;
 }
 </style>

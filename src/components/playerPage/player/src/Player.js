@@ -70,6 +70,11 @@ export default class Player {
       // 是否开启字幕
       isCaptionsOpen: false,
     }
+    // 将资源大小由字节转换成MB
+    let {
+      size,
+    } = source
+    size = Math.floor(size / 1024 / 1024)
     // html模板
     this.template = {
       playerControl: `<div class="player-main">
@@ -129,7 +134,13 @@ export default class Player {
           </div>
         </div>
       </div>`,
-      shade: '<div class="shade"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>',
+      shade: `<div class="shade">
+        <button class="player-load-button">
+          <i class="fa fa-play" aria-hidden="true"></i>
+          <span>${size}MB流量</span>
+        </button>
+        <i class="player-loading-icon fa fa-spinner fa-spin fa-3x fa-fw"></i>
+      </div>`,
       draft: '<canvas class="draft"></canvas>',
       captions: `<div class="player-captions">
         <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
@@ -155,7 +166,6 @@ export default class Player {
       this.actions = this.source.actionData.actions
       this.actions.sort((action1, action2) => action1.startTime - action2.startTime)
       this.renderShade()
-      this.fetchSource()
     }).catch((error) => {
       throw error
     })
@@ -190,6 +200,13 @@ export default class Player {
     this.domRefs.shade = shade
     const event = new CustomEvent('actionsLoaded')
     mountNode.dispatchEvent(event)
+    /* 如果为移动端，显示播放需要多少流量，并且不直接加载资源 */
+    const loadButton = document.querySelector('.player-load-button')
+    if (this.state.mode === 'mobile') {
+      loadButton.addEventListener('click', this.fetchSource.bind(this))
+    } else {
+      this.fetchSource()
+    }
   }
 
   fetchSource() {
@@ -197,10 +214,16 @@ export default class Player {
       audioUrl,
       imageUrl,
     } = this.source
+    const {
+      shade,
+    } = this.domRefs
     // 获取音频资源
     this.fetchAudio(audioUrl)
     // 获取图片资源
     this.fetchImages(imageUrl)
+    // 隐藏加载资源按钮，显示正在加载提示
+    shade.firstElementChild.style.display = 'none'
+    shade.lastElementChild.style.display = 'inline'
   }
 
   fetchAudio(audioUrl) {

@@ -167,9 +167,22 @@
   height: 100%;
   background: #000;
 }
+.player-load-button {
+  outline:none;
+  background: transparent;
+  border-radius: 5px;
+  border:1px solid white;
+  color:gainsboro;
+  cursor: pointer;
+  padding: 10px
+}
+.player-load-button>i {
+  margin-right: 10px;
+}
 .shade > i {
   font-size: 30px;
   color: white;
+  display: none;
 }
 
 /* 草稿纸 */
