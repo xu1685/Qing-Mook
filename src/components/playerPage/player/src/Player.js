@@ -69,6 +69,8 @@ export default class Player {
       subtitles: source.subtitles || [],
       // 是否开启字幕
       isCaptionsOpen: false,
+      // 资源大小
+      size: source.size,
     }
     // 将资源大小由字节转换成MB
     let {
@@ -90,37 +92,22 @@ export default class Player {
         </div>
         <div class="player-section-right">
           <button class="player-section player-button player-toggle-captions" title="打开字幕">
-            <i class="fa fa-cc"></i>
+            <svg viewBox="0 0 24 24" style="display: inline-block; fill: currentcolor; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;">
+              <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 12h4v2H4v-2zm10 6H4v-2h10v2zm6 0h-4v-2h4v2zm0-4H10v-2h10v2z"></path>
+            </svg>
           </button>
           <button class="player-section player-button player-page-fullscreen" title="网页全屏">
-            <svg class="page-fullscreen-enter" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-            viewBox="0 0 298.667 298.667" style="enable-background:new 0 0 298.667 298.667;" xml:space="preserve">
-              <g>
-                <polygon points="42.667,192 0,192 0,298.667 106.667,298.667 106.667,256 42.667,256 			"/>
-                <polygon points="0,106.667 42.667,106.667 42.667,42.667 106.667,42.667 106.667,0 0,0 			"/>
-                <polygon points="192,0 192,42.667 256,42.667 256,106.667 298.667,106.667 298.667,0 			"/>
-                <polygon points="256,256 192,256 192,298.667 298.667,298.667 298.667,192 256,192 			"/>
-              </g>
+            <svg viewBox="0 0 24 24" style="display: inline-block; fill: currentcolor; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;">
+              <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"></path>
             </svg>
-            <svg class="page-fullscreen-exit" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 469.333 469.333" style="enable-background:new 0 0 469.333 469.333;" xml:space="preserve">
-              <g>
-                <path d="M160,0h-21.333C132.771,0,128,4.771,128,10.667V128H10.667C4.771,128,0,132.771,0,138.667V160
-                  c0,5.896,4.771,10.667,10.667,10.667H160c5.896,0,10.667-4.771,10.667-10.667V10.667C170.667,4.771,165.896,0,160,0z"/>
-                <path d="M458.667,128H341.333V10.667C341.333,4.771,336.563,0,330.667,0h-21.333c-5.896,0-10.667,4.771-10.667,10.667V160
-                  c0,5.896,4.771,10.667,10.667,10.667h149.333c5.896,0,10.667-4.771,10.667-10.667v-21.333
-                  C469.333,132.771,464.563,128,458.667,128z"/>
-                <path d="M458.667,298.667H309.333c-5.896,0-10.667,4.771-10.667,10.667v149.333c0,5.896,4.771,10.667,10.667,10.667h21.333
-                  c5.896,0,10.667-4.771,10.667-10.667V341.333h117.333c5.896,0,10.667-4.771,10.667-10.667v-21.333
-                  C469.333,303.437,464.563,298.667,458.667,298.667z"/>
-                <path d="M160,298.667H10.667C4.771,298.667,0,303.437,0,309.333v21.333c0,5.896,4.771,10.667,10.667,10.667H128v117.333
-                  c0,5.896,4.771,10.667,10.667,10.667H160c5.896,0,10.667-4.771,10.667-10.667V309.333
-                  C170.667,303.437,165.896,298.667,160,298.667z"/>
-              </g>
+            <svg viewBox="0 0 24 24" style="display: none; fill: currentcolor; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;">
+              <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"></path>
             </svg>
           </button>
           <button class="player-section player-button player-fullscreen" title="进入全屏">
-            <i class="fa fa-expand"></i>
+            <svg viewBox="0 0 24 24" style="display: inline-block; fill: currentcolor; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;">
+              <path d="M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6z"></path>
+            </svg>
           </button>
         </div>
         <div class="player-progress-control">
@@ -202,7 +189,7 @@ export default class Player {
     mountNode.dispatchEvent(event)
     /* 如果为移动端，显示播放需要多少流量，并且不直接加载资源 */
     const loadButton = document.querySelector('.player-load-button')
-    if (this.state.mode === 'mobile') {
+    if (this.state.mode === 'mobile' && this.state.size) {
       loadButton.addEventListener('click', this.fetchSource.bind(this))
     } else {
       this.fetchSource()
@@ -714,7 +701,7 @@ export default class Player {
       const fullscreenSize = this.getFullscreenSize()
       mountNode.style.width = `${fullscreenSize}px`
       this.resizePlayer(fullscreenSize)
-      fullscreen.firstElementChild.className = 'fa fa-compress'
+      // fullscreen.firstElementChild.className = 'fa fa-compress'
       fullscreen.title = '退出全屏'
       if (this.state.mode === 'desktop') {
         pageFullscreen.style.display = 'none'
@@ -725,7 +712,7 @@ export default class Player {
       }
       mountNode.style.width = this.initialWidth
       this.resizePlayer(this.playerSize)
-      fullscreen.firstElementChild.className = 'fa fa-expand'
+      // fullscreen.firstElementChild.className = 'fa fa-expand'
       fullscreen.title = '进入全屏'
       if (this.state.mode === 'desktop') {
         pageFullscreen.style.display = 'inline'
@@ -876,7 +863,7 @@ export default class Player {
   handleTimeUpdate(e) {
     this.rerenderTimeInfo()
     const time = e.target.currentTime * 1000
-    this.updateSubtitles(time)
+    this.changeDisplaySubtitle(time)
   }
 
   rerenderTimeInfo() {
@@ -1013,7 +1000,7 @@ export default class Player {
     }
     // 重新渲染播放器控制条
     this.rerenderTimeInfo()
-    this.updateSubtitles(time)
+    this.changeDisplaySubtitle(time)
   }
 
   registerNextAction() {
@@ -1637,7 +1624,7 @@ export default class Player {
     return res
   }
 
-  updateSubtitles(currentTime) {
+  changeDisplaySubtitle(currentTime) {
     const {
       subtitles,
       isCaptionsOpen,
@@ -1691,6 +1678,10 @@ export default class Player {
     const node = template.content.firstElementChild
     parent.appendChild(node)
     return node
+  }
+
+  updateSubtitles(subtitles) {
+    this.state.subtitles = subtitles
   }
 
   /* 将播放器节点从dom树中移除 */
