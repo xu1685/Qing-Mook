@@ -126,14 +126,14 @@
   .coursesCell{
     width: 100%;
     /*background-color: rgba(212, 212, 212, 0.24);*/
-    height: 100px;
+    height: 65px;
     padding-top: 10px;
     padding-bottom: 10px;
   }
   .link{
     display: flex;
     align-items: center;
-    height: 100px;
+    height: 65px;
     text-align: left;
   }
   .noclick{
@@ -141,8 +141,8 @@
   }
   .imgcontainer{
     display: inline-block;
-    width: 150px;
-    height: 100px;
+    width: 110px;
+    height: 65px;
     margin: 10px;
     border-radius: 5px;
     background: gray;
@@ -164,12 +164,12 @@
   .image{
     display: inline-block;
     background-position: 0px 1px;
-    width:150px;
-    height:100px;
+    width:110px;
+    height:65px;
     border-radius: 5px;
   }
   .msgcontainer{
-    height: 100px;
+    height: 65px;
     margin-left: 8px;
   }
   .courseName{
@@ -184,7 +184,7 @@
   .alt{
     color: gray;
     font-size: 15px;
-    margin-top: 48px;
+    margin-top: 8px;
   }
 .hr1{
   height:1px;

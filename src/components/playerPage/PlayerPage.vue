@@ -79,7 +79,4 @@ export default {
 .isfixed{
   position: fixed !important;
 }
-.mint-navbar .mint-tab-item{
-  padding: 7px !important
-}
 </style>

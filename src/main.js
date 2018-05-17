@@ -9,7 +9,9 @@ import 'mint-ui/lib/style.css'
 
 
 //axios配置
-axios.defaults.baseURL = '/api/v1'
+axios.defaults.baseURL = '/api/v1';
+axios.defaults.headers.common['Authorization'] = 'QJWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsInVhIjoicGMiLCJjb21wbGV0ZSI6dHJ1ZSwiaWF0IjoxNTI2NTIxODUxLCJleHAiOjE1MjY2MDgyNTF9.jRrHrtMVUDd0ou5gBRJNZIBBd0GZOxW2JUzgjniMJnU';
+
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
 

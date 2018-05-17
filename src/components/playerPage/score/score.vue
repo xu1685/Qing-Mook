@@ -99,7 +99,7 @@ a { text-decoration:none; }
 	font-size: 25px;font-weight: 600;color: rgb(71, 71, 71)
 }
 .noscore{
-	font-size: 19px;
+	font-size: 16px;
 }
 .theTeacher{
 	display: inline-block;

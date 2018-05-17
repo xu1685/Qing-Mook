@@ -6,7 +6,7 @@
 			  	<div class="message">
 			    	<h2 class="coursetitle">{{this.library.name}}</h2>
 			    	<span style="color: rgb(199, 199, 199)">共{{this.courseList.length}}个可读文档</span>
-			    	<p style="margin-top: 20px;color: rgb(199, 199, 199)">{{this.createTime}}</p>
+			    	<!-- <p style="margin-top: 20px;color: rgb(199, 199, 199)">{{this.createTime}}</p> -->
 		      </div>
 		    	<!-- 黑色透明遮罩 -->
 			    <div class="black"></div>
@@ -20,7 +20,8 @@
     			<router-link :to="{ path: '/player/'+ course.id  }"  class="link">
 	    			<div class="imgcon">
 	    				<div class="msg">
-                <i style="color:white;font-size: 20px;width: 148px;text-align: center;margin-top: 38px;" class="fa fa-star" aria-hidden="true">{{score(course.ratingStatis)}}</i>
+                <i style="color:white;font-size: 20px;width: 110px;text-align: center;margin-top: 20px;color:#fbe359" class="fa fa-star" aria-hidden="true" v-if="score(course.ratingStatis) !== '暂无评分' ">{{score(course.ratingStatis)}}</i>
+                <i style="color:white;font-size: 20px;width: 110px;text-align: center;margin-top: 20px;" class="fa" aria-hidden="true" v-if="score(course.ratingStatis) == '暂无评分' ">{{score(course.ratingStatis)}}</i>
               </div>
               <div class="blackblock"></div>
               <div class="classImg">
@@ -162,19 +163,19 @@
 	 .courseCell{
   	width: 100%;
   	/*background-color: rgba(212, 212, 212, 0.24);*/
-  	height: 100px;
+  	height: 65px;
     padding-top: 10px;
     padding-bottom: 10px;
   }
   .link{
     display: flex;
     align-items: center;
-    height: 100px;
+    height: 65px;
   }
   .imgcon{
   	display: inline-block;
-    width: 150px;
-    height: 100px;
+    width: 110px;
+    height: 65px;
     margin: 10px;
     border-radius: 5px;
     background: gray;
@@ -182,16 +183,16 @@
   }
   .classImg{
   	display: inline-block;
-    width:150px;
-    height:100px;
+    width:110px;
+    height:65px;
     z-index: 1;
     border-radius: 5px;
   }
  
   .msg{
     position: absolute;
-    width: 150px;
-    height: 100px; 
+    width: 110px;
+    height: 65px; 
     color: white;
     border-radius: 5px;
     text-align: left;
@@ -200,17 +201,18 @@
   .blackblock{
   	display: inline-block;
   	position: absolute;
-  	width: 150px;
-  	height: 100px;
+  	width: 110px;
+  	height: 65px;
   	background-color: rgba(0, 0, 0, 0.28);
   	z-index: 2;
   	border-radius: 5px;
   }
   .msgcontainer{
-  	height: 100px;
+  	height: 65px;
   	margin-left: 8px;
   	margin-right: 10px;
   	flex:1;
+    text-align: left;
   }
  .className{
   	display: inline-block;
@@ -223,9 +225,9 @@
     text-align:left;
   }
 .icons{
-	text-align:right;
+	text-align:left;
 	color: gray;
-	margin-top: 50px;
+	margin-top: 18px;
 	width: 100%;
 }
 .hr1{

@@ -4,7 +4,7 @@
 			<span class="start">{{formatDuring(item.beginTime)}}</span>
 			<span class="wordstext">{{item.text}}</span>
   	</div>
-  	<h3 style="color: gray;margin-top: 38px;" v-if="nowords">暂无字幕</h3>
+  	<h3 style="color: gray;margin-top: 100px;" v-if="nowords">暂无字幕</h3>
 	</div>
 </template>
 
@@ -90,9 +90,8 @@
 
 <style scoped>
 	.words{
-		margin-top: 35px;
+		margin-top: 55px;
 		position: relative;
-		height: 
 	}
 	.textline{
 		text-align: left;
