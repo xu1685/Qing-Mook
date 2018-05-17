@@ -9,9 +9,14 @@ import 'mint-ui/lib/style.css'
 
 
 //axios配置
+<<<<<<< HEAD
 axios.defaults.baseURL = '/api/v1';
 axios.defaults.headers.common['Authorization'] = 'QJWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsInVhIjoicGMiLCJjb21wbGV0ZSI6dHJ1ZSwiaWF0IjoxNTI2NTIxODUxLCJleHAiOjE1MjY2MDgyNTF9.jRrHrtMVUDd0ou5gBRJNZIBBd0GZOxW2JUzgjniMJnU';
 
+=======
+axios.defaults.baseURL = '/api/v1'
+axios.defaults.headers.common['authorization'] = 'QJWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsInVhIjoicGMiLCJjb21wbGV0ZSI6dHJ1ZSwiaWF0IjoxNTI2NTIxODUxLCJleHAiOjE1MjY2MDgyNTF9.jRrHrtMVUDd0ou5gBRJNZIBBd0GZOxW2JUzgjniMJnU'
+>>>>>>> 9ece10f1a330759a8d256644b9ca45f884aee93a
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
 
