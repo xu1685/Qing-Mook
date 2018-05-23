@@ -28,6 +28,8 @@ export default class Player {
     this.state = {
       /* 语音是否正在加载 */
       audioLoading: false,
+      /* 语音加载完成 */
+      audioLoaded: false,
       /* 图片是否正在加载 */
       imagesLoading: false,
       // 资源数=音频数量+图片数量
@@ -219,6 +221,9 @@ export default class Player {
     const {
       audio,
     } = this.domRefs
+    audio.addEventListener('canplay', this.handleSrcLoaded.bind(this))
+    audio.addEventListener('canplaythrough', this.handleSrcLoaded.bind(this))
+    audio.addEventListener('loadeddata', this.handleSrcLoaded.bind(this))
     audio.addEventListener('loadedmetadata', this.handleSrcLoaded.bind(this))
     audio.src = audioUrl
     this.state.audioLoading = true
@@ -274,12 +279,21 @@ export default class Player {
 
   /* 音频加载完成会调用这个函数，判断当前所有的资源是否全部加载完成 */
   /* 每一张图片加载完成以后调用这个函数，判断当前所有的资源是否全部加载完成 */
-  handleSrcLoaded() {
+  handleSrcLoaded(event) {
     const {
       audioLoading,
+      audioLoaded,
       imagesLoading,
       srcNum,
     } = this.state
+
+    if (event.target.nodeName.toUpperCase() === 'AUDIO') {
+      if (this.state.audioLoaded) {
+        return
+      }
+      this.state.audioLoaded = true
+    }
+
     this.state.loadedSrcNum += 1
     if (
       audioLoading &&
@@ -457,6 +471,7 @@ export default class Player {
     this.handleCaptionsDown = this.handleCaptionsDown.bind(this)
     this.handleCaptionsMove = this.handleCaptionsMove.bind(this)
     this.handleCaptionsUp = this.handleCaptionsUp.bind(this)
+    this.toggleFullscreen = this.toggleFullscreen.bind(this)
     /* 添加PC端事件 */
     if (this.state.mode === 'desktop') {
       playerControl.addEventListener('mouseenter', this.showPlayerControl.bind(this))
@@ -465,7 +480,7 @@ export default class Player {
       canvas.addEventListener('mousemove', this.showPlayerControl)
       canvas.addEventListener('click', this.togglePlay, true)
       draft.addEventListener('click', this.togglePlay, true)
-      fullscreen.addEventListener('click', this.toggleFullscreen.bind(this))
+      fullscreen.addEventListener('click', this.toggleFullscreen)
       pageFullscreen.addEventListener('click', this.togglePageFullscreen.bind(this))
       progressbarWrapper.addEventListener('mouseover', this.handleProgressbarOver.bind(this))
       progressbarWrapper.addEventListener('mouseleave', this.handleProgressbarleave.bind(this))
@@ -508,6 +523,8 @@ export default class Player {
     captionsHammer.on('press', this.handleCaptionsPress)
     captionsHammer.on('panleft panright panup pandown', this.handleCaptionsPanMove)
     captionsHammer.on('panend', this.handleCaptionsPressUp)
+    const fullscreenHammer = new Hammer(fullscreen)
+    fullscreenHammer.on('tap', this.toggleFullscreen)
   }
 
   handleCaptionsPress() {
@@ -1689,6 +1706,6 @@ export default class Player {
     const {
       mountNode,
     } = this.domRefs
-    mountNode.innerHTML = ''
+    mountNode.parentNode.removeChild(mountNode)
   }
 }
