@@ -238,7 +238,7 @@ export default class Player {
     /* 如果为移动端，则显示当前需要下载的资源的大小而不是直接下载资源 */
     const loadButton = loadTipElem.querySelector('.player-load-button')
     if (mode === 'mobile' && size) {
-      loadButton.addEventListener('click', this.loadSource)
+      loadButton.addEventListener('click', this.loadSource.bind(this))
     } else {
       this.loadSource()
     }
