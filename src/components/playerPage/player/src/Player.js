@@ -296,7 +296,7 @@ export default class Player {
     this.domRefs.images = imagesUrl.map((imageUrl) => {
       const imageElement = new Image(imageWidth)
       /* 改变图片下载完成事件处理程序的指定方式 */
-      imageElement.addEventListener('load', this.handleSrcLoaded)
+      imageElement.onload = this.handleSrcLoaded
       imageElement.src = imageUrl
       return imageElement
     })
@@ -325,7 +325,7 @@ export default class Player {
     this.state.loadedSourcesNumber += 1
 
     if (
-      audioLoadStatus === 'finish' &&
+      this.state.audioLoadStatus === 'finish' &&
       imagesLoadStatus === 'finish' &&
       this.state.loadedSourcesNumber === sourcesNumber
     ) {
@@ -1681,11 +1681,10 @@ export default class Player {
     this.state.currentSubtitleIndex = res
   }
 
-  /* 渲染string表示的html，返回根节点 */
+  /* 渲染 string 表示的 HTML 元素并将之插入到第一个参数所指向的元素中，之后返回该元素 */
   static renderString(parent, string) {
     const elem = document.createElement('div')
     elem.innerHTML = string
-    /* 注意调用appenChild会将之从原来的parent节点remove掉,并附加在新parent的最后 */
     parent.appendChild(elem.firstElementChild)
     return parent.lastElementChild
   }
