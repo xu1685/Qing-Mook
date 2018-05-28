@@ -1,0 +1,929 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"aud",
+				"audio"
+			],
+			[
+				"ima",
+				"images"
+			],
+			[
+				"ac",
+				"actions"
+			],
+			[
+				"nex",
+				"nextImageOrder〔variable〕"
+			],
+			[
+				"pre",
+				"prevImageOrder"
+			],
+			[
+				"im",
+				"imageNameRegExp"
+			],
+			[
+				"audio",
+				"audioUrl"
+			],
+			[
+				"imag",
+				"images〔variable〕"
+			],
+			[
+				"window",
+				"windowWidth"
+			],
+			[
+				"op",
+				"options"
+			],
+			[
+				"cre",
+				"createElement〔function〕"
+			],
+			[
+				"index",
+				"index.js"
+			],
+			[
+				"adu",
+				"audioLoaded"
+			],
+			[
+				"but",
+				"buttonElement"
+			],
+			[
+				"audo",
+				"audioElement〔variable〕"
+			],
+			[
+				"i",
+				"iframe"
+			],
+			[
+				"WeiXin",
+				"WeiXinQrcodeHtml"
+			],
+			[
+				"set",
+				"setTimeout〔function〕"
+			],
+			[
+				"isShow",
+				"isShowLoginDialog〔variable〕"
+			],
+			[
+				"typ",
+				"typeof〔keyword〕"
+			],
+			[
+				"subs",
+				"subscribeToken"
+			],
+			[
+				"st",
+				"store"
+			],
+			[
+				"isR",
+				"isRequired"
+			],
+			[
+				"acc",
+				"accountId〔variable〕"
+			],
+			[
+				"repl",
+				"reply"
+			],
+			[
+				"handle",
+				"handleOnImageLoad"
+			],
+			[
+				"can",
+				"canChangeImage"
+			],
+			[
+				"is",
+				"isShowSaveButton"
+			],
+			[
+				"subc",
+				"subscribeToken"
+			],
+			[
+				"ava",
+				"avatarURL"
+			],
+			[
+				"new",
+				"newAvatarObjectURL"
+			],
+			[
+				"nik",
+				"nickName"
+			],
+			[
+				"pts",
+				"ptsp\tReact: PropTypes.shape"
+			],
+			[
+				"nick",
+				"nickName"
+			],
+			[
+				"label",
+				"labelId"
+			],
+			[
+				"wid",
+				"width\tproperty"
+			],
+			[
+				"prm",
+				"promiseArray"
+			],
+			[
+				"temp",
+				"tempArgs"
+			],
+			[
+				"image",
+				"imageElement"
+			],
+			[
+				"commen",
+				"commentContent"
+			],
+			[
+				"comme",
+				"commentContent"
+			],
+			[
+				"hand",
+				"handleOnAddImagesWithComment"
+			],
+			[
+				"isS",
+				"isShowImagesUploadStatus"
+			],
+			[
+				"star",
+				"starStatus〔variable〕"
+			],
+			[
+				"sub",
+				"subtitleHeight〔variable〕"
+			],
+			[
+				"node",
+				"node.config.js"
+			],
+			[
+				"margin",
+				"marginRight"
+			],
+			[
+				"fle",
+				"flex-wrap\tproperty"
+			],
+			[
+				"res",
+				"result"
+			],
+			[
+				"fr",
+				"formData"
+			],
+			[
+				"bru",
+				"border-radius\tproperty"
+			],
+			[
+				"add",
+				"addNewComment"
+			],
+			[
+				"no",
+				"nowrap\twhite-space"
+			],
+			[
+				"acs",
+				"actions"
+			],
+			[
+				"pa",
+				"password"
+			],
+			[
+				"sta",
+				"statusSelector〔variable〕"
+			],
+			[
+				"lo",
+				"loginStatus"
+			],
+			[
+				"status",
+				"statusCode"
+			],
+			[
+				"stat",
+				"status"
+			],
+			[
+				"from",
+				"fromJS"
+			],
+			[
+				"com",
+				"comments"
+			],
+			[
+				"cdm",
+				"cdm\tReact: componentDidMount() {…}"
+			],
+			[
+				"sc",
+				"scu\tReact: shouldComponentUpdate(np, ns) {…}"
+			],
+			[
+				"this",
+				"thisProps"
+			],
+			[
+				"cwu",
+				"cwun\tReact: componentWillUnmount() {…}"
+			],
+			[
+				"doc",
+				"documentElement〔variable〕"
+			],
+			[
+				"par",
+				"parseInt"
+			],
+			[
+				"Re",
+				"ReactDOM"
+			],
+			[
+				"cdup",
+				"cdup\tReact: componentDidUpdate(pp, ps) {…}"
+			],
+			[
+				"con",
+				"console\tceshi"
+			],
+			[
+				"get",
+				"getReplyContainerSize〔variable〕"
+			],
+			[
+				"reply",
+				"replyContainer"
+			],
+			[
+				"cwup",
+				"cwup\tReact: componentWillUpdate(np, ns) {…}"
+			],
+			[
+				"tran",
+				"transition\tproperty"
+			],
+			[
+				"spa",
+				"space-between\tjustify-content"
+			],
+			[
+				"ss",
+				"styles"
+			],
+			[
+				"conte",
+				"context"
+			],
+			[
+				"r",
+				"row\tflex-direction"
+			],
+			[
+				"tal",
+				"ta-l\ttext-align: left;"
+			],
+			[
+				"s",
+				"space-between\tjustify-content"
+			],
+			[
+				"class",
+				"className"
+			],
+			[
+				"cwm",
+				"cwm\tReact: componentWillMount() {…}"
+			],
+			[
+				"expor",
+				"exportPicker"
+			],
+			[
+				"clas",
+				"className"
+			],
+			[
+				"fil",
+				"fileBackUp〔variable〕"
+			],
+			[
+				"file",
+				"filepath"
+			],
+			[
+				"mat",
+				"matchs〔variable〕"
+			],
+			[
+				"ma",
+				"matchs"
+			],
+			[
+				"js",
+				"js/"
+			],
+			[
+				"min",
+				"min-height\tproperty"
+			],
+			[
+				"ali",
+				"align-items\tproperty"
+			],
+			[
+				"flex",
+				"flex-start\talign-content"
+			],
+			[
+				"rg",
+				"rgba()\tbackground-color"
+			],
+			[
+				"d",
+				"dotted\tborder-left"
+			],
+			[
+				"wb",
+				"word-break\tproperty"
+			],
+			[
+				"mw",
+				"min-width\tproperty"
+			],
+			[
+				"cdu",
+				"cdup\tReact: componentDidUpdate(pp, ps) {…}"
+			],
+			[
+				"isHas",
+				"isHasMountPlayer"
+			],
+			[
+				"play",
+				"playerSrc"
+			],
+			[
+				"imm",
+				"immutableObjectEmpty〔variable〕"
+			],
+			[
+				"clea",
+				"clearTimeout〔function〕"
+			],
+			[
+				"upload",
+				"uploadStatus"
+			],
+			[
+				"cd",
+				"cdup\tReact: componentDidUpdate(pp, ps) {…}"
+			],
+			[
+				"fun",
+				"function〔keyword〕"
+			],
+			[
+				"docuem",
+				"documents〔variable〕"
+			],
+			[
+				"docu",
+				"documents"
+			],
+			[
+				"comment",
+				"commentPictureFile"
+			],
+			[
+				"lib",
+				"libraries"
+			],
+			[
+				"cwr",
+				"cwr\tReact: componentWillReceiveProps(np) {…}"
+			],
+			[
+				"accou",
+				"accountIdOfComment"
+			],
+			[
+				"coomen",
+				"commentContent"
+			],
+			[
+				"spac",
+				"space-between"
+			],
+			[
+				"comm",
+				"commentContent"
+			],
+			[
+				"dele",
+				"deleteAll"
+			],
+			[
+				"sele",
+				"selectedLibraries"
+			],
+			[
+				"onl",
+				"onlyDeleteLibrary"
+			],
+			[
+				"li",
+				"libraries"
+			],
+			[
+				"F",
+				"FlatButton"
+			],
+			[
+				"Lib",
+				"Library〔variable〕"
+			],
+			[
+				"box",
+				"box-sizing"
+			],
+			[
+				"edi",
+				"editDocument"
+			],
+			[
+				"edit",
+				"editDocument〔variable〕"
+			],
+			[
+				"prop",
+				"props\tReact: this.props"
+			],
+			[
+				"up",
+				"uploadFileList"
+			],
+			[
+				"sa",
+				"state\tReact: this.state"
+			],
+			[
+				"do",
+				"docId"
+			],
+			[
+				"fl",
+				"flex"
+			],
+			[
+				"User",
+				"UserSvg"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/Nodejs/Nodejs.sublime-build",
+					""
+				],
+				[
+					"Packages/User/JavaScript.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/User/JavaScript.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 400.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"sshtml",
+				"Set Syntax: HTML"
+			],
+			[
+				"ssjv",
+				"Set Syntax: JSON Key-Value"
+			],
+			[
+				"ssjb",
+				"Set Syntax: JavaScript (Babel)"
+			],
+			[
+				"pcip",
+				"Package Control: Install Package"
+			],
+			[
+				"pic",
+				"Package Control: Install Package"
+			],
+			[
+				"ssj",
+				"Set Syntax: JSON"
+			],
+			[
+				"pci",
+				"Package Control: List Packages"
+			],
+			[
+				"sublimelinter",
+				"Preferences: SublimeLinter Settings"
+			],
+			[
+				"ssbb",
+				"Set Syntax: JavaScript (Babel)"
+			],
+			[
+				"package",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: pcip",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Disable Package"
+			],
+			[
+				"find",
+				"FindKeyConflicts: All Conflicts"
+			],
+			[
+				"dis",
+				"Package Control: Disable Package"
+			],
+			[
+				"jsb",
+				"Set Syntax: JavaScript (Babel)"
+			],
+			[
+				"ssmd",
+				"Set Syntax: Markdown"
+			],
+			[
+				"findkey",
+				"FindKeyConflicts: All Conflicts"
+			],
+			[
+				"s s j b",
+				"Set Syntax: JavaScript (Babel)"
+			],
+			[
+				"Package Control: lis",
+				"Package Control: List Packages"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: rem",
+				"Package Control: Remove Channel"
+			]
+		],
+		"width": 280.0
+	},
+	"console":
+	{
+		"height": 181.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d39e33b79698005270310898eea76'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/kang/Documents/Project/QingMOOC-Mobile"
+	],
+	"file_history":
+	[
+		"/Users/kang/Documents/Project/Player/index.js",
+		"/Users/kang/Documents/Project/Player/src/Player.css",
+		"/Users/kang/Documents/Project/Player/src/Player.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/Player/src/Player.js",
+		"/Users/kang/Downloads/cb80bd08afd6676e3c8556ec238ffe5d.json",
+		"/Users/kang/Documents/Project/Player/webpack.config.js",
+		"/Users/kang/Downloads/代码更新部署.txt",
+		"/Users/kang/Documents/Project/Player/index.html",
+		"/Users/kang/Downloads/评论点赞.md",
+		"/Users/kang/Documents/Project/Player/.stylelintrc",
+		"/Users/kang/Documents/Project/Player/.babelrc",
+		"/Users/kang/Documents/Project/Player/Player.sublime-project",
+		"/Users/kang/Documents/Project/Player/package.json",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/webpack.config.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/package.json",
+		"/Users/kang/Documents/Project/Player/.eslintrc",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/.eslintrc",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/webpack.dll.config.js",
+		"/Users/kang/Downloads/audio.html",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/Comment/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/helper.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/README.md",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/utils/apptemplate.ejs",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/index.html",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/sources.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/selector.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/reducer.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/stylelint/package.json",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Login/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/router.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/utils/utils.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/WeiXinQrcodeDialog/styles.scss",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/WeiXinQrcodeDialog/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/utils/weixinlogin.html",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Class/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/utils/constants.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Login/actions.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Login/reducer.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Login/selector.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Login/sources.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/SignUp/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/utils/fetch.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/store.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/User/reducer.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/User/AccountInformation/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Header/index.js",
+		"/Users/kang/Downloads/播放访问网址.txt",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Header/selector.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/User/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/User/selector.js",
+		"/Users/kang/Library/Application Support/Sublime Text 3/Packages/User/Base File.sublime-settings",
+		"/Users/kang/Library/Application Support/Sublime Text 3/Packages/Alignment/Base File.sublime-settings",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/index.js",
+		"/Users/kang/Library/Application Support/Sublime Text 3/Packages/User/JavaScript (Babel).sublime-settings",
+		"/Users/kang/Downloads/轻慕课Token.txt",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Header/sources.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Document/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/reducers.js",
+		"/Users/kang/Downloads/redux-persist-immutable-master/src/index.js",
+		"/Users/kang/Downloads/redux-persist-immutable-master/package.json",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/components/Loading/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/redux-persist-immutable/lib/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/components/ImageCropper/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/reducers/mine.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Document/reducer.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Class/reducer.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Class/sources.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/EvaluationForm/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Document/sources.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/utils/schemas.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/utils/selectors.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/reducers/users.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/reducers/replies.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Class/selector.js",
+		"/Users/kang/Downloads/用户信息.md",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Class/styles.scss",
+		"/Users/kang/Library/Application Support/Sublime Text 3/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/kang/Library/Application Support/Sublime Text 3/Packages/DashDoc/DashDoc.sublime-settings",
+		"/Users/kang/Library/Application Support/Sublime Text 3/Packages/User/DashDoc.sublime-settings",
+		"/Users/kang/Library/Application Support/Sublime Text 3/Packages/DashDoc/Default (OSX).sublime-keymap",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/Subtitles/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/Subtitle/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/main.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Document/selector.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/playerPage/player/player.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/components/ImageCropper/styles.scss",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/User/AccountInformation/styles.scss",
+		"/Users/kang/Downloads/控制脚本文件3.json",
+		"/Users/kang/Downloads/subtitles.js",
+		"/Users/kang/Downloads/7c382427046dc7aae9727ce24c78e071.json",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/User/sources.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/User/actions.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-imported-component/dist/Component.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-imported-component/dist/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-imported-component/package.json",
+		"/Users/kang/Documents/Project/weizhujiao-frontend/src/components/ClassroomInfoEditCard/ClassroomInfoEditCardCore.js",
+		"/Users/kang/Documents/Project/weizhujiao-frontend/src/components/GroupEditCard/index.js",
+		"/Users/kang/Documents/Project/weizhujiao-frontend/src/components/BatchSelectStudentsCard/BatchSelectStudentsCardCore.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/redux-form/es/Fields.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/redux-form/es/createField.js",
+		"/Users/kang/Documents/Project/weizhujiao-frontend/src/components/DiscussionSettingDialog/DiscussionSettingDialogCore.js",
+		"/Users/kang/Downloads/需要的用户信息.txt",
+		"/Users/kang/Downloads/微信申诉.txt",
+		"/Users/kang/Documents/Project/QingMooc-Backend/src/middlewares/auth/index.js",
+		"/Users/kang/Documents/Project/MySoftwareSetting/Mac OS/Mac 睡眠模式设置参数.txt",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/redux/src/createStore.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/actions.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-redux/src/components/Provider.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/redux/src/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-redux/src/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-router/es/Router.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-router/es/Route.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-router-dom/es/BrowserRouter.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-router-dom/es/Router.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/TagToolBar/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Header/styles.scss",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/Comment/styles.scss",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/styles.scss",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/Subtitle/styles.scss",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/CommentToolBar/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/CommentToolBar/styles.scss",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/QingMOOC-Frontend.sublime-project",
+		"/Users/kang/Downloads/untitled2.js",
+		"/Users/kang/Downloads/Test.js",
+		"/Users/kang/Documents/Project/Kannnnng.github.io/_posts/前端笔试面试知识记录.md",
+		"/Users/kang/Documents/Project/Kannnnng.github.io/Kannnnng.github.io.sublime-project",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/emoji-picker/build/index.js"
+	],
+	"find":
+	{
+		"height": 30.0
+	},
+	"find_in_files":
+	{
+		"height": 106.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": true,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 30.0
+	},
+	"input":
+	{
+		"height": 39.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.SublimeLinter":
+	{
+		"height": 134.0
+	},
+	"output.SublimeLinter Messages":
+	{
+		"height": 290.0
+	},
+	"output.exec":
+	{
+		"height": 387.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.mdpopups":
+	{
+		"height": 0.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 585.0
+	},
+	"pinned_build_system": "",
+	"project": "QingMOOC-Mobile.sublime-project",
+	"replace":
+	{
+		"height": 56.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 229.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

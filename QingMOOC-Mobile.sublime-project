@@ -1,0 +1,26 @@
+{
+  "folders":
+  [
+    {
+      "file_exclude_patterns":
+      [
+        ".DS_Store",
+        ".babelrc",
+        ".editorconfig",
+        ".gitignore",
+        ".postcssrc.js",
+        "README.md",
+        "QingMOOC-Mobile.sublime-project",
+        "QingMOOC-Mobile.sublime-project",
+      ],
+      "folder_exclude_patterns":
+      [
+        ".git",
+        "dist",
+        "node_modules",
+        "static",
+      ],
+      "path": "."
+    }
+  ]
+}
