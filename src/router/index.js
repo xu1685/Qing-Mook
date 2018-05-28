@@ -10,30 +10,23 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/player/:id',
-      name: 'playerPage',
-      component: PlayerPage
-    },
-    {
-      path: '/player/',
-      name: 'playerPage',
-      component: PlayerPage
-    },
-    {
-      path: '/course/:id',
-      name: 'course',
-      component: Course
+      path: '/',
+      redirect: '/teacher/',
     },
     {
       path: '/teacher/',
       name: 'teacher',
-      component: Teacher
+      component: Teacher,
     },
     {
-      path: '/',
-      name: 'teacher',
-      component: Teacher
-    }
-
+      path: '/course/:id',
+      name: 'course',
+      component: Course,
+    },
+    {
+      path: '/player/:id',
+      name: 'playerPage',
+      component: PlayerPage,
+    },
   ]
 })

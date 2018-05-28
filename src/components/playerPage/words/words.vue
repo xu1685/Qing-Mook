@@ -10,7 +10,7 @@
 
 <script>
 	import MockData from './mock'
-	import Bus from '../../../bus.js';  
+	import Bus from '../../../bus.js';
 	import BScroll from 'better-scroll'
 
 	export default{
@@ -36,8 +36,8 @@
 				this.startArr = MockData.subtitles[0].startTime;
 	      this.pageInit();
 	      for(var i=0;i<this.startArr.length;i++){
-	        this.timeArr.push(this.formatDuring(this.startArr[i]))	
-	      } 
+	        this.timeArr.push(this.formatDuring(this.startArr[i]))
+	      }
 		},
 		updated(){
 			// console.log('updated');
@@ -57,7 +57,7 @@
 				});
         Bus.$on('subtitle', subtitle =>{
 					this.changeSubtitle(subtitle);
-				});					
+				});
 			},
 			formatDuring(mss) {
 			    var minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));

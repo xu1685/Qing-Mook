@@ -16,7 +16,7 @@
 			 		<i class="fa fa-angle-right" aria-hidden="true" style="margin-left: 10px;color:gray"></i>
 			 	</div>
 		 	</router-link>
-		 	 
+
 		 </div>
 	</div>
 </template>
@@ -25,9 +25,9 @@
 	// import Star from './star.vue'
 	export default {
 		name: 'Score',
-		props:['docId'],
-		data(){
-			return{
+		props: ['docId'],
+		data() {
+			return {
         done: false,
         teacherName: '蜗牛老师',
         doc:{},
@@ -35,34 +35,33 @@
         scorenum:0
 			}
 		},
-		created(){
+		created() {
 			this.pageInit()
 		},
-		methods:{
-			pageInit(){
-				this.$http.get('/docs/'+this.docId)
+		methods: {
+			pageInit() {
+				this
+					.$http
+					.get('/docs/'+this.docId)
 					.then((res) => {
 						this.doc = res.data.doc;
 						this.ratingStatis = this.doc.ratingStatis;
-						console.log(this.ratingStatis,'ratingStatis');
 						this.scorenum = this.score(this.ratingStatis);
-						console.log(this.doc,'doc');
 					})
 			},
-			score(obj){
+			score(obj) {
 				var arr = Object.values(obj);
 				var len = arr.length;
 				var count = 0;
-				for(var i=0;i<len;i++){
+				for (var i = 0; i < len; i++) {
            count += arr[i];
 				}
-				if(count === 0){
+				if (count === 0) {
           var score = "暂无评分";
-				}else{
+				} else {
 					var score = (arr[0]*1 + arr[1]*2 + arr[2]*3 + arr[3]*4 + arr[4]*5)/count;
 					score = score.toFixed(1);
 				}
-				console.log(score,'score')
 				return score
 			}
 		}
@@ -71,11 +70,15 @@
 
 <style>
 
-a { text-decoration:none; } 
-.mint-cell-wrapper{
+a {
+	text-decoration:none;
+}
+
+.mint-cell-wrapper {
 	font-size: 14px !important;
 }
-.score{
+
+.score {
 	text-align: left;
 	height: 50px;
 	width: 90%;
@@ -87,35 +90,42 @@ a { text-decoration:none; }
 	display: flex;
 	align-items: center;
 }
-.overAll{
+
+.overAll {
 	display: inline-block;
 	width: 43%;
 }
-.overAllScore{
+
+.overAllScore {
 	font-size: 24px;
 	color:black;
 }
-.scorenum{
+
+.scorenum {
 	font-size: 25px;font-weight: 600;color: rgb(71, 71, 71)
 }
-.noscore{
+
+.noscore {
 	font-size: 16px;
 }
-.theTeacher{
+
+.theTeacher {
 	display: inline-block;
 	width: 55%;
 	line-height: 39px;
 }
-.right{
+
+.right {
 	display: flex;
 	align-items: center;
 	color: #494848;
 	line-height: 39px;
 	float: right;
 }
-  .teacherPhoto{
-  	width: 30px;
-  	height: 30px;
-  	margin-right: 5px;
-  }
+
+.teacherPhoto {
+	width: 30px;
+	height: 30px;
+	margin-right: 5px;
+}
 </style>

@@ -1,16 +1,14 @@
 <template>
   <div id="app">
-
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'App',
-  data(){
-    return{
+  data() {
+    return {
 
     }
   }
@@ -26,5 +24,7 @@ export default {
   width: 100%;
 }
 
-a{ text-decoration:none; }
+a {
+  text-decoration: none;
+}
 </style>

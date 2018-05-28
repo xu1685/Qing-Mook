@@ -25,7 +25,6 @@ export default {
   },
   created(){
     this.path = this.pagePath;
-    console.log(this.path,this.pageName,'path')
     if(this.path.slice(0,1) == 'p'){
         this.docId = this.path.slice(1);
         this.$http.get('/docs/'+this.docId).then((res)=>{
@@ -34,8 +33,6 @@ export default {
           this.$http.get('/accounts/docs')
             .then((res) => {
               this.libraries = res.data.libraries;
-              console.log(this.libraries,'lib');
-              // Indicator.close();
               var len = this.libraries.length;
               for(var i=0;i<len;i++){
                 if(this.library == this.libraries[i].id){
@@ -45,7 +42,7 @@ export default {
               }
            });
         })
-        
+
     }
   },
   methods:{
@@ -55,7 +52,7 @@ export default {
       }else if(this.path.slice(0,1) == 'c'){
         document.getElementById("c").click();
       }
-        
+
     }
   }
 }
