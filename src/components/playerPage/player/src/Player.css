@@ -1,11 +1,14 @@
 /* 这是整个播放器的容器，宽高由JS设置 */
+#playerContainer {
+  position: relative;
+  width: 740px;
+  margin: auto;
+}
+
 .player-image-container {
   position: relative;
   overflow: hidden;
-  width: 100%;
-  height: 100%;
-  user-select: none;
-  background: white;
+  background: #000;
 }
 
 .player-image-section {
@@ -79,6 +82,7 @@
 .player-progress-control {
   position: absolute;
   top: -0.7em;
+  left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -100,7 +104,7 @@
   cursor: pointer;
   transition: all 0.2s;
   background: rgba(245, 245, 245, 0.55);
-}
+ }
 
 .player-progressbar {
   position: absolute;
@@ -173,7 +177,7 @@
   animation: 1s forwards fade-out;
 }
 
-.shade {
+.player-load-tip {
   position: absolute;
   z-index: 100;
   top: 0;
@@ -183,7 +187,6 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  background: #000;
 }
 
 .player-load-button {
@@ -200,10 +203,13 @@
   margin-right: 10px;
 }
 
-.shade > i {
-  font-size: 30px;
+.player-loading {
   display: none;
-  color: white;
+  color: wheat;
+}
+
+.player-loading> i {
+  margin-bottom: 5px;
 }
 
 /* 草稿纸 */
