@@ -27,7 +27,7 @@
               <div class="classImg">
               	<img class="classImg" :src="course.cover" onerror="this.style.display='none'" >
               </div>
-	    				
+
 	    			</div>
 	    			<div class="msgcontainer">
 	    				<div style="display: inline-block;">
@@ -38,20 +38,20 @@
                 <span style="display: inline-block;margin-left: 5px;">{{course.view}}</span>
                 <i style="margin-left: 15px;" class="fa fa-commenting-o" aria-hidden="true"></i>
                 <span style="display: inline-block;margin-left: 5px;">{{course.commentNums}}</span>
-                
+
 	    				</div>
 	    			</div>
 	    		</router-link>
 	    		<hr class="hr1">
 	    	</div>
-      
+
 		</div>
 	</div>
 </template>
 
 <script>
-	import MyHeader from '../header/Header.vue'
-	import Bus from '../../bus.js'; 
+	import MyHeader from '../Header'
+	import Bus from '../../bus.js';
   import { Indicator } from 'mint-ui';
 	export default {
 		name: 'course',
@@ -71,7 +71,7 @@
 		},
 		// computed:{
   //     star:function(){
-  //         return 
+  //         return
   //     }
   //   },
 		created(){
@@ -188,11 +188,11 @@
     z-index: 1;
     border-radius: 5px;
   }
- 
+
   .msg{
     position: absolute;
     width: 110px;
-    height: 65px; 
+    height: 65px;
     color: white;
     border-radius: 5px;
     text-align: left;
@@ -236,5 +236,5 @@
   border-top:1px solid lightgray;
   margin-top: 10px;
   margin: 10px 10px 0 10px;
-} 
+}
 </style>

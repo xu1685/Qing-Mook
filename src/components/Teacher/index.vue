@@ -3,7 +3,7 @@
     <div class="teacher">
         <MyHeader :pageName="title" pagePath="00"></MyHeader>
     <div style="height: 200px;">
-     
+
       <!-- 内容：头像 信息 -->
         <div class="message">
           <mt-swipe class="mySwipe" :auto="0" :continuous="false">
@@ -18,7 +18,7 @@
                     《Sass与Compass实战》共分为10章，旨在完整介绍两个工具：Sass和Compass，从而引领读者通过框架高效地构建样式表，创建动态页面。
               </p>
             </mt-swipe-item>
-          </mt-swipe>    
+          </mt-swipe>
       </div>
       <!-- 黑色透明遮罩 -->
       <div class="black"></div>
@@ -34,13 +34,13 @@
              <div class="image">
                <img class="image" :src="course.cover" onerror="this.style.display='none'">
              </div>
-              
+
             </div>
             <div class="msgcontainer">
               <span class="courseName">{{course.name}}</span>
               <p class="alt">{{course.docs.length}}个文档</p>
             </div>
-            
+
           </router-link>
           <hr class="hr1">
         </div>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-  import MyHeader from '../header/Header.vue'
+  import MyHeader from '../Header'
   import { Swipe, SwipeItem } from 'mint-ui';
   import { Indicator } from 'mint-ui';
   import { Toast } from 'mint-ui';
@@ -150,7 +150,7 @@
  /* .msg{
     position: absolute;
     width: 148px;
-    height:20px; 
+    height:20px;
     margin-top: 78px;
     color: white;
     border-radius: 5px;
@@ -192,5 +192,5 @@
   border-top:1px solid lightgray;
   margin-top: 10px;
   margin: 10px 10px 0 10px;
-} 
+}
 </style>

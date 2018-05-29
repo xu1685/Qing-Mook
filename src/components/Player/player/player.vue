@@ -84,7 +84,10 @@
           .then((res) => {
             const action = res.data.doc.action
             const defaultAction = res.data.doc.defaultAction
+
+            /* 获取到当前准备播放的文档时，触发文档名称改变事件，改变页面标题 */
             this.$emit('myname',res.data.doc.name)
+
             this.imagesUrl = res.data.doc.pictures
             this.playAction = action.find((acs) => acs.id === defaultAction)
             this.subtitle = this.playAction.subtitle

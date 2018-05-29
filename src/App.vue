@@ -1,21 +1,24 @@
 <template>
-  <div id="app">
+  <div id='app'>
     <router-view />
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'App',
-  data() {
-    return {
-
-    }
-  }
 }
+
 </script>
 
 <style>
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -24,7 +27,4 @@ export default {
   width: 100%;
 }
 
-a {
-  text-decoration: none;
-}
 </style>
