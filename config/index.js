@@ -10,7 +10,7 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    //axios配置
+    // axios配置
     httpUrl: '/api/v1',
     proxyTable: {
         '/api/v1': {
@@ -24,12 +24,11 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: '192.168.3.148', //192.168.43.67 can be overwritten by process.env.HOST localhost
+    host: '192.168.3.148', // 192.168.43.67 can be overwritten by process.env.HOST localhost
     port: 3000, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
-    // authorization: 'QJWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidWEiOiJwYyIsImNvbXBsZXRlIjpmYWxzZSwiaWF0IjoxNTI2MzkxNDU0LCJleHAiOjE1MjY0Nzc4NTR9.t-M9gyyV6dDS7qNBu8sONJKd90I7R5F5PhRnZnilewA',
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
 
