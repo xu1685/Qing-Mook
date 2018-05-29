@@ -95,14 +95,15 @@
               audioUrl: this.playAction.recording,
               duration: this.playAction.duration,
               element: document.getElementById('myplayer'),
-              imagesUrl: this.imagesUrl,
+              imageUrls: this.imagesUrl,
               mode: 'mobile',
               size: this.playAction.totalSize,
               subtitles: this.subtitle,
             })
           }).then(() =>{
             this.hasEle = true
-          }).catch(() => {
+          }).catch((error) => {
+            throw error
             alert('获取数据错误，请检查访问地址是否正确')
           })
       },
