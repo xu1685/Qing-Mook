@@ -63,6 +63,7 @@ export default class Player {
       subtitles,
       /* 滚动一页距离需要的时间，以秒为单位 */
       scrollDuration: 1,
+      autoPlay: mode === 'mobile',
     }
     this.state = {
       /* 语音文件加载状态 */
@@ -101,7 +102,7 @@ export default class Player {
       /* 字幕数组 */
       subtitles: this.options.subtitles || [],
       /* 是否开启字幕 */
-      isCaptionsOpen: false,
+      isCaptionsOpen: mode === 'mobile',
       /* 播放器的初始宽度，用于退出全屏时进行恢复 */
       initialWidth: element.style.width,
     }
@@ -120,7 +121,7 @@ export default class Player {
             </div>
           </div>
           <div class="player-section-right">
-            <button class="player-section player-button player-toggle-captions" title="打开字幕">
+            <button class="${'player-section player-button player-toggle-captions' + (this.state.isCaptionsOpen ? ' is-active' : '')}" title="打开字幕">
               <svg viewBox="0 0 24 24" style="display: inline-block; fill: currentcolor; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;">
                 <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 12h4v2H4v-2zm10 6H4v-2h10v2zm6 0h-4v-2h4v2zm0-4H10v-2h10v2z"></path>
               </svg>
@@ -168,7 +169,7 @@ export default class Player {
       `,
       captions: `
         <div class="player-captions">
-          <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+          ${mode === 'desktop' ? '<i class="fa fa-ellipsis-v" aria-hidden="true"></i>' : ''}
           <span class="player-captions-text">(播放开始时将出现字幕)</span>
         </div>
       `,
@@ -318,6 +319,9 @@ export default class Player {
       this.setDrawTarget()
       /* 将播放进度调整到开头 */
       this.changeCurrentTime(0)
+      if (this.options.autoPlay) {
+        this.togglePlay()
+      }
       this.showPlayerControl()
     }
   }

@@ -61,7 +61,7 @@
 }
 
 .player-button.is-active {
-  color: #0EA6EC;
+  color:  rgb(65, 134, 66);
 }
 
 .player-button > svg {
@@ -230,7 +230,6 @@
   left: 5%;
   box-sizing: border-box;
   width: 90%;
-  max-height: 60px;
   padding: 8px 10px 8px 30px;
   user-select: none;
   text-align: center;
