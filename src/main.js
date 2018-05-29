@@ -10,7 +10,7 @@ import router from './router'
 
 // axios配置
 axios.defaults.baseURL = '/api/v1'
-axios.defaults.headers.common['Authorization'] = 'QJWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidWEiOiJwYyIsImNvbXBsZXRlIjp0cnVlLCJzdGF0ZSI6Ii9wbGF5ZXIvNWIwMzczZjI4NTc1NGEyN2FlMGMyZmY1IiwiaWF0IjoxNTI3NTA5Njg2LCJleHAiOjE1Mjc1OTYwODZ9.32srbACbpxN-B0RxaeFJhJRBUPc2q7N-a5UinuLMXQc' // eslint-disable-line
+axios.defaults.headers.common['Authorization'] = 'QJWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidWEiOiJwYyIsImNvbXBsZXRlIjp0cnVlLCJzdGF0ZSI6Im5vcmVkaXJlY3QiLCJpYXQiOjE1Mjc1NjI5MzEsImV4cCI6MTUyNzY0OTMzMX0.RpfV5kb7wHAPAoFn5G8gBUbbebF8imXop_8EXWdUBsQ' // eslint-disable-line
 
 Vue.config.productionTip = false
 

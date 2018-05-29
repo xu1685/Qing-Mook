@@ -1,18 +1,18 @@
 <template>
 	<div class="commentContainer">
-		
+
 		<!-- 评论输入框 -->
 		 <mt-field class="commentInput" placeholder="评论" v-model="myComment">
-				<i @click="visible=true" 
-					v-if="iconIs === 1" 
-					class="fa fa-picture-o" 
+				<i @click="visible=true"
+					v-if="iconIs === 1"
+					class="fa fa-picture-o"
 					aria-hidden="true"
 					style="font-size: 26px;"></i>
 				<img :src="this.preview0" v-if="iconIs === 2" width="35px">
 				<mt-button @click="comment()" height="45px" style="margin-left: 10px;margin-right: -5px;"  type="default">提交</mt-button>
 		 </mt-field>
     <!-- 评论容器 -->
-			<div class="commentCell" 
+			<div class="commentCell"
 			 v-for="(item,index) in commentList"
 			 :key="index"><!-- key为该评论数组序列号 -->
 	      <!-- 用户头像名称 -->
@@ -47,9 +47,9 @@
 		  	<img :src="preview0" v-if=" preview0 !== '' " height="70px" style="margin-left: 20px;">
 		  	<img :src="preview1" v-if=" preview1 !== '' " height="70px" style="margin-left: 20px;">
 		  	<img :src="preview2" v-if=" preview2 !== '' " height="70px" style="margin-left: 20px;">
-		  	<i class="fa fa-plus-square-o" 
-		  	aria-hidden="true" 
-		  	@click="upLoad" 
+		  	<i class="fa fa-plus-square-o"
+		  	aria-hidden="true"
+		  	@click="upLoad"
 		  	style="font-size: 70px;margin-left: 5%;" v-if=" preview2 == '' "></i>
 		  	<input id="uploadImg" @change="handleInputChange" type="file" :value="inputimg" accept="image/*" style="display: none" multiple>
         <div style="height: 40px;"></div>
@@ -125,9 +125,9 @@
 			  	<img :src="preview0" v-if=" preview0 !== '' " height="70px" style="margin-left: 10px;">
 			  	<img :src="preview1" v-if=" preview1 !== '' " height="70px" >
 			  	<img :src="preview2" v-if=" preview2 !== '' " height="70px" >
-			  	<i class="fa fa-plus-square-o" 
-			  	aria-hidden="true" 
-			  	@click="upLoad" 
+			  	<i class="fa fa-plus-square-o"
+			  	aria-hidden="true"
+			  	@click="upLoad"
 			  	style="font-size: 70px;margin-left: 5%;" v-if=" preview2 == '' "></i>
 			  	<input id="uploadImg" @change="handleInputChange" type="file" :value="inputimg" accept="image/*" style="display: none" multiple>
 		    </div>
@@ -209,7 +209,7 @@ import Viewer from 'viewerjs'
 		},
 		methods:{
 			pageinit(){
-        
+
 			},
 			//评论
 			comment(file){
@@ -242,13 +242,13 @@ import Viewer from 'viewerjs'
 						  position: 'bottom'
 						});
 					})
-					
+
 					// console.log(this.commentList)
 					this.myComment = '';
 					this.cancleImage();
 					this.iconIs = 1;
 				}
-				
+
 			},
 			// 点击上传图片按钮
 			upLoad(){
@@ -268,9 +268,9 @@ import Viewer from 'viewerjs'
 				console.log(this.files)
         // 检查文件类型
 		    if(['jpeg', 'png', 'gif', 'jpg'].indexOf(event.target.files[0].type.split("/")[1]) < 0){
-		        // 自定义报错方式
-		        Toast.error("文件类型仅支持 jpeg/png/gif！", 2000, undefined, false);
-		        return;
+	        // 自定义报错方式
+	        Toast.error("文件类型仅支持 jpeg/png/gif！", 2000, undefined, false);
+	        return;
 		    }
 		    this.transformToDataUrl(this.files);
 			},
@@ -292,10 +292,10 @@ import Viewer from 'viewerjs'
 		          this.preview2 = URL.createObjectURL(files[i]);
 		        }
           }
-        	
+
         }
-        
-        
+
+
 			},
 			// 确认上传图片
 			comfirmUpload(){
@@ -337,7 +337,7 @@ import Viewer from 'viewerjs'
 				this.rrVisible = true;
 			  this.replyFormData = new FormData()
 				this.replyFormData.append('commentId',this.commentList[index].id);
-			
+
 				if(type === 1){
 					this.replyFormData.append('sourceId',this.commentList[index].accountId);
 				}else{
@@ -355,9 +355,9 @@ import Viewer from 'viewerjs'
 				  this.replyFormData.append('files', this.uploadFile[i])
 				}
 				this.replyFormData.append('text',this.replyText);
-        
+
 				if(this.replyText == '' && this.preview0 == ''){
-				
+
 					Toast('请输入回复');
 				}else{
 					Indicator.open({position:'bottom'});
@@ -384,7 +384,7 @@ import Viewer from 'viewerjs'
 						  position: 'bottom'
 						});
 					})
-				}	
+				}
 			},
 			// 取消回复
 			cancleReply(){
@@ -445,12 +445,13 @@ import Viewer from 'viewerjs'
 			}
 		}
 	}
-	
+
 </script>
 
 <style>
+
 p{
-   word-wrap:break-word; 
+   word-wrap:break-word;
    margin: 5px;
 }
 
@@ -568,6 +569,5 @@ p{
 		.replyCell{
 			margin-top: -10px;
 		}
-
 
 </style>

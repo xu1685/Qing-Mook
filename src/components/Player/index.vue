@@ -1,6 +1,6 @@
 <template>
   <div class="play">
-    <MyHeader
+    <Header
       :pageName='course'
       :pagePath=' "p" + docId'
     />
@@ -12,22 +12,22 @@
     <mt-navbar
       class='bar'
       v-model='selected'
-      :class='{isfixed: selected === "wordsBar" && barfix}'
-    />
+      :class='{isfixed: selected === "subtitles" && barfix}'
+    >
+      <mt-tab-item id='subtitles'>
+        <span style='font-size: 16px;'>字幕</span>
+      </mt-tab-item>
       <mt-tab-item id='commentBar'>
         <span style='font-size: 16px;'>评论</span>
       </mt-tab-item>
-      <mt-tab-item id='wordsBar'>
-        <span style='font-size: 16px;'>字幕</span>
-      </mt-tab-item>
     </mt-navbar>
     <mt-tab-container v-model='selected'>
+      <mt-tab-container-item id='subtitles'>
+        <Words :docId='docId' />
+      </mt-tab-container-item>
       <mt-tab-container-item id='commentBar'>
         <Score :docId='docId' />
         <Comment :docId='docId' />
-      </mt-tab-container-item>
-      <mt-tab-container-item id='wordsBar'>
-        <Words :docId='docId' />
       </mt-tab-container-item>
     </mt-tab-container>
   </div>
@@ -35,12 +35,11 @@
 
 <script>
 
-import { Navbar, TabItem } from 'mint-ui'
-import MyHeader from '../Header'
-import Comment from './comment/comment.vue'
-import Player from './player/player.vue'
-import Score from './score/score.vue'
-import Words from './words/words.vue'
+import Header from '../Header'
+import Comment from './Comment'
+import Player from './Player'
+import Score from './Score'
+import Words from './Words'
 
 export default {
   name: 'PlayerPage',
@@ -48,8 +47,8 @@ export default {
   data() {
     return {
       course: '课程名称',
-      selected: 'commentBar',
-      docId: '0000',
+      selected: 'subtitles',
+      docId: '',
       barfix: true,
       path: '',
       params: '',
@@ -59,8 +58,9 @@ export default {
   created() {
     if (this.$route.params.id === undefined) {
       alert('id错误')
+    } else {
+      this.docId = this.$route.params.id
     }
-    this.docId = this.$route.params.id
   },
 
   methods: {
@@ -70,13 +70,11 @@ export default {
   },
 
   components: {
-    MyHeader,
+    Header,
     Player,
     Comment,
     Score,
     Words,
-    'mt-navbar': Navbar,
-    'mt-tab-item': TabItem,
   },
 }
 
@@ -84,18 +82,18 @@ export default {
 
 <style scoped>
 
-.play{
+.play {
   width: 100%;
 }
 
-.bar{
+.bar {
   margin-top: -1px;
   width: 100%;
   background-color: white;
   z-index: 1;
 }
 
-.isfixed{
+.isfixed {
   position: fixed !important;
 }
 
