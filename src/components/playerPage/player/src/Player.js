@@ -1685,6 +1685,7 @@ export default class Player {
   static renderString(parent, string) {
     const elem = document.createElement('div')
     elem.innerHTML = string
+    /* 注意调用appenChild会将之从原来的parent节点remove掉,并附加在新parent的最后 */
     parent.appendChild(elem.firstElementChild)
     return parent.lastElementChild
   }

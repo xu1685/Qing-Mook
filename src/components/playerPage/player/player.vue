@@ -16,30 +16,32 @@
   export default{
     name: 'Player',
     props: ['message','docId'],
-    data(){
-      return{
-        Height:0,
+    data() {
+      return {
+        Height: 0,
         subtitleIndex: '',
-        isnone:true,
+        isnone: true,
         screenWidth: document.body.clientWidth,
         screenHeight: window.innerHeight,
-        hasEle:false,
-        player:{},
-        library:''
+        hasEle: false,
+        player: {},
+        library: '',
       }
     },
-    watch:{
-      subtitleIndex(){
+    watch: {
+      subtitleIndex() {
         Bus.$emit('subtitleIndex', this.subtitleIndex)
       },
-      message(){
+
+      message() {
         if (this.message == 'wordsBar') {
           this.isnone = false
         } else {
           this.isnone = true
         }
       },
-      screenWidth(){
+
+      screenWidth() {
         setTimeout(() => {
           var ele = document.querySelector('.player-image-container')
           this.Height = ele.offsetHeight
@@ -56,7 +58,8 @@
         // }
       }
     },
-    mounted(){
+
+    mounted() {
       this.pageInit()
       const that = this
       window.onresize = () => {
@@ -66,13 +69,15 @@
           })()
       }
     },
+
     beforeDestroy(){
       if(this.player && typeof this.player.unmount === 'function'){
         this.player.unmount()
       }
     },
-    methods:{
-      pageInit(){
+
+    methods: {
+      pageInit() {
         this
           .$http
           .get('/players/'+this.docId)
@@ -100,50 +105,53 @@
           }).catch(() => {
             alert('获取数据错误，请检查访问地址是否正确')
           })
-
       },
+
       handleTimechange(e){
         this.subtitleIndex = e.detail.subtitleIndex
       },
+
       loaded(){
         var ele = document.querySelector('.player-image-container')
         this.Height = ele.offsetHeight
       },
+
       change(){
         console.log('change')
       },
+
       unmount(){
 
-      }
+      },
     }
   }
 
 </script>
 
 <style>
-  #myPlayerContainer{
+  #myPlayerContainer {
     margin-top: 40px;
     width: 100%;
     background-color: #5d5d5d;
   }
 
-  #myplayer{
+  #myplayer {
     width: 100%;
     background-color: white;
     position: relative;
   }
 
-  .isfixed{
+  .isfixed {
     position: fixed !important;
     z-index:1;
   }
 
-  .block{
+  .block {
     background-color: white;
     z-index: 1;
   }
 
-  .none{
+  .none {
     display: none;
   }
 </style>
