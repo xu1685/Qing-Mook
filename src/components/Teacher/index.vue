@@ -18,20 +18,18 @@
         </mt-swipe>
       </div>
       <img class='backgroundImage' src='./teacher.jpeg'>
-    <!-- 课程卡片 -->
     </div>
-    <div class='course'>
-      <div class='coursesCell' v-for='(course,index) in libraries'>
-        <!-- <div class='no' v-if='!course.isDefault' @click='pop'></div> -->
-        <router-link :to='"/course/" + index' class='link'>
+    <div class='courseList'>
+      <div class='coursesCell' v-for='library in libraries'>
+        <router-link :to='"/course/" + library.id' class='link'>
           <div class='imgcontainer'>
            <div class='image'>
-             <img class='image' :src='course.cover' onerror='this.style.display="none"'>
+             <img class='image' :src='library.cover' onerror='this.style.display="none"'>
            </div>
           </div>
           <div class='msgcontainer'>
-            <span class='courseName'>{{course.name}}</span>
-            <p class='alt'>{{course.docs.length}}个文档</p>
+            <span class='courseName'>{{library.name}}</span>
+            <p class='alt'>{{library.docs.length}}个文档</p>
           </div>
         </router-link>
         <hr class='hr1'>
@@ -113,6 +111,10 @@ export default {
   top: 0;
   left: 0;
   z-index: -1;
+}
+
+.courseList {
+
 }
 
 .photo {

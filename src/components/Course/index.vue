@@ -1,49 +1,49 @@
 <template>
   <div class="coursePage">
-    <MyHeader :pageName="name" pagePath="c"></MyHeader>
+    <MyHeader :pageName="name" />
     <div class="container">
-        <div style="height: 200px;">
-          <div class="message">
-            <h2 class="coursetitle">{{this.library.name}}</h2>
-            <span style="color: rgb(199, 199, 199)">共{{this.courseList.length}}个可读文档</span>
-            <!-- <p style="margin-top: 20px;color: rgb(199, 199, 199)">{{this.createTime}}</p> -->
+      <div style="height: 200px;">
+        <div class="message">
+          <h2 class="coursetitle">{{this.library.name}}</h2>
+          <span style="color: rgb(199, 199, 199)">共{{this.courseList.length}}个可读文档</span>
+          <!-- <p style="margin-top: 20px;color: rgb(199, 199, 199)">{{this.createTime}}</p> -->
+        </div>
+        <!-- 黑色透明遮罩 -->
+        <div class="black"></div>
+        <img :src="this.library.cover" onerror="this.style.display='none'" width="100%" height="200px;">
+        <!-- 内容：头像 信息 -->
+
+      <!-- 课程卡片 -->
+      </div>
+      <hr class="hr1">
+      <div class="courseCell" @click="sendIndex" v-for="(course,index) in courseList" :key="index">
+        <router-link :to="{ path: '/player/'+ course.id  }"  class="link">
+          <div class="imgcon">
+            <div class="msg">
+              <i style="color:white;font-size: 20px;width: 110px;text-align: center;margin-top: 20px;color:#fbe359" class="fa fa-star" aria-hidden="true" v-if="score(course.ratingStatis) !== '暂无评分' ">{{score(course.ratingStatis)}}</i>
+              <i style="color:white;font-size: 20px;width: 110px;text-align: center;margin-top: 20px;" class="fa" aria-hidden="true" v-if="score(course.ratingStatis) == '暂无评分' ">{{score(course.ratingStatis)}}</i>
+            </div>
+            <div class="blackblock"></div>
+            <div class="classImg">
+              <img class="classImg" :src="course.cover" onerror="this.style.display='none'" >
+            </div>
+
           </div>
-          <!-- 黑色透明遮罩 -->
-          <div class="black"></div>
-          <img :src="this.library.cover" onerror="this.style.display='none'" width="100%" height="200px;">
-          <!-- 内容：头像 信息 -->
+          <div class="msgcontainer">
+            <div style="display: inline-block;">
+              <span class="className">{{course.name}}</span>
+            </div>
+            <div class="icons">
+              <i  class="fa fa-caret-square-o-right" aria-hidden="true"></i>
+              <span style="display: inline-block;margin-left: 5px;">{{course.view}}</span>
+              <i style="margin-left: 15px;" class="fa fa-commenting-o" aria-hidden="true"></i>
+              <span style="display: inline-block;margin-left: 5px;">{{course.commentNums}}</span>
 
-        <!-- 课程卡片 -->
-        </div>
+            </div>
+          </div>
+        </router-link>
         <hr class="hr1">
-        <div class="courseCell" @click="sendIndex" v-for="(course,index) in courseList" :key="index">
-          <router-link :to="{ path: '/player/'+ course.id  }"  class="link">
-            <div class="imgcon">
-              <div class="msg">
-                <i style="color:white;font-size: 20px;width: 110px;text-align: center;margin-top: 20px;color:#fbe359" class="fa fa-star" aria-hidden="true" v-if="score(course.ratingStatis) !== '暂无评分' ">{{score(course.ratingStatis)}}</i>
-                <i style="color:white;font-size: 20px;width: 110px;text-align: center;margin-top: 20px;" class="fa" aria-hidden="true" v-if="score(course.ratingStatis) == '暂无评分' ">{{score(course.ratingStatis)}}</i>
-              </div>
-              <div class="blackblock"></div>
-              <div class="classImg">
-                <img class="classImg" :src="course.cover" onerror="this.style.display='none'" >
-              </div>
-
-            </div>
-            <div class="msgcontainer">
-              <div style="display: inline-block;">
-                <span class="className">{{course.name}}</span>
-              </div>
-              <div class="icons">
-                <i  class="fa fa-caret-square-o-right" aria-hidden="true"></i>
-                <span style="display: inline-block;margin-left: 5px;">{{course.view}}</span>
-                <i style="margin-left: 15px;" class="fa fa-commenting-o" aria-hidden="true"></i>
-                <span style="display: inline-block;margin-left: 5px;">{{course.commentNums}}</span>
-
-              </div>
-            </div>
-          </router-link>
-          <hr class="hr1">
-        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -60,7 +60,7 @@ export default {
     return {
       title: "课程列表",
       courseList:[],
-      courseIndex: this.$route.params.id,
+      libraryId: this.$route.params.id,
       docs:[],
       allDcos:[],
       library:{},
@@ -84,15 +84,9 @@ export default {
       Indicator.open()
       this.$http.get('/accounts/docs')
         .then((res) => {
-            // console.log(res.data)
           this.allDcos = res.data.docs
-          this.library = res.data.libraries[this.courseIndex]
-          // this.name = this.library.name
-          this.createTime = this.library.createTime
-          this.createTime = this.createTime.replace('T',' ')
-          this.createTime = this.createTime.replace(/\.\w+/,'')
-          // console.log(this.createTime)
-          // console.log(this.library,'library')
+          this.library = res.data.libraries.find((library) => library.id === this.libraryId)
+          this.createTime = this.library.createTime.replace('T',' ').replace(/\.\w+/,'')
           this.docs = this.library.docs
           var len = this.allDcos.length
           for(var i = 0;i<len;i++) {
@@ -101,7 +95,6 @@ export default {
             }
           }
           this.courseList = this.courseList.reverse()
-          console.log(this.courseList,'courseList')
           Indicator.close()
       })
     },
@@ -114,16 +107,15 @@ export default {
       var arr = Object.values(obj)
       var len = arr.length
       var count = 0
-      for(var i=0;i<len;i++) {
+      for (var i = 0; i < len; i++) {
          count += arr[i]
       }
-      if(count === 0) {
+      if (count === 0) {
         var score = "暂无评分"
-      }else {
-        var score = (arr[0]*1 + arr[1]*2 + arr[2]*3 + arr[3]*4 + arr[4]*5)/count
+      } else {
+        var score = (arr[0] * 1 + arr[1] * 2 + arr[2] * 3 + arr[3] * 4 + arr[4] * 5) / count
         score = score.toFixed(1)
       }
-      console.log(score,'score')
       return score
     }
   },
@@ -135,19 +127,21 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 
 .coursePage {
-  margin-top: 40px;
+
 }
- .black {
+
+.black {
   width: 100%;
   height: 200px;
   position: absolute;
   background-color:rgba(0, 0, 0, 0.48);
   z-index: 1;
 }
- .message {
+
+.message {
   width: 100%;
   height: 200px;
   position: absolute;
@@ -155,6 +149,7 @@ export default {
   z-index: 3;
   text-align: center
 }
+
 .coursetitle {
   margin-top: 40px;
   color: white;
@@ -164,6 +159,7 @@ export default {
   width: 60%;
   margin-left: 20%;
 }
+
  .courseCell {
   width: 100%;
   /*background-color: rgba(212, 212, 212, 0.24);*/
@@ -171,11 +167,13 @@ export default {
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
 .link {
   display: flex;
   align-items: center;
   height: 65px;
 }
+
 .imgcon {
   display: inline-block;
   width: 110px;
@@ -185,6 +183,7 @@ export default {
   background: gray;
   z-index: 1;
 }
+
 .classImg {
   display: inline-block;
   width:110px;
@@ -202,6 +201,7 @@ export default {
   text-align: left;
   z-index: 3;
 }
+
 .blackblock {
   display: inline-block;
   position: absolute;
@@ -211,6 +211,7 @@ export default {
   z-index: 2;
   border-radius: 5px;
 }
+
 .msgcontainer {
   height: 65px;
   margin-left: 8px;
@@ -218,6 +219,7 @@ export default {
   flex:1;
   text-align: left;
 }
+
 .className {
   display: inline-block;
   width: 160px;
@@ -228,12 +230,14 @@ export default {
   color: black;
   text-align:left;
 }
+
 .icons {
   text-align:left;
   color: gray;
   margin-top: 18px;
   width: 100%;
 }
+
 .hr1 {
   height:1px;
   border:none;
@@ -241,4 +245,5 @@ export default {
   margin-top: 10px;
   margin: 10px 10px 0 10px;
 }
+
 </style>
