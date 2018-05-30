@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       documentName: '课程名称',
-      selected: 'subtitles',
+      selected: 'comment',
       docId: '',
       path: '',
       params: '',
