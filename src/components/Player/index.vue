@@ -1,31 +1,27 @@
 <template>
-  <div class="play">
-    <Header
-      :pageName='course'
-      :pagePath=' "p" + docId'
-    />
+  <div class="player">
+    <Header :pageName='documentName' />
     <Player
       :docId='docId'
       :message='selected'
-      @myname='myname'
     />
     <mt-navbar
-      class='bar'
+      class='commentAndSubtitleToolBar'
       v-model='selected'
-      :class='{isfixed: selected === "subtitles" && barfix}'
+      :class='{isfixed: selected === "subtitles"}'
     >
+      <mt-tab-item id='comment'>
+        <span style='font-size: 16px;'>评论</span>
+      </mt-tab-item>
       <mt-tab-item id='subtitles'>
         <span style='font-size: 16px;'>字幕</span>
-      </mt-tab-item>
-      <mt-tab-item id='commentBar'>
-        <span style='font-size: 16px;'>评论</span>
       </mt-tab-item>
     </mt-navbar>
     <mt-tab-container v-model='selected'>
       <mt-tab-container-item id='subtitles'>
         <Words :docId='docId' />
       </mt-tab-container-item>
-      <mt-tab-container-item id='commentBar'>
+      <mt-tab-container-item id='comment'>
         <Score :docId='docId' />
         <Comment :docId='docId' />
       </mt-tab-container-item>
@@ -40,16 +36,16 @@ import Comment from './Comment'
 import Player from './Player'
 import Score from './Score'
 import Words from './Words'
+import Bus from '../../bus.js'
 
 export default {
   name: 'PlayerPage',
 
   data() {
     return {
-      course: '课程名称',
+      documentName: '课程名称',
       selected: 'subtitles',
       docId: '',
-      barfix: true,
       path: '',
       params: '',
     }
@@ -61,12 +57,10 @@ export default {
     } else {
       this.docId = this.$route.params.id
     }
-  },
 
-  methods: {
-    myname(data) {
-      this.course = data
-    },
+    Bus.$on('COMPONENTS/PLAYER/PLAYER/DOCUMENT_NAME_CHANGE', (documentName) => {
+      this.documentName = documentName
+    })
   },
 
   components: {
@@ -82,11 +76,11 @@ export default {
 
 <style scoped>
 
-.play {
+.player {
   width: 100%;
 }
 
-.bar {
+.commentAndSubtitleToolBar {
   margin-top: -1px;
   width: 100%;
   background-color: white;

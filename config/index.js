@@ -14,17 +14,17 @@ module.exports = {
     httpUrl: '/api/v1',
     proxyTable: {
         '/api/v1': {
-            target:'https://mobile.mamasousuo.com/api/v1',
+            target:'https://mobile.mamasousuo.com',
             changeOrigin: true,
-            secure: false,
+            secure: true,
             pathRewrite:{
-                '^/api/v1':''
+                '^/api/v1':'/api/v1'
             },
         }
     },
 
     // Various Dev Server settings
-    host: '192.168.3.148', // 192.168.43.67 can be overwritten by process.env.HOST localhost
+    host: '10.11.63.12', // 192.168.43.67 can be overwritten by process.env.HOST localhost
     port: 3000, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,

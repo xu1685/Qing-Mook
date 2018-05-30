@@ -1,77 +1,63 @@
 <template>
   <div id="myPlayerContainer" >
-    <div id="myplayer" :class="{isfixed: !isnone}" @subtitlechange="handleTimechange" @actionsLoaded="loaded" >
-
-    </div>
-    <div :class="{block:true, none: isnone}"  :style="{height: this.Height +'px'}" ></div>
+    <div
+      id="myPlayer"
+      :class="{isfixed: !isnone}"
+      @subtitlechange="handleTimechange"
+      @actionsLoaded="loaded"
+    />
+    <div
+      :class="{block: true, none: isnone}"
+      :style="{height: this.Height +'px'}"
+    />
   </div>
 </template>
 
 <script>
   import Player from './src/Player.js'
-  import Bus from '../../../bus.js';
+  import Bus from '../../../bus.js'
 
   import './src/Player.css'
 
-  export default{
+  export default {
     name: 'Player',
-    props: ['message','docId'],
+
+    props: [
+      'docId',
+      'message',
+    ],
+
     data() {
       return {
         Height: 0,
         subtitleIndex: '',
         isnone: true,
-        screenWidth: document.body.clientWidth,
-        screenHeight: window.innerHeight,
         hasEle: false,
         player: {},
         library: '',
       }
     },
+
     watch: {
       subtitleIndex() {
         Bus.$emit('subtitleIndex', this.subtitleIndex)
       },
 
       message() {
-        if (this.message == 'wordsBar') {
+        if (this.message === 'subtitles') {
           this.isnone = false
         } else {
           this.isnone = true
         }
       },
-
-      screenWidth() {
-        setTimeout(() => {
-          var ele = document.querySelector('.player-image-container')
-          this.Height = ele.offsetHeight
-        },100)
-
-        // if(this.Height > this.screenHeight - 100){
-        //  this.isnone = true;
-        //  alert('hquxiao fix')
-        //  // Bus.$emit('barfix', false);
-        // }else{
-        //  this.isnone = false;
-
-        //  // Bus.$emit('barfix', true);
-        // }
-      }
     },
 
     mounted() {
       this.pageInit()
-      const that = this
-      window.onresize = () => {
-          return (() => {
-              window.screenWidth = document.body.clientWidth
-              that.screenWidth = window.screenWidth
-          })()
-      }
     },
 
-    beforeDestroy(){
-      if(this.player && typeof this.player.unmount === 'function'){
+    beforeDestroy() {
+      if(this.player && typeof this.player.unmount === 'function') {
         this.player.unmount()
       }
     },
@@ -86,7 +72,7 @@
             const defaultAction = res.data.doc.defaultAction
 
             /* 获取到当前准备播放的文档时，触发文档名称改变事件，改变页面标题 */
-            this.$emit('myname',res.data.doc.name)
+            Bus.$emit('COMPONENTS/PLAYER/PLAYER/DOCUMENT_NAME_CHANGE', res.data.doc.name)
 
             this.imagesUrl = res.data.doc.pictures
             this.playAction = action.find((acs) => acs.id === defaultAction)
@@ -97,13 +83,13 @@
               actionUrl: this.playAction.json,
               audioUrl: this.playAction.recording,
               duration: this.playAction.duration,
-              element: document.getElementById('myplayer'),
+              element: document.getElementById('myPlayer'),
               imageUrls: this.imagesUrl,
               mode: 'mobile',
               size: this.playAction.totalSize,
               subtitles: this.subtitle,
             })
-          }).then(() =>{
+          }).then(() => {
             this.hasEle = true
           }).catch((error) => {
             throw error
@@ -111,21 +97,13 @@
           })
       },
 
-      handleTimechange(e){
+      handleTimechange(e) {
         this.subtitleIndex = e.detail.subtitleIndex
       },
 
-      loaded(){
+      loaded() {
         var ele = document.querySelector('.player-image-container')
         this.Height = ele.offsetHeight
-      },
-
-      change(){
-        console.log('change')
-      },
-
-      unmount(){
-
       },
     }
   }
@@ -139,7 +117,7 @@
     background-color: #5d5d5d;
   }
 
-  #myplayer {
+  #myPlayer {
     width: 100%;
     background-color: white;
     position: relative;
