@@ -31,10 +31,6 @@ export default {
     }
   },
 
-  computed: {
-
-  },
-
   watch: {
     subtitleIndex() {
       Bus.$emit('subtitleIndex', this.subtitleIndex)

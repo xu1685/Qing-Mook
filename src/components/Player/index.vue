@@ -1,24 +1,33 @@
 <template>
   <div class='playerWrapper'>
-    <Header :pageName='documentName' />
-    <Player
-      :docId='docId'
-      :message='selected'
-    />
-    <mt-navbar
-      class='commentAndSubtitleToolBar'
-      v-model='selected'
+    <div
+      :style='{
+        position: selected === "subtitles" ? "fixed" : undefined,
+        top: selected === "subtitles" ? "0" : undefined,
+        left: selected === "subtitles" ? "0" : undefined,
+        zIndex: selected === "subtitles" ? "100" : undefined,
+      }'
     >
-      <mt-tab-item id='comment'>
-        <span style='font-size: 16px;'>评论</span>
-      </mt-tab-item>
-      <mt-tab-item id='subtitles'>
-        <span style='font-size: 16px;'>字幕</span>
-      </mt-tab-item>
-    </mt-navbar>
+      <Header :pageName='documentName' />
+      <Player
+        :docId='docId'
+        :message='selected'
+      />
+      <mt-navbar
+        class='commentAndSubtitleToolBar'
+        v-model='selected'
+      >
+        <mt-tab-item id='comment'>
+          <span style='font-size: 16px;'>评论</span>
+        </mt-tab-item>
+        <mt-tab-item id='subtitles'>
+          <span style='font-size: 16px;'>字幕</span>
+        </mt-tab-item>
+      </mt-navbar>
+    </div>
     <mt-tab-container v-model='selected'>
       <mt-tab-container-item id='subtitles'>
-        <Words :docId='docId' />
+        <Subtitles :docId='docId' />
       </mt-tab-container-item>
       <mt-tab-container-item id='comment'>
         <Score :docId='docId' />
@@ -34,7 +43,7 @@ import Header from '../Header'
 import Comment from './Comment'
 import Player from './Player'
 import Score from './Score'
-import Words from './Words'
+import Subtitles from './Subtitles'
 import Bus from '../../bus.js'
 
 export default {
@@ -62,12 +71,16 @@ export default {
     })
   },
 
+  computed: {
+
+  },
+
   components: {
     Header,
     Player,
     Comment,
     Score,
-    Words,
+    Subtitles,
   },
 }
 

@@ -15,7 +15,7 @@ import Bus from '../../../bus.js';
 import BScroll from 'better-scroll'
 
 export default {
-	name:'Words',
+	name:'Subtitles',
 
 	props:['docId'],
 
