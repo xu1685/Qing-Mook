@@ -1,5 +1,5 @@
 <template>
-  <div class="player">
+  <div class='playerWrapper'>
     <Header :pageName='documentName' />
     <Player
       :docId='docId'
@@ -8,7 +8,6 @@
     <mt-navbar
       class='commentAndSubtitleToolBar'
       v-model='selected'
-      :class='{isfixed: selected === "subtitles"}'
     >
       <mt-tab-item id='comment'>
         <span style='font-size: 16px;'>评论</span>
@@ -76,19 +75,18 @@ export default {
 
 <style scoped>
 
-.player {
+.playerWrapper {
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .commentAndSubtitleToolBar {
-  margin-top: -1px;
   width: 100%;
-  background-color: white;
-  z-index: 1;
 }
 
-.isfixed {
-  position: fixed !important;
+.commentAndSubtitleToolBar > a:not(:first-child) {
+  border-left: solid 1px #EEE;
 }
 
 </style>

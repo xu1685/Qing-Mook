@@ -1,5 +1,8 @@
 <template>
-  <mt-header fixed class="header" :title="pageName">
+  <mt-header
+    class="header"
+    :title="pageName"
+  >
     <a @click="back" slot="left">
       <mt-button icon="back" />
     </a>
@@ -14,16 +17,6 @@ export default {
   props: [
     'pageName',
   ],
-
-  data() {
-    return {
-
-    }
-  },
-
-  created() {
-
-  },
 
   methods: {
     back() {
@@ -40,8 +33,6 @@ export default {
   background-color: #FFF;
   color: #000;
   font-size: 18px;
-  height: 40px;
-  z-index: 100;
 }
 
 </style>

@@ -7,7 +7,7 @@
         <span class="overAllScore"></span>
       </div>
     </div>
-    <!-- 跳转到老师页面 -->
+    <!-- 跳转到教师页面 -->
     <div class="theTeacher">
       <router-link :to="'/teacher/' ">
         <div class="right">
@@ -63,7 +63,7 @@
         if (count === 0) {
           var score = "暂无评分"
         } else {
-          var score = (arr[0] * 1 + arr[1] * 2 + arr[2] * 3 + arr[3] * 4 + arr[4] * 5) / count
+          var score = (arr[0] * 5 + arr[1] * 4 + arr[2] * 3 + arr[3] * 2 + arr[4] * 1) / count
           score = score.toFixed(1)
         }
         return score
@@ -74,24 +74,17 @@
 
 <style>
 
-a {
-  text-decoration:none;
-}
-
 .mint-cell-wrapper {
   font-size: 14px !important;
 }
 
 .score {
-  text-align: left;
   height: 50px;
-  width: 90%;
-  margin-top: 5px;
-  margin-left: 5%;
-  background-color: white;
+  padding: 0 10px;
   border-bottom: 1px solid lightgray;
   border-top: 1px solid lightgray;
   display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 

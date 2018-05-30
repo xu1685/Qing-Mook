@@ -1,24 +1,17 @@
 <template>
-  <div id="myPlayerContainer" >
-    <div
-      id="myPlayer"
-      :class="{isFixed: this.message === 'subtitles'}"
-      @subtitlechange="handleTimechange"
-      @actionsLoaded="loaded"
-    />
-    <div
-      :class="{block: true, none: this.message === 'comment'}"
-      :style="{height: this.Height +'px'}"
-    />
-  </div>
+  <div
+    id="myPlayer"
+    @subtitlechange="handleTimechange"
+    @actionsLoaded="loaded"
+  />
 </template>
 
 <script>
 
+import './src/Player.css'
+
 import Player from './src/Player.js'
 import Bus from '../../../bus.js'
-
-import './src/Player.css'
 
 export default {
   name: 'Player',
@@ -109,28 +102,10 @@ export default {
 </script>
 
 <style>
-  #myPlayerContainer {
-    margin-top: 40px;
-    width: 100%;
-    background-color: #5d5d5d;
-  }
 
-  #myPlayer {
-    width: 100%;
-    background-color: white;
-    position: relative;
-  }
+#myPlayer {
+  width: 100%;
+  position: relative;
+}
 
-  .isFixed {
-    position: fixed !important;
-    z-index: 10;
-  }
-
-  .block {
-    background-color: transparent;
-  }
-
-  .none {
-    display: none;
-  }
 </style>
