@@ -1,12 +1,13 @@
 <template>
-  <div class='playerWrapper'>
+  <div class='container'>
     <div
-      :style='{
-        position: selected === "subtitles" ? "fixed" : undefined,
-        top: selected === "subtitles" ? "0" : undefined,
-        left: selected === "subtitles" ? "0" : undefined,
-        zIndex: selected === "subtitles" ? "100" : undefined,
-      }'
+      id='fixedComponentWrapper'
+      :style='selected === "subtitles" ? {
+        position: "fixed",
+        top: "0",
+        left: "0",
+        zIndex: "100",
+      } : undefined'
     >
       <Header :pageName='documentName' />
       <Player
@@ -27,7 +28,10 @@
     </div>
     <mt-tab-container v-model='selected'>
       <mt-tab-container-item id='subtitles'>
-        <Subtitles :docId='docId' />
+        <Subtitles
+          :docId='docId'
+          :style='{marginTop: selected === "subtitles" ? fixedComponentWrapperElementHeight + "px" : undefined}'
+        />
       </mt-tab-container-item>
       <mt-tab-container-item id='comment'>
         <Score :docId='docId' />
@@ -72,7 +76,11 @@ export default {
   },
 
   computed: {
-
+    fixedComponentWrapperElementHeight: function () {
+      if (this.selected === 'subtitles') {
+        return document.getElementById('fixedComponentWrapper').clientHeight
+      }
+    },
   },
 
   components: {
@@ -88,7 +96,7 @@ export default {
 
 <style scoped>
 
-.playerWrapper {
+.container {
   width: 100%;
   display: flex;
   flex-direction: column;

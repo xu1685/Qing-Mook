@@ -1,6 +1,6 @@
 <template>
-	<div class="words">
-		<div class="textline" v-for="(item,index) in subtitle" :class="{onshow: index == subtitleIndex }">
+	<div class="subtitles">
+		<div class="textline" v-for="(item, index) in subtitle" :class="{onshow: index == subtitleIndex }">
 			<span class="start">{{formatDuring(item.beginTime)}}</span>
 			<span class="wordstext">{{item.text}}</span>
   	</div>
@@ -48,7 +48,6 @@ export default {
 		this.onshow = document.querySelector('.onshow');
     	if(this.onshow) {
 		 		var nowH = this.onshow.offsetTop;
-		    // console.log(nowH,this.onshow,'offsetTop');
 			  if(nowH > 100) {
 			  	window.scrollTo(0,this.onshow.offsetTop -100)
 			  }
@@ -96,7 +95,7 @@ export default {
 
 <style scoped>
 
-.words {
+.subtitles {
 	position: relative;
   border-top: solid 1px #EEE
 }
