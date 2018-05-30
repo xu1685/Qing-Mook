@@ -13,7 +13,6 @@ export default {
 
   props: [
     'pageName',
-    'pagePath',
   ],
 
   data() {
@@ -38,7 +37,7 @@ export default {
 <style scoped>
 
 .header {
-  background-color: #F8F8F8;
+  background-color: #FFF;
   color: #000;
   font-size: 18px;
   height: 40px;
