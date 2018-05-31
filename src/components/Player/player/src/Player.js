@@ -445,8 +445,6 @@ export default class Player {
       playerControl,
     } = this.domRefs
     const captionsNode = Player.renderString(playerContainer, this.template.captions)
-    const top = playerContainer.offsetHeight - captionsNode.offsetHeight - playerControl.offsetHeight
-    captionsNode.style.top = `${top / playerContainer.offsetHeight * 100}%`
     if (!this.state.isCaptionsOpen) {
       captionsNode.style.display = 'none'
     }
@@ -627,13 +625,19 @@ export default class Player {
     const parentWidth = playerContainer.offsetWidth
     const parentHeight = playerContainer.offsetHeight
     const captionsLeftMax = parentWidth - captions.offsetWidth
-    const captionsTopMax = parentHeight - captions.offsetHeight - playerControl.offsetHeight
-    left = Math.max(0, left)
-    left = Math.min(captionsLeftMax, left)
-    top = Math.max(0, top)
-    top = Math.min(captionsTopMax, top)
-    captions.style.left = `${left / parentWidth * 100}%`
-    captions.style.top = `${top / parentHeight * 100}%`
+    const captionsBottomMax = parentHeight - captions.offsetHeight
+
+    let leftOffset = left
+    leftOffset = Math.max(0, leftOffset)
+    leftOffset = Math.min(captionsLeftMax, leftOffset)
+    captions.style.left = `${leftOffset / parentWidth * 100}%`
+
+    /* 这里设置字幕的bottom值而非top，是考虑到用户一般会将字幕放到视频的下半部分，
+    所以需要避免字幕过多时超出播放器的下限，但仍然有超出上限的危险 */
+    let bottomOffset = parentHeight - top - captions.offsetHeight
+    bottomOffset = Math.max(playerControl.offsetHeight, bottomOffset)
+    bottomOffset = Math.min(captionsBottomMax, bottomOffset)
+    captions.style.bottom = `${bottomOffset / parentHeight * 100}%`
   }
 
   handleWindowResize() {
@@ -775,7 +779,6 @@ export default class Player {
       audio,
       playerControl,
       captions,
-      playerContainer,
     } = this.domRefs
     const {
       windowWidth,
@@ -803,11 +806,6 @@ export default class Player {
     this.setDrawTarget()
     this.setDraftSize()
     this.changeCurrentTime(audio.currentTime * 1000)
-
-    /* 重新调整字幕位置 */
-    const captionsLeft = parseFloat(captions.style.left) / 100 * playerContainer.offsetWidth
-    const captionsTop = parseFloat(captions.style.top) / 100 * playerContainer.offsetHeight
-    this.setCaptionsOffset(captionsLeft, captionsTop)
 
     /* 调整字幕字体大小 */
     const propotion = containerWidth / this.state.initialWidth
@@ -1048,6 +1046,7 @@ export default class Player {
       /* 如果当前正在加载，且当前等待的页码和时间与之前一致，则恢复播放，
       之所以要进行后面两个判断，是因为可能在等待加载的过程中又调整了进度，这时等待的页码和时间可能与之前不同 */
       if (isLoading && currentWaitingPage === waitingPage && waitingTime === currentWaitingTime) {
+        /* 在此函数内只需根据情况打开音频，因为changeCurrentTime会注册板书动作 */
         this.continue()
 
         /* 由于等待的页码已经加载成功，此时可以顺利地调整时间 */

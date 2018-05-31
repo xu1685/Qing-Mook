@@ -226,7 +226,7 @@
 .player-captions {
   position: absolute;
   z-index: 101;
-  top: 70%;
+  bottom: 10%;
   left: 5%;
   box-sizing: border-box;
   font-size: 16px;
