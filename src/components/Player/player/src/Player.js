@@ -332,8 +332,7 @@ export default class Player {
     /* 如果音频加载完成且第一张图片加载完成，播放器可以开始播放 */
     if (this.state.audioLoadStatus === 'finish' && this.state.imagesLoaded[0] && !this.state.canPlay) {
       this.state.canPlay = true
-      this.state.isLoading = false
-      this.setLoadingTipStatus()
+      this.setLoadingTipStatus(false)
       /* 图片和语音都已经加载完成，可以初始化页面的 HTML 结构了 */
       this.initHtml()
       this.bindEvents()
@@ -356,7 +355,8 @@ export default class Player {
     this.renderDraft()
   }
 
-  setLoadingTipStatus() {
+  setLoadingTipStatus(status) {
+    this.state.isLoading = status
     this.domRefs.loading.style.display = this.state.isLoading ? 'block' : 'none'
   }
 
@@ -481,10 +481,8 @@ export default class Player {
     this.handleCaptionsMove = this.handleCaptionsMove.bind(this)
     this.showPlayerControl = this.showPlayerControl.bind(this)
     this.handleCaptionsDown = this.handleCaptionsDown.bind(this)
-    this.handleCaptionsMove = this.handleCaptionsMove.bind(this)
     this.handleCaptionsUp = this.handleCaptionsUp.bind(this)
     this.toggleFullscreen = this.toggleFullscreen.bind(this)
-    this.showPlayerControl = this.showPlayerControl.bind(this)
     this.togglePageFullscreen = this.togglePageFullscreen.bind(this)
     this.handleProgressbarOver = this.handleProgressbarOver.bind(this)
     this.handleProgressbarleave = this.handleProgressbarleave.bind(this)
@@ -493,8 +491,8 @@ export default class Player {
     if (this.options.mode === 'desktop') {
       playerControl.addEventListener('mouseenter', this.showPlayerControl)
       playerControl.addEventListener('mousemove', this.showPlayerControl)
-      canvas.addEventListener('mouseenter', this.showPlayerControl)
-      canvas.addEventListener('mousemove', this.showPlayerControl)
+      loadTip.addEventListener('mouseenter', this.showPlayerControl)
+      loadTip.addEventListener('mousemove', this.showPlayerControl)
       loadTip.addEventListener('click', this.handlePlayButtonClick)
       fullscreen.addEventListener('click', this.toggleFullscreen)
       pageFullscreen.addEventListener('click', this.togglePageFullscreen)
@@ -1010,6 +1008,11 @@ export default class Player {
   }
 
   /* 用于正在缓冲时暂停播放,此函数不改变状态变量 */
+  wait() {
+    this.setLoadingTipStatus(true)
+    this.halt()
+  }
+
   halt() {
     this.domRefs.audio.pause()
     window.clearTimeout(this.state.nextAction)
@@ -1017,6 +1020,13 @@ export default class Player {
   }
 
   /* 用于缓冲结束时继续播放 */
+  continue() {
+    this.setLoadingTipStatus(false)
+    if (!this.state.halt) {
+      this.domRefs.audio.play()
+    }
+  }
+
   play() {
     this.domRefs.audio.play()
     this.registerNextAction()
@@ -1024,12 +1034,8 @@ export default class Player {
   }
 
   waitPageLoading(waitingPage, waitingTime) {
-    /* 打开加载提示 */
-    this.state.isLoading = true
-    this.setLoadingTipStatus()
-
     /* 等待加载的过程中暂停播放 */
-    this.pause()
+    this.wait()
 
     /* 记录等待的页码和时间 */
     this.state.waiting = { waitingPage, waitingTime }
@@ -1042,15 +1048,7 @@ export default class Player {
       /* 如果当前正在加载，且当前等待的页码和时间与之前一致，则恢复播放，
       之所以要进行后面两个判断，是因为可能在等待加载的过程中又调整了进度，这时等待的页码和时间可能与之前不同 */
       if (isLoading && currentWaitingPage === waitingPage && waitingTime === currentWaitingTime) {
-        /* 关闭加载提示 */
-        this.state.isLoading = false
-        this.setLoadingTipStatus()
-
-        /* 由于在等待加载时暂停了播放，如果本来是正在播放的状态，此时需要进行恢复，
-        只需打开音频即可，changeCurrentTime会根据状态选择是否注册板书动作 */
-        if (!this.state.halt) {
-          this.domRefs.audio.play()
-        }
+        this.continue()
 
         /* 由于等待的页码已经加载成功，此时可以顺利地调整时间 */
         this.changeCurrentTime(waitingTime)
@@ -1068,14 +1066,21 @@ export default class Player {
         imagesLoaded,
       },
     } = this
+    /* 调整音频时间秒 */
+    audio.currentTime = time / 1000
+    this.rerenderTimeInfo()
+
     /* 若该时刻的图片还未加载完成，待加载完成再进行动作 */
     const page = this.getPageByTime(time)
     if (!imagesLoaded[page]) {
       this.waitPageLoading(page, time)
       return
     }
-    /* 调整音频时间秒 */
-    audio.currentTime = time / 1000
+
+    if (this.state.isLoading) {
+      this.continue()
+    }
+
     /* 取消已注册的动作 */
     window.clearTimeout(this.state.nextAction)
     /* 取消当前动画 */
@@ -1099,7 +1104,6 @@ export default class Player {
       this.registerNextAnimation()
     }
     /* 重新渲染播放器控制条 */
-    this.rerenderTimeInfo()
     this.changeDisplaySubtitle(time)
   }
 
