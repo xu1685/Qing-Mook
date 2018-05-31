@@ -14,7 +14,7 @@ export default class Player {
         color: action.color,
         endTime: action.endTime ? Math.round(window.parseFloat(action.endTime) * 10) * 100 : undefined,
         id: action.id,
-        points: action.points ? action.points.map((point) => [window.parseFloat(point.x), window.parseFloat(point.y)]) : undefined,
+        points: action.points ? action.points.map(point => [window.parseFloat(point.x), window.parseFloat(point.y)]) : undefined,
         startTime: Math.round(window.parseFloat(action.startTime) * 10) * 100,
         target: action.target,
         type: action.type,
@@ -63,7 +63,10 @@ export default class Player {
       subtitles,
       /* 滚动一页距离需要的时间，以秒为单位 */
       scrollDuration: 1,
+      /* 是否自动播放 */
       autoPlay: mode === 'mobile',
+      /* 字幕初始大小 */
+      captionFontSize: 16,
     }
     this.state = {
       /* 语音文件加载状态 */
@@ -81,8 +84,10 @@ export default class Player {
       animationObj: null,
       /* 播放器处于暂停或播放状态 */
       halt: true,
+      /* 播放器是否正在等候加载 */
+      isLoading: true,
       /* 是否处于网页全屏 */
-      pageFullscreen: false,
+      isPageFullscreenOpen: false,
       /* 草稿纸是否处于打开状态 */
       isdraftOpen: false,
       /* 草稿纸的宽度，用于打开草稿纸时进行恢复 */
@@ -104,7 +109,12 @@ export default class Player {
       /* 是否开启字幕 */
       isCaptionsOpen: mode === 'mobile',
       /* 播放器的初始宽度，用于退出全屏时进行恢复 */
-      initialWidth: element.style.width,
+      initialWidth: element.offsetWidth,
+      /* 用于记录加载完成后如何恢复状态，分别为正在等待加载的页码和加载成功后恢复的时刻 */
+      wating: {
+        waitingPage: null,
+        waitingTime: null,
+      },
     }
     /* html模板 */
     this.template = {
@@ -282,25 +292,35 @@ export default class Player {
 
       return prevImageOrder - nextImageOrder
     })
+    this.options.imageUrls = imageUrls
 
     /* 图片宽度等于播放器宽度 */
     const imageWidth = this.domRefs.playerContainer.offsetWidth
 
-    /* 根据图集的 URL 生成对应的图片元素，并保存在 domRefs 中 */
+    /* 生成图片节点,并请求第一张图片,待第一张请求成功再请求其他图片 */
     this.domRefs.images = imageUrls.map((imageUrl, index) => {
       const imageElement = new Image(imageWidth)
       /* 改变图片下载完成事件处理程序的指定方式 */
       imageElement.addEventListener('load', this.handleImageLoaded.bind(this, index))
-      imageElement.src = imageUrl
       return imageElement
+    })
+    this.domRefs.images[0].addEventListener('load', this.handleFirstImageLoaded.bind(this))
+    this.domRefs.images[0].src = imageUrls[0]
+  }
+
+  handleFirstImageLoaded() {
+    this.checkSrcLoadStatus()
+
+    /* 加载剩余的图片 */
+    this.domRefs.images.forEach((imageElem, index) => {
+      if (index) {
+        imageElem.src = this.options.imageUrls[index]
+      }
     })
   }
 
   handleImageLoaded(index) {
     this.state.imagesLoaded[index] = true
-    if (!index) {
-      this.checkSrcLoadStatus()
-    }
   }
 
   handleAudioLoaded() {
@@ -312,7 +332,8 @@ export default class Player {
     /* 如果音频加载完成且第一张图片加载完成，播放器可以开始播放 */
     if (this.state.audioLoadStatus === 'finish' && this.state.imagesLoaded[0] && !this.state.canPlay) {
       this.state.canPlay = true
-      this.toggleLoadingTip()
+      this.state.isLoading = false
+      this.setLoadingTipStatus()
       /* 图片和语音都已经加载完成，可以初始化页面的 HTML 结构了 */
       this.initHtml()
       this.bindEvents()
@@ -335,11 +356,8 @@ export default class Player {
     this.renderDraft()
   }
 
-  toggleLoadingTip() {
-    const {
-      loading,
-    } = this.domRefs
-    loading.style.display = loading.style.display === 'none' ? 'block' : 'none'
+  setLoadingTipStatus() {
+    this.domRefs.loading.style.display = this.state.isLoading ? 'block' : 'none'
   }
 
   renderImages() {
@@ -456,7 +474,6 @@ export default class Player {
       progressHandle,
       toggleCaptionsButton,
       captions,
-      draft,
       loadTip,
     } = this.domRefs
     this.handlePlayButtonClick = this.handlePlayButtonClick.bind(this)
@@ -467,20 +484,24 @@ export default class Player {
     this.handleCaptionsMove = this.handleCaptionsMove.bind(this)
     this.handleCaptionsUp = this.handleCaptionsUp.bind(this)
     this.toggleFullscreen = this.toggleFullscreen.bind(this)
+    this.showPlayerControl = this.showPlayerControl.bind(this)
+    this.togglePageFullscreen = this.togglePageFullscreen.bind(this)
+    this.handleProgressbarOver = this.handleProgressbarOver.bind(this)
+    this.handleProgressbarleave = this.handleProgressbarleave.bind(this)
+    this.handleSeekMousedown = this.handleSeekMousedown.bind(this)
     /* 添加PC端事件 */
     if (this.options.mode === 'desktop') {
-      playerControl.addEventListener('mouseenter', this.showPlayerControl.bind(this))
-      playerControl.addEventListener('mousemove', this.showPlayerControl.bind(this))
+      playerControl.addEventListener('mouseenter', this.showPlayerControl)
+      playerControl.addEventListener('mousemove', this.showPlayerControl)
       canvas.addEventListener('mouseenter', this.showPlayerControl)
       canvas.addEventListener('mousemove', this.showPlayerControl)
-      canvas.addEventListener('click', this.handlePlayButtonClick, true)
-      draft.addEventListener('click', this.handlePlayButtonClick, true)
+      loadTip.addEventListener('click', this.handlePlayButtonClick)
       fullscreen.addEventListener('click', this.toggleFullscreen)
-      pageFullscreen.addEventListener('click', this.togglePageFullscreen.bind(this))
-      progressbarWrapper.addEventListener('mouseover', this.handleProgressbarOver.bind(this))
-      progressbarWrapper.addEventListener('mouseleave', this.handleProgressbarleave.bind(this))
-      progressbarWrapper.addEventListener('mousemove', this.handleProgressbarOver.bind(this))
-      progressHandle.addEventListener('mousedown', this.handleSeekMousedown.bind(this))
+      pageFullscreen.addEventListener('click', this.togglePageFullscreen)
+      progressbarWrapper.addEventListener('mouseover', this.handleProgressbarOver)
+      progressbarWrapper.addEventListener('mouseleave', this.handleProgressbarleave)
+      progressbarWrapper.addEventListener('mousemove', this.handleProgressbarOver)
+      progressHandle.addEventListener('mousedown', this.handleSeekMousedown)
       captions.addEventListener('mousedown', this.handleCaptionsDown)
     }
     /* 添加公共事件 */
@@ -707,28 +728,27 @@ export default class Player {
       options: {
         mode,
       },
+      state: {
+        initialWidth,
+        isPageFullscreenOpen,
+      },
     } = this
 
     if (fscreen.fullscreenElement) {
-      /* 点击整个屏幕都可以暂停/播放 */
-      if (mode === 'desktop') {
-        document.addEventListener('click', this.handleFullscreenClick)
-      }
       const fullscreenSize = this.getFullscreenSize()
       playerContainer.style.width = `${fullscreenSize}px`
       this.resizePlayer(fullscreenSize)
-      /* fullscreen.firstElementChild.className = 'fa fa-compress' */
+
       fullscreen.title = '退出全屏'
+
+      /* 在全屏状态不可直接设置网页全屏，需先退出才可设置 */
       if (mode === 'desktop') {
         pageFullscreen.style.display = 'none'
       }
     } else {
-      if (mode === 'desktop') {
-        document.removeEventListener('click', this.handleFullscreenClick)
-      }
-      playerContainer.style.width = this.initialWidth
-      this.resizePlayer(this.playerSize)
-      /* fullscreen.firstElementChild.className = 'fa fa-expand' */
+      playerContainer.style.width = isPageFullscreenOpen ? '100%' : `${initialWidth}px`
+      this.resizePlayer(playerContainer.offsetWidth)
+
       fullscreen.title = '进入全屏'
       if (mode === 'desktop') {
         pageFullscreen.style.display = 'inline'
@@ -750,6 +770,7 @@ export default class Player {
     propotions[0] = imageContainer.offsetWidth / windowWidth
     propotions[1] = imageContainer.offsetHeight / draftHeight
   }
+
   /* 根据mountNode的宽度设置播放器各部件大小 */
   resizePlayer(containerWidth) {
     const {
@@ -762,7 +783,9 @@ export default class Player {
       windowWidth,
       windowHeight,
     } = this.actionData
+
     const containerHeight = windowHeight / windowWidth * containerWidth
+
     /* 如果全屏，播放器控制条占满宽度 */
     let translateX = 0
     let controlWidth = containerWidth
@@ -771,19 +794,26 @@ export default class Player {
       translateX = (window.screen.width - containerWidth) / 2
     }
     playerControl.style.width = `${controlWidth}px`
+
     /* 全屏时将控制条移到最左侧 */
     playerControl.style.transform = `translateX(${-translateX}px)`
     this.setContainerSize(containerWidth, containerHeight)
     this.setCanvasSize(containerWidth)
+
     /* 修改播放器size后与原始大小的比例发生了变化 */
     this.setPropotions()
     this.setDrawTarget()
     this.setDraftSize()
     this.changeCurrentTime(audio.currentTime * 1000)
+
     /* 重新调整字幕位置 */
     const captionsLeft = parseFloat(captions.style.left) / 100 * playerContainer.offsetWidth
     const captionsTop = parseFloat(captions.style.top) / 100 * playerContainer.offsetHeight
     this.setCaptionsOffset(captionsLeft, captionsTop)
+
+    /* 调整字幕字体大小 */
+    const propotion = containerWidth / this.state.initialWidth
+    captions.style.fontSize = `${this.options.captionFontSize * propotion}px`
   }
 
   toggleFullscreen() {
@@ -793,8 +823,6 @@ export default class Player {
     if (fscreen.fullscreenElement) {
       fscreen.exitFullscreen()
     } else {
-      /* 全屏前记录下mountNode的宽度，用于之后恢复播放器的大小 */
-      this.playerSize = playerContainer.offsetWidth
       fscreen.requestFullscreen(playerContainer)
     }
   }
@@ -804,16 +832,21 @@ export default class Player {
       playerContainer,
       pageFullscreen,
     } = this.domRefs
-    this.state.pageFullscreen = !this.state.pageFullscreen
-    if (this.state.pageFullscreen) {
+    this.state.isPageFullscreenOpen = !this.state.isPageFullscreenOpen
+    if (this.state.isPageFullscreenOpen) {
+      /* 改变图标 */
       pageFullscreen.firstElementChild.style.display = 'none'
       pageFullscreen.lastElementChild.style.display = 'inline-block'
+
+      /* 网页全屏的含义是将播放器宽度设成100%，使其撑满包裹元素 */
       playerContainer.style.width = '100%'
       this.resizePlayer(playerContainer.offsetWidth)
     } else {
       pageFullscreen.firstElementChild.style.display = 'inline-block'
       pageFullscreen.lastElementChild.style.display = 'none'
-      playerContainer.style.width = '494px'
+
+      /* 退出网页全屏即将宽度恢复原值 */
+      playerContainer.style.width = `${this.state.initialWidth}px`
       this.resizePlayer(playerContainer.offsetWidth)
     }
   }
@@ -976,7 +1009,7 @@ export default class Player {
     this.showPlayerControl()
   }
 
-  /* 用于正在缓冲时暂停播放 */
+  /* 用于正在缓冲时暂停播放,此函数不改变状态变量 */
   halt() {
     this.domRefs.audio.pause()
     window.clearTimeout(this.state.nextAction)
@@ -990,14 +1023,58 @@ export default class Player {
     this.registerNextAnimation()
   }
 
+  waitPageLoading(waitingPage, waitingTime) {
+    /* 打开加载提示 */
+    this.state.isLoading = true
+    this.setLoadingTipStatus()
+
+    /* 等待加载的过程中暂停播放 */
+    this.pause()
+
+    /* 记录等待的页码和时间 */
+    this.state.waiting = { waitingPage, waitingTime }
+
+    /* 侦听等待图片的load事件，使得加载完成后可自动恢复播放 */
+    this.domRefs.images[waitingPage].addEventListener('load', () => {
+      const { waiting, isLoading } = this.state
+      const { waitingPage: currentWaitingPage, waitingTime: currentWaitingTime } = waiting
+
+      /* 如果当前正在加载，且当前等待的页码和时间与之前一致，则恢复播放，
+      之所以要进行后面两个判断，是因为可能在等待加载的过程中又调整了进度，这时等待的页码和时间可能与之前不同 */
+      if (isLoading && currentWaitingPage === waitingPage && waitingTime === currentWaitingTime) {
+        /* 关闭加载提示 */
+        this.state.isLoading = false
+        this.setLoadingTipStatus()
+
+        /* 由于在等待加载时暂停了播放，如果本来是正在播放的状态，此时需要进行恢复，
+        只需打开音频即可，changeCurrentTime会根据状态选择是否注册板书动作 */
+        if (!this.state.halt) {
+          this.domRefs.audio.play()
+        }
+
+        /* 由于等待的页码已经加载成功，此时可以顺利地调整时间 */
+        this.changeCurrentTime(waitingTime)
+      }
+    })
+  }
+
   /* 移动进度条时调用的函数，time单位为ms */
   changeCurrentTime(time) {
     const {
       domRefs: {
         audio,
       },
+      state: {
+        imagesLoaded,
+      },
     } = this
-    /* 调整音频时间，可调整的最小时间间隔为 100 毫秒 */
+    /* 若该时刻的图片还未加载完成，待加载完成再进行动作 */
+    const page = this.getPageByTime(time)
+    if (!imagesLoaded[page]) {
+      this.waitPageLoading(page, time)
+      return
+    }
+    /* 调整音频时间秒 */
     audio.currentTime = time / 1000
     /* 取消已注册的动作 */
     window.clearTimeout(this.state.nextAction)
@@ -1005,7 +1082,6 @@ export default class Player {
     window.cancelAnimationFrame(this.state.animation)
     this.state.animationObj = null
     /* 转到time时刻所在的页面 */
-    const page = this.getPageByTime(time)
     this.pageTo(page)
     /* 恢复课件在time时刻的状态 */
     this.setPageState(page, time)
@@ -1389,6 +1465,12 @@ export default class Player {
     if (targetPage >= pages.length || targetPage < 0) {
       return
     }
+
+    if (!this.state.imagesLoaded[targetPage]) {
+      this.waitPageLoading(targetPage, action.startTime - 1)
+      return
+    }
+
     /* 转到该页 */
     this.pageTo(targetPage, animate)
     this.setPageState(targetPage, action.startTime)
