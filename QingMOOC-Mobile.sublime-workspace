@@ -4,6 +4,50 @@
 		"selected_items":
 		[
 			[
+				"librar",
+				"library"
+			],
+			[
+				"bb",
+				"bxz-bb\tbox-sizing: border-box;"
+			],
+			[
+				"text",
+				"text-decoration\tproperty"
+			],
+			[
+				"tex",
+				"text-decoration\tproperty"
+			],
+			[
+				"subtitl",
+				"subtitles"
+			],
+			[
+				"pos",
+				"position\tproperty"
+			],
+			[
+				"pad",
+				"padding\tproperty"
+			],
+			[
+				"ali",
+				"align-self\tproperty"
+			],
+			[
+				"bl",
+				"border-left\tproperty"
+			],
+			[
+				"bor",
+				"border-bottom\tproperty"
+			],
+			[
+				"P",
+				"PlayerPage.vue"
+			],
+			[
 				"aud",
 				"audio"
 			],
@@ -364,10 +408,6 @@
 				"min-height\tproperty"
 			],
 			[
-				"ali",
-				"align-items\tproperty"
-			],
-			[
 				"flex",
 				"flex-start\talign-content"
 			],
@@ -474,46 +514,6 @@
 			[
 				"F",
 				"FlatButton"
-			],
-			[
-				"Lib",
-				"Library〔variable〕"
-			],
-			[
-				"box",
-				"box-sizing"
-			],
-			[
-				"edi",
-				"editDocument"
-			],
-			[
-				"edit",
-				"editDocument〔variable〕"
-			],
-			[
-				"prop",
-				"props\tReact: this.props"
-			],
-			[
-				"up",
-				"uploadFileList"
-			],
-			[
-				"sa",
-				"state\tReact: this.state"
-			],
-			[
-				"do",
-				"docId"
-			],
-			[
-				"fl",
-				"flex"
-			],
-			[
-				"User",
-				"UserSvg"
 			]
 		]
 	},
@@ -548,6 +548,18 @@
 		"selected_items":
 		[
 			[
+				"sublime",
+				"Preferences: SublimeLinter Settings"
+			],
+			[
+				"sublimelinter",
+				"Preferences: SublimeLinter Settings"
+			],
+			[
+				"pcl",
+				"Package Control: List Packages"
+			],
+			[
 				"sshtml",
 				"Set Syntax: HTML"
 			],
@@ -574,10 +586,6 @@
 			[
 				"pci",
 				"Package Control: List Packages"
-			],
-			[
-				"sublimelinter",
-				"Preferences: SublimeLinter Settings"
 			],
 			[
 				"ssbb",
@@ -653,17 +661,52 @@
 	},
 	"expanded_folders":
 	[
-		"/Users/kang/Documents/Project/QingMOOC-Mobile"
+		"/Users/kang/Documents/Project/QingMOOC-Mobile",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/build",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src"
 	],
 	"file_history":
 	[
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/build/index.ejs",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/main.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/package.json",
+		"/Users/kang/Downloads/代码更新部署.txt",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Teacher/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Course/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Player/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Player/Subtitles/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Player/Player/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Player/Words/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Player/Score/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/config/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/App.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Header/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/router/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Player/Comment/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/.eslintrc",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/playerPage/PlayerPage.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/teacher/teacher.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/index.html",
+		"/Users/kang/.eslintrc",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/bus.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/build/build.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/config/dev.env.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/playerPage/player/player.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/build/webpack.base.conf.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/build/webpack.dev.conf.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/build/vue-loader.conf.js",
+		"/Users/kang/Documents/Project/Player/src/Player.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/playerPage/player/index.html",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/playerPage/player/src/Player.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/playerPage/score/score.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/playerPage/words/words.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/header/Header.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/QingMOOC-Mobile.sublime-project",
 		"/Users/kang/Documents/Project/Player/index.js",
 		"/Users/kang/Documents/Project/Player/src/Player.css",
-		"/Users/kang/Documents/Project/Player/src/Player.js",
 		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/Player/src/Player.js",
 		"/Users/kang/Downloads/cb80bd08afd6676e3c8556ec238ffe5d.json",
 		"/Users/kang/Documents/Project/Player/webpack.config.js",
-		"/Users/kang/Downloads/代码更新部署.txt",
 		"/Users/kang/Documents/Project/Player/index.html",
 		"/Users/kang/Downloads/评论点赞.md",
 		"/Users/kang/Documents/Project/Player/.stylelintrc",
@@ -740,9 +783,7 @@
 		"/Users/kang/Library/Application Support/Sublime Text 3/Packages/DashDoc/Default (OSX).sublime-keymap",
 		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/Subtitles/index.js",
 		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/Subtitle/index.js",
-		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/main.js",
 		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Document/selector.js",
-		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/playerPage/player/player.vue",
 		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/components/ImageCropper/styles.scss",
 		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/User/AccountInformation/styles.scss",
 		"/Users/kang/Downloads/控制脚本文件3.json",
@@ -753,48 +794,20 @@
 		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-imported-component/dist/Component.js",
 		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-imported-component/dist/index.js",
 		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-imported-component/package.json",
-		"/Users/kang/Documents/Project/weizhujiao-frontend/src/components/ClassroomInfoEditCard/ClassroomInfoEditCardCore.js",
-		"/Users/kang/Documents/Project/weizhujiao-frontend/src/components/GroupEditCard/index.js",
-		"/Users/kang/Documents/Project/weizhujiao-frontend/src/components/BatchSelectStudentsCard/BatchSelectStudentsCardCore.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/redux-form/es/Fields.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/redux-form/es/createField.js",
-		"/Users/kang/Documents/Project/weizhujiao-frontend/src/components/DiscussionSettingDialog/DiscussionSettingDialogCore.js",
-		"/Users/kang/Downloads/需要的用户信息.txt",
-		"/Users/kang/Downloads/微信申诉.txt",
-		"/Users/kang/Documents/Project/QingMooc-Backend/src/middlewares/auth/index.js",
-		"/Users/kang/Documents/Project/MySoftwareSetting/Mac OS/Mac 睡眠模式设置参数.txt",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/redux/src/createStore.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/actions.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-redux/src/components/Provider.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/redux/src/index.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-redux/src/index.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-router/es/Router.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-router/es/Route.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-router-dom/es/BrowserRouter.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-router-dom/es/Router.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/TagToolBar/index.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Header/styles.scss",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/Comment/styles.scss",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/styles.scss",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/Subtitle/styles.scss",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/CommentToolBar/index.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/CommentToolBar/styles.scss",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/QingMOOC-Frontend.sublime-project",
-		"/Users/kang/Downloads/untitled2.js",
-		"/Users/kang/Downloads/Test.js",
-		"/Users/kang/Documents/Project/Kannnnng.github.io/_posts/前端笔试面试知识记录.md",
-		"/Users/kang/Documents/Project/Kannnnng.github.io/Kannnnng.github.io.sublime-project",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/emoji-picker/build/index.js"
+		"/Users/kang/Documents/Project/weizhujiao-frontend/src/components/ClassroomInfoEditCard/ClassroomInfoEditCardCore.js"
 	],
 	"find":
 	{
-		"height": 30.0
+		"height": 38.0
 	},
 	"find_in_files":
 	{
 		"height": 106.0,
 		"where_history":
 		[
+			"",
+			"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Player",
+			""
 		]
 	},
 	"find_state":
@@ -802,6 +815,134 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"location",
+			"\\$http",
+			"courseId",
+			"courseIndex",
+			"message",
+			"libraries",
+			"course",
+			"backgroundImage",
+			"content",
+			"container",
+			"\"",
+			"title",
+			"words",
+			"playerWrapper",
+			";$",
+			"(?<=\\S)\\{$",
+			"(?<=\\s)\\{$",
+			"(?=\\s)\\{$",
+			"\\$http",
+			"fixed",
+			"Subtitles",
+			"Words",
+			"watch",
+			"MockData",
+			"timeArr",
+			"startArr",
+			"textlines",
+			"timeArr",
+			"formatDuring",
+			"startArr",
+			"textlines",
+			"MockData",
+			"Words",
+			"om '../Header'\nimport Comment from './Comment'\nimport Player from './Player'\nimport Score from './Score'\nimport Subtitles from './Subtitl",
+			"Words",
+			"BScroll",
+			"(?<=\\S)\\{$",
+			"(?<=\\b)\\{$",
+			"\\{",
+			"{",
+			"\\{",
+			"\\{$",
+			"(?=\\b)\\{$",
+			"(?<=\\b)\\{$",
+			"(?<=\\s)\\{$",
+			"(?=\\s)\\{$",
+			"\"",
+			"subtitles",
+			"commentAndSubtitleToolBar",
+			"isfixed",
+			"block",
+			"documentName",
+			"player",
+			"header",
+			"none",
+			"block",
+			"isFixed",
+			"isfixed",
+			"isShowSubtitles",
+			"message",
+			"isShowSubtitles",
+			"isnone",
+			"commentBar",
+			"wordsBar",
+			"isnone",
+			"Height",
+			"screenWidth",
+			"screenHeight",
+			"screenWidth",
+			"screenHeight",
+			"screenWidth",
+			"that",
+			"screenWidth",
+			"isnone",
+			"Height",
+			"block",
+			"Height",
+			"change",
+			"pageInit",
+			"myname",
+			"subtitle",
+			"$emit",
+			"Bus",
+			"myPlayer",
+			"myplayer",
+			"ge',\n      'docId',",
+			";$",
+			"(\\S)\\{$",
+			"(\\S)\\{￥",
+			"(\\S)\\{",
+			"(?=\\b)\\{$",
+			"message",
+			"selected",
+			"barfix",
+			"commentAndSubtitleToolBar",
+			"bar",
+			"pagePath",
+			"data",
+			"course",
+			"\\{$",
+			";$",
+			"docId",
+			"smallImg",
+			"path",
+			"courseIndex",
+			"back",
+			"left",
+			"slot",
+			"path",
+			"pagePath",
+			";$",
+			"fixed",
+			"wordsBar",
+			"MyHeader",
+			"selected",
+			"commentBar",
+			"wordsBar",
+			"mt-tab-container",
+			"myname",
+			"<",
+			"myname",
+			"course",
+			"TabItem",
+			"Bus",
+			"Indicator",
+			"\"",
+			"PlayerPage",
+			"header"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -809,11 +950,17 @@
 		"regex": true,
 		"replace_history":
 		[
+			"",
+			" {",
+			"",
+			"$1 {",
+			"  {",
+			" {"
 		],
 		"reverse": false,
 		"show_context": true,
 		"use_buffer2": true,
-		"whole_word": true,
+		"whole_word": false,
 		"wrap": true
 	},
 	"groups":
@@ -883,7 +1030,7 @@
 	"project": "QingMOOC-Mobile.sublime-project",
 	"replace":
 	{
-		"height": 56.0
+		"height": 72.0
 	},
 	"save_all_on_build": true,
 	"select_file":
