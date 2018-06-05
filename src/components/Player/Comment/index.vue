@@ -149,302 +149,298 @@
 </template>
 
 <script>
-import { MessageBox } from 'mint-ui';
-import { Toast } from 'mint-ui';
-import { Popup }   from 'mint-ui';
-import { Indicator } from 'mint-ui';
+import { MessageBox } from 'mint-ui'
+import { Toast } from 'mint-ui'
+import { Popup } from 'mint-ui'
+import { Indicator } from 'mint-ui'
 import Viewer from 'viewerjs'
-	export default{
-		name:'Comment',
-		props:['docId'],
-		data(){
-			return{
-				commentId: '',
-				approveList: [],
-				index: -1,
-			  commentList:[],
-			  nocomment:false,
+
+export default{
+  name: 'Comment',
+  props: ['docId'],
+  data() {
+    return {
+      commentId: '',
+      approveList: [],
+      index: -1,
+			  commentList: [],
+			  nocomment: false,
 			  showIndex: [],
-			  replyList:[],
+			  replyList: [],
 			  approveCount: [],
 			  myComment: '',
 			  visible: false,
-			  files:[],
-			  uploadFile:[],
+			  files: [],
+			  uploadFile: [],
 			  iconIs: 1,
-			  replyVisible:false,
-			  replyText:'',
+			  replyVisible: false,
+			  replyText: '',
 			  replyIndex: -1,
 			  replyId: -1,
 			  change: false,
-			  approveL:0,
-			  rrVisible:false,
-			  commentObj:{},
-			  images:[],
-			  preview0:'',
-			  preview1:'',
-			  preview2:'',
-			  inputimg:'',
-			  showImgUrl:'',
-			  showImgVisible:false
-			}
-		},
-		components:{
-			'popup':Popup
-		},
-		mounted(){
-			this.$nextTick(() => {
-				this.pageinit();
-			})
-			this.$http.get('/docs/'+this.docId)
-			.then(res=>{
-				this.commentList = res.data.comments;
-				if(this.commentList.length == 0){
-					this.nocomment = true;
-				}else{
-					this.nocomment = false;
-				}
-				// console.log(this.commentList,'comment')
-			})
-		},
-		methods:{
-			pageinit(){
+			  approveL: 0,
+			  rrVisible: false,
+			  commentObj: {},
+			  images: [],
+			  preview0: '',
+			  preview1: '',
+			  preview2: '',
+			  inputimg: '',
+			  showImgUrl: '',
+			  showImgVisible: false,
+    }
+  },
+  components: {
+    popup: Popup,
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.pageinit()
+    })
+    this.$http.get(`/docs/${this.docId}`)
+      .then((res) => {
+        this.commentList = res.data.comments
+        if (this.commentList.length == 0) {
+          this.nocomment = true
+        } else {
+          this.nocomment = false
+        }
+        // console.log(this.commentList,'comment')
+      })
+  },
+  methods: {
+    pageinit() {
 
-			},
-			//评论
-			comment(file){
-				if(this.myComment == '' && this.preview0 == ''){
-          Toast('请输入评论');
-				}else{
-					const formData = new FormData()
-					formData.append('text',this.myComment);
-					formData.append('docId',this.docId);
-					for (var i = 0; i < this.uploadFile.length; i++) {
+    },
+    // 评论
+    comment(file) {
+      if (this.myComment == '' && this.preview0 == '') {
+        Toast('请输入评论')
+      } else {
+        const formData = new FormData()
+        formData.append('text', this.myComment)
+        formData.append('docId', this.docId)
+        for (let i = 0; i < this.uploadFile.length; i++) {
 				    formData.append('files', this.uploadFile[i])
 				  }
-					Indicator.open();
-					this.$http.post('/comments/',formData)
-					.then(res=>{
-						this.commentList.unshift(res.data);
-						// console.log(res.data,'res')
-					}).then(()=>{
-						Indicator.close();
-						Toast({
+        Indicator.open()
+        this.$http.post('/comments/', formData)
+          .then((res) => {
+            this.commentList.unshift(res.data)
+            // console.log(res.data,'res')
+          }).then(() => {
+            Indicator.close()
+            Toast({
 						  message: '评论成功',
 						  iconClass: 'icon icon-success',
-						  position: 'bottom'
-						});
-					}).catch(()=>{
-						Indicator.close();
-						Toast({
+						  position: 'bottom',
+            })
+          }).catch(() => {
+            Indicator.close()
+            Toast({
 						  message: '评论失败',
 						  iconClass: 'icon icon-success',
-						  position: 'bottom'
-						});
-					})
+						  position: 'bottom',
+            })
+          })
 
-					// console.log(this.commentList)
-					this.myComment = '';
-					this.cancleImage();
-					this.iconIs = 1;
-				}
-
-			},
-			// 点击上传图片按钮
-			upLoad(){
-				this.inputimg = '';
-				document.getElementById('uploadImg').click();
-			},
-			//转换文件类型
-			handleInputChange(e){
-				this.files = [];
-				console.log(e.target.files,'files');
-				var len = e.target.files.length - 1;
-				for(var i=len;i > len-3;i--){
-					if(event.target.files[i]){
-						this.files.push(event.target.files[i]);
-					}
-				}
-				console.log(this.files)
-        // 检查文件类型
-		    if(['jpeg', 'png', 'gif', 'jpg'].indexOf(event.target.files[0].type.split("/")[1]) < 0){
-	        // 自定义报错方式
-	        Toast.error("文件类型仅支持 jpeg/png/gif！", 2000, undefined, false);
-	        return;
-		    }
-		    this.transformToDataUrl(this.files);
-			},
-			transformToDataUrl(files){
-        for(var i=0;i<3;i++){
-          let reader = new FileReader();
-          if(files[i]){
-          	reader.readAsDataURL(files[i]);
-		        reader.onload = function(e) {
-		          let base64 = this.result;
-		          let img = new Image();
-		          img.src = base64;
-		        }
-		        if(this.preview0 == ''){
-		        	this.preview0 = URL.createObjectURL(files[i]);
-		        }else if(this.preview1 == ''){
-		        	this.preview1 = URL.createObjectURL(files[i]);
-		        }else{
-		          this.preview2 = URL.createObjectURL(files[i]);
-		        }
-          }
-
+        // console.log(this.commentList)
+        this.myComment = ''
+        this.cancleImage()
+        this.iconIs = 1
+      }
+    },
+    // 点击上传图片按钮
+    upLoad() {
+      this.inputimg = ''
+      document.getElementById('uploadImg').click()
+    },
+    // 转换文件类型
+    handleInputChange(e) {
+      this.files = []
+      console.log(e.target.files, 'files')
+      const len = e.target.files.length - 1
+      for (let i = len; i > len - 3; i--) {
+        if (event.target.files[i]) {
+          this.files.push(event.target.files[i])
         }
-
-
-			},
-			// 确认上传图片
-			comfirmUpload(){
-				this.visible = false;
-				this.uploadFile = this.files;
-				this.iconIs = 2;
-				// console.log(this.uploadFile,'upload')
-			},
-			// 取消上传图片
-			cancleUpload(){
-				this.visible = false;
-				this.cancleImage();
-			},
-			//删除图片相关
-			cancleImage(){
-        this.uploadFile = [];
-				this.files = [];
-				this.preview0 = '';
-				this.preview1 = '';
-				this.preview2 = '';
-			},
-			showImg(imgUrl){
-        this.showImgUrl = imgUrl;
-        this.showImgVisible = true;
-			},
-			//点击回复按钮
-			replyHandle(index,i,type){
-				let count = 0;
-				if(index !== -1){
-					this.index = index;
-				}else{
-					index = this.index;
-				}
-			  this.commentObj = this.commentList[index];
+      }
+      console.log(this.files)
+      // 检查文件类型
+		    if (['jpeg', 'png', 'gif', 'jpg'].indexOf(event.target.files[0].type.split('/')[1]) < 0) {
+	        // 自定义报错方式
+	        Toast.error('文件类型仅支持 jpeg/png/gif！', 2000, undefined, false)
+	        return
+		    }
+		    this.transformToDataUrl(this.files)
+    },
+    transformToDataUrl(files) {
+      for (let i = 0; i < 3; i++) {
+        const reader = new FileReader()
+        if (files[i]) {
+          	reader.readAsDataURL(files[i])
+		        reader.onload = function (e) {
+		          const base64 = this.result
+		          const img = new Image()
+		          img.src = base64
+		        }
+		        if (this.preview0 == '') {
+		        	this.preview0 = URL.createObjectURL(files[i])
+		        } else if (this.preview1 == '') {
+		        	this.preview1 = URL.createObjectURL(files[i])
+		        } else {
+		          this.preview2 = URL.createObjectURL(files[i])
+		        }
+        }
+      }
+    },
+    // 确认上传图片
+    comfirmUpload() {
+      this.visible = false
+      this.uploadFile = this.files
+      this.iconIs = 2
+      // console.log(this.uploadFile,'upload')
+    },
+    // 取消上传图片
+    cancleUpload() {
+      this.visible = false
+      this.cancleImage()
+    },
+    // 删除图片相关
+    cancleImage() {
+      this.uploadFile = []
+      this.files = []
+      this.preview0 = ''
+      this.preview1 = ''
+      this.preview2 = ''
+    },
+    showImg(imgUrl) {
+      this.showImgUrl = imgUrl
+      this.showImgVisible = true
+    },
+    // 点击回复按钮
+    replyHandle(index, i, type) {
+      const count = 0
+      if (index !== -1) {
+        this.index = index
+      } else {
+        index = this.index
+      }
+			  this.commentObj = this.commentList[index]
 			  console.log(this.commentObj)
-			  this.approveL = this.commentObj.approve.length;
-			  this.replyList = this.commentList[index].replies;
-				this.replyVisible = true;
-				this.rrVisible = true;
+			  this.approveL = this.commentObj.approve.length
+			  this.replyList = this.commentList[index].replies
+      this.replyVisible = true
+      this.rrVisible = true
 			  this.replyFormData = new FormData()
-				this.replyFormData.append('commentId',this.commentList[index].id);
+      this.replyFormData.append('commentId', this.commentList[index].id)
 
-				if(type === 1){
-					this.replyFormData.append('sourceId',this.commentList[index].accountId);
-				}else{
-					this.replyFormData.append('sourceId',this.commentList[index].replies[i].accountId);
-				}
-				this.replyIndex = index;
-			},
-			// 确认回复
-			confirmReply(){
-				this.iconIs = 1;
-				this.rrVisible = false;
-				this.comfirmUpload();
-				// console.log(this.uploadFile,'replyupload')
-				for (var i = 0; i < this.uploadFile.length; i++) {
+      if (type === 1) {
+        this.replyFormData.append('sourceId', this.commentList[index].accountId)
+      } else {
+        this.replyFormData.append('sourceId', this.commentList[index].replies[i].accountId)
+      }
+      this.replyIndex = index
+    },
+    // 确认回复
+    confirmReply() {
+      this.iconIs = 1
+      this.rrVisible = false
+      this.comfirmUpload()
+      // console.log(this.uploadFile,'replyupload')
+      for (let i = 0; i < this.uploadFile.length; i++) {
 				  this.replyFormData.append('files', this.uploadFile[i])
-				}
-				this.replyFormData.append('text',this.replyText);
+      }
+      this.replyFormData.append('text', this.replyText)
 
-				if(this.replyText == '' && this.preview0 == ''){
-
-					Toast('请输入回复');
-				}else{
-					Indicator.open({position:'bottom'});
-					this.preview0 = '';
-					this.$http.post('/comments/' + this.commentList[this.replyIndex].id + '/reply',
-						this.replyFormData)
-					.then(res=>{
-						this.replyList = res.data.replies;
-						this.commentList[this.index].replies = res.data.replies;
-						this.cancleImage();
-						this.replyText = '';
-						Indicator.close();
-						Toast({
+      if (this.replyText == '' && this.preview0 == '') {
+        Toast('请输入回复')
+      } else {
+        Indicator.open({ position: 'bottom' })
+        this.preview0 = ''
+        this.$http.post(`/comments/${this.commentList[this.replyIndex].id}/reply`,
+          this.replyFormData)
+          .then((res) => {
+            this.replyList = res.data.replies
+            this.commentList[this.index].replies = res.data.replies
+            this.cancleImage()
+            this.replyText = ''
+            Indicator.close()
+            Toast({
 						  message: '回复成功',
 						  iconClass: 'icon icon-success',
-						  position: 'bottom'
-						});
-						this.showReply(this.replyIndex);
-					}).catch(()=>{
-						Indicator.close();
-						Toast({
+						  position: 'bottom',
+            })
+            this.showReply(this.replyIndex)
+          }).catch(() => {
+            Indicator.close()
+            Toast({
 						  message: '回复失败',
 						  iconClass: 'icon icon-success',
-						  position: 'bottom'
-						});
-					})
-				}
-			},
-			// 取消回复
-			cancleReply(){
-				// console.log('reject');
-				this.cancleImage();
-				this.rrVisible = false;
-				this.replyText = '';
-			},
-			// 显示回复列表
-			showReply(index){
-        if(this.showIndex.indexOf(index) !== -1){
-        	let i = this.showIndex.indexOf(index);
-        	this.showIndex.splice(i,1)
-        }else{
-        	this.showIndex.push(index);
-        }
-			},
-			// 点赞
-			approveHandle(index,i,type){
-				if(index === -1){
-					index = this.index;
-				}
-        if(type === 1){//点赞评论
-        	this.commentId = this.commentList[index].id;
-        	this.accountId = this.commentList[index].accountId;
-        	this.approveList = this.commentList[index].approve;
-        }else{//点赞reply
-        	this.commentId = this.commentList[index].replies[i].id;
-        	this.accountId = this.commentList[index].replies[i].accountId;
-        	this.approveList = this.commentList[index].replies[i].approve;
-        }
-        // console.log(document.getElementById("approvepop"+this.commentId),'doc')
-        //检查此评论是否被点赞过（查找list中有没有这个accountId）
-        if(this.approveList.indexOf(this.accountId) == -1){
-        	  document.getElementById("approve"+this.commentId).style.color = "#2196F3";
-        	  if(document.getElementById("approvepop"+this.commentId)){
-        	  	document.getElementById("approvepop"+this.commentId).style.color = "#2196F3";
+						  position: 'bottom',
+            })
+          })
+      }
+    },
+    // 取消回复
+    cancleReply() {
+      // console.log('reject');
+      this.cancleImage()
+      this.rrVisible = false
+      this.replyText = ''
+    },
+    // 显示回复列表
+    showReply(index) {
+      if (this.showIndex.indexOf(index) !== -1) {
+        	const i = this.showIndex.indexOf(index)
+        	this.showIndex.splice(i, 1)
+      } else {
+        	this.showIndex.push(index)
+      }
+    },
+    // 点赞
+    approveHandle(index, i, type) {
+      if (index === -1) {
+        index = this.index
+      }
+      if (type === 1) { // 点赞评论
+        	this.commentId = this.commentList[index].id
+        	this.accountId = this.commentList[index].accountId
+        	this.approveList = this.commentList[index].approve
+      } else { // 点赞reply
+        	this.commentId = this.commentList[index].replies[i].id
+        	this.accountId = this.commentList[index].replies[i].accountId
+        	this.approveList = this.commentList[index].replies[i].approve
+      }
+      // console.log(document.getElementById("approvepop"+this.commentId),'doc')
+      // 检查此评论是否被点赞过（查找list中有没有这个accountId）
+      if (this.approveList.indexOf(this.accountId) == -1) {
+        	  document.getElementById(`approve${this.commentId}`).style.color = '#2196F3'
+        	  if (document.getElementById(`approvepop${this.commentId}`)) {
+        	  	document.getElementById(`approvepop${this.commentId}`).style.color = '#2196F3'
         	  }
-	        	this.approveList.push(this.accountId);
-	        	if(type === 1){
-	        		this.approveL = this.approveList.length;
+	        	this.approveList.push(this.accountId)
+	        	if (type === 1) {
+	        		this.approveL = this.approveList.length
 	        	}
-	        	this.$http.put('/comments/' + this.commentId+ '/approve',{approve:true}).then((res)=>{
+	        	this.$http.put(`/comments/${this.commentId}/approve`, { approve: true }).then((res) => {
 	        		// console.log(this.commentList[index])
         	})
-        }else{
-        	let cancleIndex = this.approveList.indexOf(this.accountId);
-        	this.approveList.splice(cancleIndex,1);
-        	if(type === 1){
-	        		this.approveL = this.approveList.length;
+      } else {
+        	const cancleIndex = this.approveList.indexOf(this.accountId)
+        	this.approveList.splice(cancleIndex, 1)
+        	if (type === 1) {
+	        		this.approveL = this.approveList.length
 	        	}
-          document.getElementById("approve"+this.commentId).style.color = "black";
-          if(document.getElementById("approvepop"+this.commentId)){
-        	  	document.getElementById("approvepop"+this.commentId).style.color = "black";
+        document.getElementById(`approve${this.commentId}`).style.color = 'black'
+        if (document.getElementById(`approvepop${this.commentId}`)) {
+        	  	document.getElementById(`approvepop${this.commentId}`).style.color = 'black'
         	  }
-        	this.$http.put('/comments/' + this.commentId + '/approve',{approve:false});
-        }
-			}
-		}
-	}
+        	this.$http.put(`/comments/${this.commentId}/approve`, { approve: false })
+      }
+    },
+  },
+}
 
 </script>
 

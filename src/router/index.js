@@ -28,5 +28,5 @@ export default new Router({
       name: 'playerPage',
       component: Player,
     },
-  ]
+  ],
 })

@@ -46,8 +46,8 @@ const vendor = (
 )
 
 export default {
-  requestFullscreen: (element) => element[vendor[key.requestFullscreen]](),
-  requestFullscreenFunction: (element) => element[vendor[key.requestFullscreen]],
+  requestFullscreen: element => element[vendor[key.requestFullscreen]](),
+  requestFullscreenFunction: element => element[vendor[key.requestFullscreen]],
   get exitFullscreen() { return document[vendor[key.exitFullscreen]].bind(document) },
   addEventListener: (type, handler, options) => document.addEventListener(vendor[key[type]], handler, options),
   removeEventListener: (type, handler, options) => document.removeEventListener(vendor[key[type]], handler, options),

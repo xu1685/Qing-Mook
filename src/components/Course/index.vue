@@ -53,21 +53,22 @@
 import MyHeader from '../Header'
 import Bus from '../../bus.js'
 import { Indicator } from 'mint-ui'
+
 export default {
   name: 'course',
 
   data() {
     return {
-      title: "课程列表",
-      courseList:[],
+      title: '课程列表',
+      courseList: [],
       libraryId: this.$route.params.id,
-      docs:[],
-      allDcos:[],
-      library:{},
-      cover:'',
-      createTime:'',
-      action:[],
-      name:'课堂主页'
+      docs: [],
+      allDcos: [],
+      library: {},
+      cover: '',
+      createTime: '',
+      action: [],
+      name: '课堂主页',
     }
   },
 
@@ -85,18 +86,18 @@ export default {
       this.$http.get('/accounts/docs')
         .then((res) => {
           this.allDcos = res.data.docs
-          this.library = res.data.libraries.find((library) => library.id === this.libraryId)
-          this.createTime = this.library.createTime.replace('T',' ').replace(/\.\w+/,'')
+          this.library = res.data.libraries.find(library => library.id === this.libraryId)
+          this.createTime = this.library.createTime.replace('T', ' ').replace(/\.\w+/, '')
           this.docs = this.library.docs
-          var len = this.allDcos.length
-          for(var i = 0;i<len;i++) {
-            if(this.docs.indexOf(this.allDcos[i].id) != -1 && this.allDcos[i].status == 'open' && this.allDcos[i].transformed == '1' && this.allDcos[i].hasAction) {
+          const len = this.allDcos.length
+          for (let i = 0; i < len; i++) {
+            if (this.docs.indexOf(this.allDcos[i].id) != -1 && this.allDcos[i].status == 'open' && this.allDcos[i].transformed == '1' && this.allDcos[i].hasAction) {
               this.courseList.push(this.allDcos[i])
             }
           }
           this.courseList = this.courseList.reverse()
           Indicator.close()
-      })
+        })
     },
 
     sendIndex() {
@@ -104,20 +105,20 @@ export default {
     },
 
     score(obj) {
-      var arr = Object.values(obj)
-      var len = arr.length
-      var count = 0
-      for (var i = 0; i < len; i++) {
-         count += arr[i]
+      const arr = Object.values(obj)
+      const len = arr.length
+      let count = 0
+      for (let i = 0; i < len; i++) {
+        count += arr[i]
       }
       if (count === 0) {
-        var score = "暂无评分"
+        var score = '暂无评分'
       } else {
         var score = (arr[0] * 1 + arr[1] * 2 + arr[2] * 3 + arr[3] * 4 + arr[4] * 5) / count
         score = score.toFixed(1)
       }
       return score
-    }
+    },
   },
 
   components: {

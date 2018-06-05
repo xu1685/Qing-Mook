@@ -76,7 +76,7 @@ export default {
   },
 
   computed: {
-    fixedComponentWrapperElementHeight: function () {
+    fixedComponentWrapperElementHeight() {
       if (this.selected === 'subtitles') {
         return document.getElementById('fixedComponentWrapper').clientHeight
       }

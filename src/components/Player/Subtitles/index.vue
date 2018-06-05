@@ -11,84 +11,84 @@
 <script>
 
 import MockData from './mock'
-import Bus from '../../../bus.js';
+import Bus from '../../../bus.js'
 import BScroll from 'better-scroll'
 
 export default {
-	name:'Subtitles',
+  name: 'Subtitles',
 
-	props:['docId'],
+  props: ['docId'],
 
-	data() {
-		return {
-      text:'',
-      textlines:[],
-      startArr:[],
-      timeArr:[],
-      time:'',
-      onshow:'',
-      scroll:'',
+  data() {
+    return {
+      text: '',
+      textlines: [],
+      startArr: [],
+      timeArr: [],
+      time: '',
+      onshow: '',
+      scroll: '',
       count: 0,
-      subtitle:[],
-      nowords:false,
-      subtitleIndex:-1
-		}
-	},
+      subtitle: [],
+      nowords: false,
+      subtitleIndex: -1,
+    }
+  },
 
-	created() {
-			this.textlines = MockData.subtitles[0].textArr.split('。');
-			this.startArr = MockData.subtitles[0].startTime;
-      this.pageInit();
-      for(var i=0;i<this.startArr.length;i++) {
-        this.timeArr.push(this.formatDuring(this.startArr[i]))
-      }
-	},
+  created() {
+    this.textlines = MockData.subtitles[0].textArr.split('。')
+    this.startArr = MockData.subtitles[0].startTime
+    this.pageInit()
+    for (let i = 0; i < this.startArr.length; i++) {
+      this.timeArr.push(this.formatDuring(this.startArr[i]))
+    }
+  },
 
-	updated() {
-		this.onshow = document.querySelector('.onshow');
-    	if(this.onshow) {
-		 		var nowH = this.onshow.offsetTop;
-			  if(nowH > 100) {
-			  	window.scrollTo(0,this.onshow.offsetTop -100)
+  updated() {
+    this.onshow = document.querySelector('.onshow')
+    	if (this.onshow) {
+		 		const nowH = this.onshow.offsetTop
+			  if (nowH > 100) {
+			  	window.scrollTo(0, this.onshow.offsetTop - 100)
 			  }
-			}
-	},
+    }
+  },
 
-	methods: {
-		pageInit() {
-			Bus.$on('subtitleIndex', subtitleIndex => {
-				this.changeActive(subtitleIndex)
-			});
-      Bus.$on('subtitle', subtitle => {
-				this.changeSubtitle(subtitle);
-			});
-		},
+  methods: {
+    pageInit() {
+      Bus.$on('subtitleIndex', (subtitleIndex) => {
+        this.changeActive(subtitleIndex)
+      })
+      Bus.$on('subtitle', (subtitle) => {
+        this.changeSubtitle(subtitle)
+      })
+    },
 
-		formatDuring(mss) {
-		    var minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
-		    var seconds = parseInt((mss % (1000 * 60)) / 1000);
+    formatDuring(mss) {
+		    let minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60))
+		    let seconds = parseInt((mss % (1000 * 60)) / 1000)
 		    if (seconds < 10) {
-		    	seconds = seconds + '0'
+		    	seconds += '0'
 		    }
 		    if (minutes < 10) {
-		    	minutes = '0' + minutes;
+		    	minutes = `0${minutes}`
 		    }
-		    return  minutes + ":" + seconds ;
-		},
+		    return `${minutes}:${seconds}`
+    },
 
-		changeActive(index) {
-			this.subtitleIndex = index;
-		},
+    changeActive(index) {
+      this.subtitleIndex = index
+    },
 
     changeSubtitle(subtitle) {
-    	this.subtitle = subtitle;
+    	this.subtitle = subtitle
     	if (this.subtitle.length == 0) {
-    		this.nowords = true;
+    		this.nowords = true
     	} else {
-    		this.nowords = false;
+    		this.nowords = false
     	}
-    }
-	}
+    },
+  },
 }
 
 </script>

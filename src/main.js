@@ -26,9 +26,9 @@ if (result) {
 
 /* axios 配置 */
 axios.defaults.baseURL = '/api/v1'
-axios.defaults.headers.common['Authorization'] = token
+axios.defaults.headers.common.Authorization = token
 
-axios.interceptors.response.use((response) => response, (error) => {
+axios.interceptors.response.use(response => response, (error) => {
   const {
     response: {
       status: statusCode,

@@ -38,13 +38,12 @@ export default {
   },
 
 
-
   mounted() {
     this.pageInit()
   },
 
   beforeDestroy() {
-    if(this.player && typeof this.player.unmount === 'function') {
+    if (this.player && typeof this.player.unmount === 'function') {
       this.player.unmount()
     }
   },
@@ -53,7 +52,7 @@ export default {
     pageInit() {
       this
         .$http
-        .get('/players/'+this.docId)
+        .get(`/players/${this.docId}`)
         .then((res) => {
           const action = res.data.doc.action
           const defaultAction = res.data.doc.defaultAction
@@ -62,7 +61,7 @@ export default {
           Bus.$emit('COMPONENTS/PLAYER/PLAYER/DOCUMENT_NAME_CHANGE', res.data.doc.name)
 
           this.imagesUrl = res.data.doc.pictures
-          this.playAction = action.find((acs) => acs.id === defaultAction)
+          this.playAction = action.find(acs => acs.id === defaultAction)
           this.subtitle = this.playAction.subtitle
           Bus.$emit('subtitle', this.subtitle)
         }).then(() => {
@@ -78,7 +77,8 @@ export default {
           })
         }).then(() => {
           this.hasEle = true
-        }).catch((error) => {
+        })
+        .catch((error) => {
           throw error
           alert('获取数据错误，请检查访问地址是否正确')
         })
@@ -89,10 +89,10 @@ export default {
     },
 
     loaded() {
-      var ele = document.querySelector('.player-image-container')
+      const ele = document.querySelector('.player-image-container')
       this.Height = ele.offsetHeight
     },
-  }
+  },
 }
 
 </script>

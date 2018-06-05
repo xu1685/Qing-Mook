@@ -75,12 +75,12 @@ export default {
         iconClass: 'icon',
         position: 'bottom',
       })
-    }
+    },
   },
 
   components: {
     MyHeader,
-  }
+  },
 }
 
 </script>

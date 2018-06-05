@@ -21,55 +21,55 @@
 </template>
 
 <script>
-  // import Star from './star.vue'
-  export default {
-    name: 'Score',
+// import Star from './star.vue'
+export default {
+  name: 'Score',
 
-    props: ['docId'],
+  props: ['docId'],
 
-    data() {
-      return {
-        done: false,
-        teacherName: '蜗牛老师',
-        doc:{},
-        ratingStatis:[],
-        scorenum:0
-      }
-    },
-
-    created() {
-      this.pageInit()
-    },
-
-    methods: {
-      pageInit() {
-        this
-          .$http
-          .get('/docs/'+this.docId)
-          .then((res) => {
-            this.doc = res.data.doc
-            this.ratingStatis = this.doc.ratingStatis
-            this.scorenum = this.score(this.ratingStatis)
-          })
-      },
-
-      score(obj) {
-        var arr = Object.values(obj)
-        var len = arr.length
-        var count = 0
-        for (var i = 0; i < len; i++) {
-           count += arr[i]
-        }
-        if (count === 0) {
-          var score = "暂无评分"
-        } else {
-          var score = (arr[0] * 5 + arr[1] * 4 + arr[2] * 3 + arr[3] * 2 + arr[4] * 1) / count
-          score = score.toFixed(1)
-        }
-        return score
-      }
+  data() {
+    return {
+      done: false,
+      teacherName: '蜗牛老师',
+      doc: {},
+      ratingStatis: [],
+      scorenum: 0,
     }
-  }
+  },
+
+  created() {
+    this.pageInit()
+  },
+
+  methods: {
+    pageInit() {
+      this
+        .$http
+        .get(`/docs/${this.docId}`)
+        .then((res) => {
+          this.doc = res.data.doc
+          this.ratingStatis = this.doc.ratingStatis
+          this.scorenum = this.score(this.ratingStatis)
+        })
+    },
+
+    score(obj) {
+      const arr = Object.values(obj)
+      const len = arr.length
+      let count = 0
+      for (let i = 0; i < len; i++) {
+        count += arr[i]
+      }
+      if (count === 0) {
+        var score = '暂无评分'
+      } else {
+        var score = (arr[0] * 5 + arr[1] * 4 + arr[2] * 3 + arr[3] * 2 + arr[4] * 1) / count
+        score = score.toFixed(1)
+      }
+      return score
+    },
+  },
+}
 </script>
 
 <style>
