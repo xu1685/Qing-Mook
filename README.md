@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# qing-mook
+# QingMOOC-Mobile
 
 > A Vue.js project
 
@@ -20,6 +19,3 @@ npm run build --report
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
-=======
-#QingMOOC-Mobile
->>>>>>> 258ef18079ccd14dc6425475b5abc66460b1f15c
