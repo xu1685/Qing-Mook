@@ -10,8 +10,6 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    // axios配置
-    httpUrl: '/api/v1',
     proxyTable: {
         '/api/v1': {
             target:'https://mobile.mamasousuo.com',
@@ -24,13 +22,20 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: '192.168.3.148', // 192.168.43.67 can be overwritten by process.env.HOST localhost
+    host: '0.0.0.0', // can be overwritten by process.env.HOST
     port: 3000, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
+    // Use Eslint Loader?
+    // If true, your code will be linted during bundling and
+    // linting errors and warnings will be shown in the console.
+    useEslint: true,
+    // If true, eslint errors and warnings will also be shown in the error overlay
+    // in the browser.
+    showEslintErrorsInOverlay: false,
 
     /**
      * Source Maps

@@ -7,6 +7,8 @@
         ".DS_Store",
         ".babelrc",
         ".editorconfig",
+        ".eslintignore",
+        ".eslintrc.js",
         ".gitignore",
         ".postcssrc.js",
         "README.md",
@@ -18,7 +20,6 @@
         ".git",
         "dist",
         "node_modules",
-        "static",
       ],
       "path": "."
     }

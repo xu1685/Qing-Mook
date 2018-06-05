@@ -1,9 +1,9 @@
 import 'mint-ui/lib/style.css'
 
-import Vue from 'vue'
 import MintUI from 'mint-ui'
+import Vue from 'vue'
 import axios from 'axios'
-import App from './App.vue'
+import App from './App'
 import router from './router'
 
 let token
