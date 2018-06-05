@@ -5,6 +5,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import App from './App'
 import router from './router'
+import { wxOAuth2RedirectUrl } from './utils/constants'
 
 let token
 
@@ -41,10 +42,7 @@ axios.interceptors.response.use(response => response, (error) => {
       /* 当用户处于播放页面时，跳转之前需要把现在的地址记录下来 */
       const originURL = window.encodeURIComponent(window.location.pathname)
       /* 带着现在的地址跳转到登录页面，等到用户登录以后再跳转回原来的播放页面 */
-      window.location.replace(`/login?originurl=${originURL}`)
-    } else if (window.location.pathname !== '/login') {
-      /* 当用户不在登录页面时，不再显示错误信息，直接跳转到登录页面 */
-      window.location.replace('/login')
+      window.location.assign(wxOAuth2RedirectUrl.replace(/\{\{.*?\}\}/, originURL))
     }
   }
 
