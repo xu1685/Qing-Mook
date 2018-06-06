@@ -1,17 +1,20 @@
 <template>
   <div class='container'>
     <div
+      ref='playerWrapper'
       :style='selected === "subtitles" ? {
         position: "fixed",
-        top: "0",
         left: "0",
+        top: "0",
         zIndex: "100",
+        width: "100%",
       } : undefined'
     >
       <MyHeader :title='title' />
       <div
         id="player"
-        @subtitlechange="handleOnSubtitleChange"
+        @actionsLoaded='handleOnSetSubtitleContainerPaddingTop'
+        @subtitlechange='handleOnSubtitleChange'
       />
       <mt-navbar
         class='selectToolBar'
@@ -29,17 +32,18 @@
       <mt-tab-container-item id='subtitles'>
         <Subtitles
           :activeSubtitleIndex='activeSubtitleIndex'
+          :style='{ paddingTop: subtitleContainerPaddingTop ? `${subtitleContainerPaddingTop}px` : undefined }'
         />
       </mt-tab-container-item>
       <mt-tab-container-item id='comment'>
         <Score
-          :teacherName='teacherName'
           :accountId='accountId'
           :score='score'
+          :teacherInformation='teacherInformation'
         />
         <Comment
           :docId='docId'
-          :comments='comments'
+          :comments.sync='comments'
         />
       </mt-tab-container-item>
     </mt-tab-container>
@@ -66,10 +70,11 @@ export default {
       activeSubtitleIndex: -1,
       comments: [],
       docId: '',
-      player: null,
+      player: {},
       score: -1,
       selected: 'comment',
-      teacherName: '',
+      subtitleContainerPaddingTop: null,
+      teacherInformation: {},
       title: '课程名称',
     }
   },
@@ -112,8 +117,10 @@ export default {
 
           /* 获取当前文档的作者信息 */
           this.accountId = accountId
-          const teacherInformation = accounts.find((user) => user.id === this.accountId)
-          this.teacherName = teacherInformation.name || teacherInformation.nickname
+          this.teacherInformation = accounts.find((user) => user.id === this.accountId)
+
+          /* 获取当前文档信息 */
+          this.title = name
 
           /* 获取当前文档的评论和回复信息 */
           this.comments = comments
@@ -123,6 +130,7 @@ export default {
 
           /* 计算当前文档的评分 */
           this.score = (star1 + star2 * 2 + star3 * 3 + star4 * 4 + star5 * 5) / (star1 + star2 + star3 + star4 + star5)
+          this.score = window.isNaN(this.score) ? -1 : this.score
 
           /* 实例化播放器 */
           // this.player = new Player({
@@ -149,7 +157,11 @@ export default {
   methods: {
     handleOnSubtitleChange(subtitleIndex) {
       this.activeSubtitleIndex = subtitleIndex
-    }
+    },
+
+    handleOnSetSubtitleContainerPaddingTop() {
+      this.subtitleContainerPaddingTop = this.$ref.playerWrapper.offsetHeight
+    },
   },
 
   watch: {
@@ -167,13 +179,15 @@ export default {
   flex-direction: column;
 }
 
-.player {
+#player {
   width: 100%;
   position: relative;
 }
 
 .selectToolBar {
   width: 100%;
+  border: solid 1px #EEE;
+  box-sizing: border-box;
 }
 
 .selectToolBar > a:not(:first-child) {

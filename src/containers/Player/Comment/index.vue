@@ -2,41 +2,65 @@
   <div class='commentContainer'>
 
     <!-- 评论输入框 -->
-    <mt-field class='commentInput' placeholder='评论' v-model='myComment'>
-      <i @click='visible=true'
-        v-if='iconIs === 1'
+    <mt-field
+      class='commentInput'
+      placeholder='评论'
+      disableClear
+      v-model='myComment'
+    >
+      <i
         class='fa fa-picture-o'
-        style='font-size: 26px;'
+        style='font-size: 20px;'
+        v-if='!isShowUploadImage'
+        @click='visible=true'
       />
-      <img :src='this.preview0' v-if='iconIs === 2' width='35px'>
-      <mt-button @click='comment()' height='45px' style='margin-left: 10px;margin-right: -5px;'  type='default'>提交</mt-button>
+      <img
+        width='35px'
+        v-if='isShowUploadImage'
+        :src='this.preview0'
+      />
+      <mt-button
+        style='margin-left: 10px; height: 35px;'
+        @click='confirmComment()'
+      >
+        提交
+      </mt-button>
     </mt-field>
 
     <!-- 评论容器 -->
     <div
       class='commentCell'
-      v-for='(item,index) in commentList'
-      :key='index'
+      v-for='comment in commentList'
+      :key='comment.id'
     >
       <!-- 用户头像名称 -->
-      <img src='./logo.png' class='userPhoto' :id='"photo" + index'>
-      <span class='name'>{{item.accountId}}</span>
+      <img
+        class='userPhoto'
+        src='./logo.png'
+        :id='"photo" + index'
+      />
+      <span class='name'>{{comment.accountId}}</span>
       <!-- 回复 点赞等 -->
       <div class='replyBtnCell'>
         <!-- 点赞 -->
-        <i @click='approveHandle(index,0,1)' :id=''approve' + item.id' class='fa fa-thumbs-o-up' aria-hidden='true' style='font-size: 20px;'></i>
-        <span>{{item.approve.length}}</span>
+        <i
+          class='fa fa-thumbs-o-up'
+          style='font-size: 20px;'
+          :id='"approve" + comment.id'
+          @click='approveHandle(index,0,1)'
+        />
+        <span>{{comment.approve.length}}</span>
       </div>
       <!-- 评论内容 -->
-      <p class='text'>{{item.text}}</p>
+      <p class='text'>{{comment.text}}</p>
       <div class='imgBox'>
-        <img @click='showImg(img)' v-for='(img,index) in item.images' class='textImg' :src='img' width='60px' height='60px'>
+        <img @click='showImg(img)' v-for='(img,index) in comment.images' class='textImg' :src='img' width='60px' height='60px'>
       </div>
       <!-- 回复 -->
-      <span style='color: gray;font-size: 12px;'>{{item.createTime.replace(/[T]/,' ').replace(/\.\S*/,'')}}</span>
-      <span class='replyBtn' @click='replyHandle(index,0,1)'>回复({{ item.replies.length }})</span>
+      <span style='color: gray;font-size: 12px;'>{{comment.createTime.replace(/[T]/,' ').replace(/\.\S*/,'')}}</span>
+      <span class='replyBtn' @click='replyHandle(index,0,1)'>回复({{ comment.replies.length }})</span>
     </div>
-    <h3 v-if='nocomment' style='color: gray'>暂无评论，快来评论吧！</h3>
+    <h3 v-if='!commentList.length' style='color: gray'>暂无评论，快来评论吧！</h3>
 
     <!-- 图片上传弹框 -->
     <mt-popup
@@ -44,7 +68,7 @@
       popup-transition='popup-fade'
       class='imgPop'
     >
-      <div class='' >
+      <div>
         <p style='padding-bottom: 10px;color: #535353'>至多可提交3张图片</p>
         <img :src='preview0' v-if=' preview0 !== "" ' height='70px' style='margin-left: 20px;'>
         <img :src='preview1' v-if=' preview1 !== "" ' height='70px' style='margin-left: 20px;'>
@@ -116,36 +140,52 @@
           <img @click='showImg(img)' v-for='(img,index) in reply.images' class='textImg' :src='img' width='70px' height='70px'>
         </div>
       </div>
-     </mt-popup>
+    </mt-popup>
 
-     <mt-popup
+
+    <mt-popup
+      class='reply'
+      position='right'
       v-model='rrVisible'
-      position='right'
-      class='reply'>
-        <mt-field class='replyInput' placeholder='请输入回复' v-model='replyText'></mt-field>
-        <div style='text-align: left;margin-top: 5px;' >
-          <p style='font-size: 12px;color:gray;margin:0 12px'>至多可提交3张图片</p>
-          <img :src='preview0' v-if=' preview0 !== "" ' height='70px' style='margin-left: 10px;'>
-          <img :src='preview1' v-if=' preview1 !== "" ' height='70px' >
-          <img :src='preview2' v-if=' preview2 !== "" ' height='70px' >
-          <i class='fa fa-plus-square-o'
-          aria-hidden='true'
+    >
+      <mt-field
+        class='replyInput'
+        placeholder='请输入回复'
+        v-model='replyText'
+      />
+      <div style='text-align: left;margin-top: 5px;'>
+        <p style='font-size: 12px;color:gray;margin:0 12px'>至多可提交3张图片</p>
+        <img :src='preview0' v-if=' preview0 !== "" ' height='70px' style='margin-left: 10px;'>
+        <img :src='preview1' v-if=' preview1 !== "" ' height='70px' >
+        <img :src='preview2' v-if=' preview2 !== "" ' height='70px' >
+        <i
+          class='fa fa-plus-square-o'
+          style='font-size: 70px;margin-left: 5%;' v-if=' preview2 == "" '
           @click='upLoad'
-          style='font-size: 70px;margin-left: 5%;' v-if=' preview2 == "" '></i>
-          <input id='uploadImg' @change='handleInputChange' type='file' :value='inputimg' accept='image/*' style='display: none' multiple>
-        </div>
-        <div style='position: absolute;bottom:15px;left:0;width: 100%;'>
-          <mt-button @click='confirmReply' style='width: 40%;margin-left: 5%;float: left'>确定</mt-button>
-          <mt-button @click='cancleReply' style='width: 40%;margin-right: 5%;float:right'>取消</mt-button>
-        </div>
-     </mt-popup>
+        />
+        <input
+          id='uploadImg'
+          type='file'
+          accept='image/*'
+          multiple
+          style='display: none'
+          :value='inputimg'
+          @change='handleInputChange'
+        >
+      </div>
+      <div style='position: absolute;bottom:15px;left:0;width: 100%;'>
+        <mt-button @click='confirmReply' style='width: 40%;margin-left: 5%;float: left'>确定</mt-button>
+        <mt-button @click='cancleReply' style='width: 40%;margin-right: 5%;float:right'>取消</mt-button>
+      </div>
+    </mt-popup>
 
-     <mt-popup
-      v-model='showImgVisible'
+    <mt-popup
       position='right'
-      class='showImg'>
-        <img :src='showImgUrl' width='100%;' height='100%'>
-     </mt-popup>
+      class='showImg'
+      v-model='showImgVisible'
+    >
+      <img :src='showImgUrl' width='100%;' height='100%'>
+    </mt-popup>
   </div>
 </template>
 
@@ -179,12 +219,11 @@ export default {
       commentList: this.comments,
       commentObj: {},
       files: [],
-      iconIs: 1,
+      isShowUploadImage: false,
       images: [],
       index: -1,
       inputimg: '',
       myComment: '',
-      nocomment: this.comments.length === 0,
       preview0: '',
       preview1: '',
       preview2: '',
@@ -202,8 +241,14 @@ export default {
     }
   },
 
+  watch: {
+    comments() {
+      this.commentList = this.comments
+    }
+  },
+
   methods: {
-    comment(file) {
+    confirmComment() {
       if (this.myComment == '' && this.preview0 == '') {
         Toast('请输入评论')
       } else {
@@ -211,39 +256,49 @@ export default {
         formData.append('text', this.myComment)
         formData.append('docId', this.docId)
         for (let i = 0; i < this.uploadFile.length; i++) {
-            formData.append('files', this.uploadFile[i])
-          }
+          formData.append('files', this.uploadFile[i])
+        }
+
+        /* 显示上传评论提示 */
         Indicator.open()
-        this.$http.post('/comments/', formData)
+
+        this
+          .$http
+          .post('/comments/', formData)
           .then((res) => {
             this.commentList.unshift(res.data)
           }).then(() => {
+            /* 关闭上传评论提示 */
             Indicator.close()
+
             Toast({
               message: '评论成功',
-              iconClass: 'icon icon-success',
-              position: 'bottom',
+              iconClass: 'fa fa-check',
             })
           }).catch(() => {
+            /* 关闭上传评论提示 */
             Indicator.close()
+
             Toast({
               message: '评论失败',
-              iconClass: 'icon icon-success',
-              position: 'bottom',
+              iconClass: 'fa fa-exclamation-triangle',
             })
           })
 
         this.myComment = ''
+        this.isShowUploadImage = false
+
+        /* 清空上传图片相关 */
         this.cancleImage()
-        this.iconIs = 1
       }
     },
-    // 点击上传图片按钮
+
+    /* 点击上传图片按钮 */
     upLoad() {
       this.inputimg = ''
       document.getElementById('uploadImg').click()
     },
-    // 转换文件类型
+    /* 转换文件类型 */
     handleInputChange(e) {
       this.files = []
       console.log(e.target.files, 'files')
@@ -254,9 +309,9 @@ export default {
         }
       }
       console.log(this.files)
-      // 检查文件类型
+      /* 检查文件类型 */
         if (['jpeg', 'png', 'gif', 'jpg'].indexOf(event.target.files[0].type.split('/')[1]) < 0) {
-          // 自定义报错方式
+          /* 自定义报错方式 */
           Toast.error('文件类型仅支持 jpeg/png/gif！', 2000, undefined, false)
           return
         }
@@ -282,19 +337,21 @@ export default {
         }
       }
     },
-    // 确认上传图片
+
+    /* 确认上传图片 */
     comfirmUpload() {
       this.visible = false
       this.uploadFile = this.files
-      this.iconIs = 2
-      // console.log(this.uploadFile,'upload')
+      this.isShowUploadImage = true
     },
-    // 取消上传图片
+
+    /* 取消上传图片 */
     cancleUpload() {
       this.visible = false
       this.cancleImage()
     },
-    // 删除图片相关
+
+    /* 删除图片相关 */
     cancleImage() {
       this.uploadFile = []
       this.files = []
@@ -302,11 +359,13 @@ export default {
       this.preview1 = ''
       this.preview2 = ''
     },
+
     showImg(imgUrl) {
       this.showImgUrl = imgUrl
       this.showImgVisible = true
     },
-    // 点击回复按钮
+
+    /* 点击回复按钮 */
     replyHandle(index, i, type) {
       const count = 0
       if (index !== -1) {
@@ -329,12 +388,12 @@ export default {
       }
       this.replyIndex = index
     },
-    // 确认回复
+
+    /* 确认回复 */
     confirmReply() {
-      this.iconIs = 1
+      this.isShowUploadImage = false
       this.rrVisible = false
       this.comfirmUpload()
-      // console.log(this.uploadFile,'replyupload')
       for (let i = 0; i < this.uploadFile.length; i++) {
         this.replyFormData.append('files', this.uploadFile[i])
       }
@@ -371,13 +430,15 @@ export default {
           })
       }
     },
-    // 取消回复
+
+    /* 取消回复 */
     cancleReply() {
       this.cancleImage()
       this.rrVisible = false
       this.replyText = ''
     },
-    // 显示回复列表
+
+    /* 显示回复列表 */
     showReply(index) {
       if (this.showIndex.indexOf(index) !== -1) {
         const i = this.showIndex.indexOf(index)
@@ -386,21 +447,24 @@ export default {
         this.showIndex.push(index)
       }
     },
-    // 点赞
+
+    /* 点赞 */
     approveHandle(index, i, type) {
       if (index === -1) {
         index = this.index
       }
-      if (type === 1) { // 点赞评论
+      if (type === 1) {
+        /* 点赞评论 */
         this.commentId = this.commentList[index].id
         this.accountId = this.commentList[index].accountId
         this.approveList = this.commentList[index].approve
-      } else { // 点赞reply
+      } else {
+        /* 点赞回复 */
         this.commentId = this.commentList[index].replies[i].id
         this.accountId = this.commentList[index].replies[i].accountId
         this.approveList = this.commentList[index].replies[i].approve
       }
-      // 检查此评论是否被点赞过（查找list中有没有这个accountId）
+      /* 检查此评论是否被点赞过（查找list中有没有这个accountId） */
       if (this.approveList.indexOf(this.accountId) == -1) {
         document.getElementById(`approve${this.commentId}`).style.color = '#2196F3'
         if (document.getElementById(`approvepop${this.commentId}`)) {
@@ -433,8 +497,27 @@ export default {
 
 <style scoped>
 
+.commentContainer {
+  margin: 10px 10px 60px;
+}
+
+.commentInput {
+  position: fixed;
+  z-index: 200;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-top: 1px solid #AAA;
+}
+
+.commentCell {
+  margin-bottom: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #EEE;
+}
+
 p {
-  margin: 5px;
   word-wrap: break-word;
 }
 
@@ -461,20 +544,6 @@ p {
   margin-bottom: 10px;
 }
 
-.commentContainer {
-  margin: 10px;
-  margin-bottom: 60px;
-}
-
-a.commentInput {
-  position: fixed;
-  z-index: 103;
-  bottom: 0px;
-  left: 0px;
-  width: 100%;
-  border-top: 1px solid lightgray;
-}
-
 .showImg {
   width: 80%;
   margin-right: 10%;
@@ -489,14 +558,6 @@ a.commentInput {
   padding: 10px;
   text-align: left;
   border-radius: 3px;
-}
-
-.commentCell {
-  margin: 5px 0;
-  padding: 5px;
-  text-align: left;
-  border-radius: 3px;
-  background-color: rgba(212, 212, 212, 0.24);
 }
 
 .userPhoto {

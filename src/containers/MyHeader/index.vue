@@ -33,6 +33,7 @@ export default {
   background-color: #FFF;
   color: #000;
   font-size: 18px;
+  width: 100%;
 }
 
 </style>
