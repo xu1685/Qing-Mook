@@ -1,7 +1,6 @@
 <template>
   <div class='container'>
     <div
-      id='fixedComponentWrapper'
       :style='selected === "subtitles" ? {
         position: "fixed",
         top: "0",
@@ -10,12 +9,12 @@
       } : undefined'
     >
       <MyHeader :title='title' />
-      <Player
-        :docId='docId'
-        :message='selected'
+      <div
+        id="player"
+        @subtitlechange="handleOnSubtitleChange"
       />
       <mt-navbar
-        class='commentAndSubtitleToolBar'
+        class='selectToolBar'
         v-model='selected'
       >
         <mt-tab-item id='comment'>
@@ -28,7 +27,9 @@
     </div>
     <mt-tab-container v-model='selected'>
       <mt-tab-container-item id='subtitles'>
-        <Subtitles :style='{marginTop: selected === "subtitles" ? fixedComponentWrapperElementHeight + "px" : undefined}' />
+        <Subtitles
+          :activeSubtitleIndex='activeSubtitleIndex'
+        />
       </mt-tab-container-item>
       <mt-tab-container-item id='comment'>
         <Score
@@ -44,19 +45,22 @@
 
 <script>
 
+import '../Player/Player/src/Player.css'
+
 import MyHeader from '../MyHeader'
 import Comment from './Comment'
-import Player from './Player'
 import Score from './Score'
 import Subtitles from './Subtitles'
 import Bus from '../../bus.js'
+import Player from '../Player/Player/src/Player.js'
 
 export default {
-  name: 'PlayerPage',
+  name: 'Player',
 
   data() {
     return {
       accountId: -1,
+      activeSubtitleIndex: -1,
       docId: '',
       player: null,
       score: -1,
@@ -66,10 +70,15 @@ export default {
     }
   },
 
+  components: {
+    MyHeader,
+    Comment,
+    Score,
+    Subtitles,
+  },
+
   mounted() {
-    if (this.$route.params.id === undefined) {
-      alert('您访问的地址不正确，请检查访问地址')
-    } else {
+    if (this.$route.params.id) {
       this.docId = this.$route.params.id
 
       this
@@ -113,7 +122,7 @@ export default {
             actionUrl : action.json,
             audioUrl  : action.recording,
             duration  : action.duration,
-            element   : document.getElementById('myPlayer'),
+            element   : document.getElementById('player'),
             imageUrls : pictures,
             mode      : 'mobile',
             size      : action.totalSize,
@@ -126,20 +135,14 @@ export default {
     }
   },
 
-  computed: {
-    fixedComponentWrapperElementHeight() {
-      if (this.selected === 'subtitles') {
-        return document.getElementById('fixedComponentWrapper').clientHeight
-      }
-    },
+  methods: {
+    handleOnSubtitleChange(subtitleIndex) {
+      this.activeSubtitleIndex = subtitleIndex
+    }
   },
 
-  components: {
-    MyHeader,
-    Player,
-    Comment,
-    Score,
-    Subtitles,
+  watch: {
+
   },
 }
 
@@ -153,11 +156,16 @@ export default {
   flex-direction: column;
 }
 
-.commentAndSubtitleToolBar {
+.player {
+  width: 100%;
+  position: relative;
+}
+
+.selectToolBar {
   width: 100%;
 }
 
-.commentAndSubtitleToolBar > a:not(:first-child) {
+.selectToolBar > a:not(:first-child) {
   border-left: solid 1px #EEE;
 }
 
