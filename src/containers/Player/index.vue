@@ -9,7 +9,7 @@
         zIndex: "100",
       } : undefined'
     >
-      <Header :pageName='documentName' />
+      <MyHeader :title='title' />
       <Player
         :docId='docId'
         :message='selected'
@@ -28,15 +28,14 @@
     </div>
     <mt-tab-container v-model='selected'>
       <mt-tab-container-item id='subtitles'>
-        <Subtitles
-          :name=''
-          :accountId=''
-          :score=''
-          :style='{marginTop: selected === "subtitles" ? fixedComponentWrapperElementHeight + "px" : undefined}'
-        />
+        <Subtitles :style='{marginTop: selected === "subtitles" ? fixedComponentWrapperElementHeight + "px" : undefined}' />
       </mt-tab-container-item>
       <mt-tab-container-item id='comment'>
-        <Score :docId='docId' />
+        <Score
+          :teacherName='teacherName'
+          :accountId='accountId'
+          :score='score'
+        />
         <Comment :docId='docId' />
       </mt-tab-container-item>
     </mt-tab-container>
@@ -45,7 +44,7 @@
 
 <script>
 
-import Header from '../Header'
+import MyHeader from '../MyHeader'
 import Comment from './Comment'
 import Player from './Player'
 import Score from './Score'
@@ -57,58 +56,74 @@ export default {
 
   data() {
     return {
-      documentName: '课程名称',
-      selected: 'comment',
+      accountId: -1,
       docId: '',
-      path: '',
-      params: '',
+      player: null,
+      score: -1,
+      selected: 'comment',
+      teacherName: '',
+      title: '课程名称',
     }
   },
 
-  beforeCreate() {
+  mounted() {
     if (this.$route.params.id === undefined) {
-      alert('id错误')
+      alert('您访问的地址不正确，请检查访问地址')
     } else {
       this.docId = this.$route.params.id
 
       this
         .$http
         .get(`/players/${this.docId}`)
-        .then((res) => {
-          const action = res.data.doc.action
-          const defaultAction = res.data.doc.defaultAction
+        .then((respones) => {
+          const {
+            accounts,
+            data: {
+              doc: {
+                accountId,
+                action: actions,
+                defaultAction,
+                name,
+                pictures,
+                ratingStatis: {
+                  star1,
+                  star2,
+                  star3,
+                  star4,
+                  star5,
+                },
+              },
+            },
+          } = respones
 
-          /* 获取到当前准备播放的文档时，触发文档名称改变事件，改变页面标题 */
-          Bus.$emit('COMPONENTS/PLAYER/PLAYER/DOCUMENT_NAME_CHANGE', res.data.doc.name)
 
-          this.imagesUrl = res.data.doc.pictures
-          this.playAction = action.find(acs => acs.id === defaultAction)
-          this.subtitle = this.playAction.subtitle
-          Bus.$emit('subtitle', this.subtitle)
-        }).then(() => {
+          /* 获取当前文档的作者信息 */
+          this.accountId = accountId
+          const teacherInformation = accounts.find((user) => user.id === this.accountId)
+          this.teacherName = teacherInformation.name || teacherInformation.nickname
+
+          /* 获取应当播放的 action */
+          const action = actions.find((action) => action.id === defaultAction)
+
+          /* 计算当前文档的评分 */
+          this.score = (star1 + star2 * 2 + star3 * 3 + star4 * 4 + star5 * 5) / (star1 + star2 + star3 + star4 + star5)
+
+          /* 实例化播放器 */
           this.player = new Player({
-            actionUrl: this.playAction.json,
-            audioUrl: this.playAction.recording,
-            duration: this.playAction.duration,
-            element: document.getElementById('myPlayer'),
-            imageUrls: this.imagesUrl,
-            mode: 'mobile',
-            size: this.playAction.totalSize,
-            subtitles: this.subtitle,
+            actionUrl : action.json,
+            audioUrl  : action.recording,
+            duration  : action.duration,
+            element   : document.getElementById('myPlayer'),
+            imageUrls : pictures,
+            mode      : 'mobile',
+            size      : action.totalSize,
+            subtitles : action.subtitle,
           })
-        }).then(() => {
-          this.hasEle = true
         })
         .catch((error) => {
-          throw error
-          alert('获取数据错误，请检查访问地址是否正确')
+          alert('获取数据错误，请检查访问地址')
         })
-
     }
-
-    Bus.$on('COMPONENTS/PLAYER/PLAYER/DOCUMENT_NAME_CHANGE', (documentName) => {
-      this.documentName = documentName
-    })
   },
 
   computed: {
@@ -120,7 +135,7 @@ export default {
   },
 
   components: {
-    Header,
+    MyHeader,
     Player,
     Comment,
     Score,

@@ -1,7 +1,7 @@
 <template>
   <mt-header
     class="header"
-    :title="pageName"
+    :title="title"
   >
     <a @click="back" slot="left">
       <mt-button icon="back" />
@@ -15,7 +15,7 @@ export default {
   name: 'MyHeader',
 
   props: [
-    'pageName',
+    'title',
   ],
 
   methods: {

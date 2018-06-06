@@ -1,6 +1,6 @@
 <template>
   <div
-    id="myPlayer"
+    id="player"
     @subtitlechange="handleTimechange"
     @actionsLoaded="loaded"
   />
