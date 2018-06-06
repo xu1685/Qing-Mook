@@ -37,7 +37,10 @@
           :accountId='accountId'
           :score='score'
         />
-        <Comment :docId='docId' />
+        <Comment
+          :docId='docId'
+          :comments='comments'
+        />
       </mt-tab-container-item>
     </mt-tab-container>
   </div>
@@ -61,6 +64,7 @@ export default {
     return {
       accountId: -1,
       activeSubtitleIndex: -1,
+      comments: [],
       docId: '',
       player: null,
       score: -1,
@@ -86,8 +90,9 @@ export default {
         .get(`/players/${this.docId}`)
         .then((respones) => {
           const {
-            accounts,
             data: {
+              accounts,
+              comments,
               doc: {
                 accountId,
                 action: actions,
@@ -105,11 +110,13 @@ export default {
             },
           } = respones
 
-
           /* 获取当前文档的作者信息 */
           this.accountId = accountId
           const teacherInformation = accounts.find((user) => user.id === this.accountId)
           this.teacherName = teacherInformation.name || teacherInformation.nickname
+
+          /* 获取当前文档的评论和回复信息 */
+          this.comments = comments
 
           /* 获取应当播放的 action */
           const action = actions.find((action) => action.id === defaultAction)
@@ -118,19 +125,23 @@ export default {
           this.score = (star1 + star2 * 2 + star3 * 3 + star4 * 4 + star5 * 5) / (star1 + star2 + star3 + star4 + star5)
 
           /* 实例化播放器 */
-          this.player = new Player({
-            actionUrl : action.json,
-            audioUrl  : action.recording,
-            duration  : action.duration,
-            element   : document.getElementById('player'),
-            imageUrls : pictures,
-            mode      : 'mobile',
-            size      : action.totalSize,
-            subtitles : action.subtitle,
-          })
+          // this.player = new Player({
+          //   actionUrl : action.json,
+          //   audioUrl  : action.recording,
+          //   duration  : action.duration,
+          //   element   : document.getElementById('player'),
+          //   imageUrls : pictures,
+          //   mode      : 'mobile',
+          //   size      : action.totalSize,
+          //   subtitles : action.subtitle,
+          // })
         })
         .catch((error) => {
-          alert('获取数据错误，请检查访问地址')
+          if (process.env.NODE_ENV === 'development') {
+            throw error
+          } else {
+            alert('获取数据错误，请检查访问地址')
+          }
         })
     }
   },
