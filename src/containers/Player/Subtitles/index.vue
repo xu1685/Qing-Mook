@@ -1,18 +1,24 @@
 <template>
-  <div class="subtitles">
-    <div class="textline" v-for="(item, index) in subtitles" :class="{onshow: index == activeSubtitleIndex }">
-      <span class="start">{{formatDuring(item.beginTime)}}</span>
-      <span class="wordstext">{{item.text}}</span>
+  <div
+    class='subtitles'
+    ref='subtitlesContainer'
+    :style='subtitleContainerMarginTop ? { marginTop: `${subtitleContainerMarginTop}px` } : undefined'
+  >
+    <div
+      class='subtitle'
+      v-for='(subtitle, index) in subtitles'
+      :class='{activeSubtitle: index === activeSubtitleIndex }'
+      :key='subtitle.beginTime'
+      :ref='index === activeSubtitleIndex ? "activeSubtitle" : undefined'
+    >
+      <span class='start'>{{formatDuring(subtitle.beginTime)}}</span>
+      <span class='wordstext'>{{subtitle.text}}</span>
     </div>
-    <h3 style="color: gray;margin-top: 100px;" v-if="nowords">暂无字幕</h3>
+    <h3 style='color: gray; margin-top: 100px;' v-if='!subtitles.length'>暂无字幕</h3>
   </div>
 </template>
 
 <script>
-
-import MockData from './mock'
-import Bus from '../../../bus.js'
-import BScroll from 'better-scroll'
 
 export default {
   name: 'Subtitles',
@@ -26,37 +32,25 @@ export default {
       type: Array,
       required: true,
     },
+    subtitleContainerMarginTop: {
+      type: Number,
+      required: true,
+    },
   },
 
   data() {
     return {
       text: '',
-      textlines: [],
-      startArr: [],
-      timeArr: [],
       time: '',
-      onshow: '',
       scroll: '',
       count: 0,
-      nowords: false,
-    }
-  },
-
-  created() {
-    this.textlines = MockData.subtitles[0].textArr.split('。')
-    this.startArr = MockData.subtitles[0].startTime
-    for (let i = 0; i < this.startArr.length; i++) {
-      this.timeArr.push(this.formatDuring(this.startArr[i]))
     }
   },
 
   updated() {
-    this.onshow = document.querySelector('.onshow')
-      if (this.onshow) {
-        const nowH = this.onshow.offsetTop
-        if (nowH > 100) {
-          window.scrollTo(0, this.onshow.offsetTop - 100)
-        }
+    if (this.$refs.activeSubtitle[0]) {
+      const offsetTop = this.$refs.activeSubtitle[0].offsetTop
+      document.documentElement.scrollTop = offsetTop
     }
   },
 
@@ -65,7 +59,7 @@ export default {
       let minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60))
       let seconds = parseInt((mss % (1000 * 60)) / 1000)
       if (seconds < 10) {
-        seconds += '0'
+        seconds = `0${seconds}`
       }
       if (minutes < 10) {
         minutes = `0${minutes}`
@@ -84,7 +78,7 @@ export default {
   border-top: solid 1px #EEE
 }
 
-.textline {
+.subtitle {
   text-align: left;
   font-size: 16px;
   padding-top: 5px;
@@ -111,9 +105,9 @@ export default {
   display: inline-block;
 }
 
-.onshow {
+.activeSubtitle {
   color: black;
-  background-color: hsla(0, 0%, 50%, 0.1607843137254902);
+  background-color: #DDD;
   transition: background-color 0.1s;
 }
 

@@ -13,7 +13,7 @@
       <MyHeader :title='title' />
       <div
         id="player"
-        @actionsLoaded='handleOnSetSubtitleContainerPaddingTop'
+        @actionsLoaded='handleOnSetSubtitleContainerMarginTop'
         @subtitlechange='handleOnSubtitleChange'
       />
       <mt-navbar
@@ -39,13 +39,6 @@
       </mt-navbar>
     </div>
     <mt-tab-container v-model='selected'>
-      <mt-tab-container-item id='subtitles'>
-        <Subtitles
-          :subtitles='subtitles'
-          :activeSubtitleIndex='activeSubtitleIndex'
-          :style='{ paddingTop: subtitleContainerPaddingTop ? `${subtitleContainerPaddingTop}px` : undefined }'
-        />
-      </mt-tab-container-item>
       <mt-tab-container-item id='comment'>
         <Score
           :accountId='accountId'
@@ -55,6 +48,14 @@
         <Comment
           :docId='docId'
           :comments.sync='comments'
+        />
+      </mt-tab-container-item>
+      <mt-tab-container-item id='subtitles'>
+        <Subtitles
+          ref='subtitle'
+          :subtitles='subtitles'
+          :activeSubtitleIndex='activeSubtitleIndex'
+          :subtitleContainerMarginTop='subtitleContainerMarginTop'
         />
       </mt-tab-container-item>
     </mt-tab-container>
@@ -84,7 +85,7 @@ export default {
       player: {},
       score: -1,
       selected: 'comment',
-      subtitleContainerPaddingTop: null,
+      subtitleContainerMarginTop: null,
       subtitles: [],
       teacherInformation: {},
       title: '课程名称',
@@ -171,21 +172,20 @@ export default {
             alert('获取数据错误，请检查访问地址')
           }
         })
+        .then(() => {
+          this.handleOnSetSubtitleContainerMarginTop()
+        })
     }
   },
 
   methods: {
-    handleOnSubtitleChange(subtitleIndex) {
-      this.activeSubtitleIndex = subtitleIndex
+    handleOnSubtitleChange(event) {
+      this.activeSubtitleIndex = event.detail.subtitleIndex
     },
 
-    handleOnSetSubtitleContainerPaddingTop() {
-      this.subtitleContainerPaddingTop = this.$refs.playerWrapper.offsetHeight
+    handleOnSetSubtitleContainerMarginTop() {
+      this.subtitleContainerMarginTop = this.$refs.playerWrapper.offsetHeight
     },
-  },
-
-  watch: {
-
   },
 }
 

@@ -45,6 +45,9 @@ export default {
     teacherInformation: {
       type: Object,
       required: true,
+      default: function() {
+        return {}
+      }
     },
   },
 }
