@@ -11,12 +11,12 @@
       <i
         class='fa fa-picture-o'
         style='font-size: 20px;'
-        v-if='!isShowUploadImage'
-        @click='visible=true'
+        v-if='!isShowUploadImageIcon'
+        @click='isShowUploadImagesDialog = true'
       />
       <img
         width='35px'
-        v-if='isShowUploadImage'
+        v-if='isShowUploadImageIcon'
         :src='this.preview0'
       />
       <mt-button
@@ -64,24 +64,43 @@
 
     <!-- 图片上传弹框 -->
     <mt-popup
-      v-model='visible'
+      class='imagesUploadDialog'
       popup-transition='popup-fade'
-      class='imgPop'
+      v-model='isShowUploadImagesDialog'
     >
       <div>
-        <p style='padding-bottom: 10px;color: #535353'>至多可提交3张图片</p>
-        <img :src='preview0' v-if=' preview0 !== "" ' height='70px' style='margin-left: 20px;'>
-        <img :src='preview1' v-if=' preview1 !== "" ' height='70px' style='margin-left: 20px;'>
-        <img :src='preview2' v-if=' preview2 !== "" ' height='70px' style='margin-left: 20px;'>
-        <i class='fa fa-plus-square-o'
-        aria-hidden='true'
-        @click='upLoad'
-        style='font-size: 70px;margin-left: 5%;' v-if='preview2 == ""'></i>
-        <input id='uploadImg' @change='handleInputChange' type='file' :value='inputimg' accept='image/*' style='display: none' multiple>
-        <div style='height: 40px;'></div>
-        <div style='position: absolute;bottom: 15px;left:0;width: 100%;'>
-          <mt-button @click='comfirmUpload' style='width: 40%;margin-left: 5%'>确定</mt-button>
-          <mt-button @click='cancleUpload' style='width: 40%;float:right;margin-right: 5%'>取消</mt-button>
+        <p style='padding-bottom: 10px; color: #555'>最多可上传3张图片</p>
+        <img :src='preview0' v-if='preview0 !== ""' height='70px' style='margin-left: 20px;'>
+        <img :src='preview1' v-if='preview1 !== ""' height='70px' style='margin-left: 20px;'>
+        <img :src='preview2' v-if='preview2 !== ""' height='70px' style='margin-left: 20px;'>
+        <i
+          class='fa fa-plus-square-o'
+          style='font-size: 70px;'
+          v-if='preview2 === ""'
+          @click='clickUploadImageInputForComment'
+        />
+        <input
+          ref='uploadImageInputForComment'
+          accept='image/*'
+          type='file'
+          multiple
+          style='display: none'
+          :value='inputImage'
+          @change='handleInputChange'
+        />
+        <div style='display: flex; justify-content: center; align-self: center; margin-top: 30px;'>
+          <mt-button
+            style='margin-right: 10px; padding-left: 30px; padding-right: 30px;'
+            @click='comfirmUpload'
+          >
+            确定
+          </mt-button>
+          <mt-button
+            style='margin-left: 10px; padding-left: 30px; padding-right: 30px;'
+            @click='cancleUpload'
+          >
+            取消
+          </mt-button>
         </div>
       </div>
     </mt-popup>
@@ -160,22 +179,32 @@
         <img :src='preview2' v-if=' preview2 !== "" ' height='70px' >
         <i
           class='fa fa-plus-square-o'
-          style='font-size: 70px;margin-left: 5%;' v-if=' preview2 == "" '
-          @click='upLoad'
+          style='font-size: 70px;margin-left: 5%;' v-if=' preview2 === "" '
+          @click='clickUploadImageInputForReply'
         />
         <input
-          id='uploadImg'
+          ref='uploadImageInputForReply'
           type='file'
           accept='image/*'
           multiple
           style='display: none'
-          :value='inputimg'
+          :value='inputImage'
           @change='handleInputChange'
         >
       </div>
-      <div style='position: absolute;bottom:15px;left:0;width: 100%;'>
-        <mt-button @click='confirmReply' style='width: 40%;margin-left: 5%;float: left'>确定</mt-button>
-        <mt-button @click='cancleReply' style='width: 40%;margin-right: 5%;float:right'>取消</mt-button>
+      <div style='display: flex; justify-content: center; align-self: center; margin-top: 30px;'>
+        <mt-button
+          style='margin-right: 10px; padding-left: 30px; padding-right: 30px;'
+          @click='confirmReply'
+        >
+          确定
+        </mt-button>
+        <mt-button
+          style='margin-left: 10px; padding-left: 30px; padding-right: 30px;'
+          @click='cancleReply'
+        >
+          取消
+        </mt-button>
       </div>
     </mt-popup>
 
@@ -219,10 +248,11 @@ export default {
       commentList: this.comments,
       commentObj: {},
       files: [],
-      isShowUploadImage: false,
       images: [],
       index: -1,
-      inputimg: '',
+      inputImage: '',
+      isShowUploadImageIcon: false,
+      isShowUploadImagesDialog: false,
       myComment: '',
       preview0: '',
       preview1: '',
@@ -237,7 +267,6 @@ export default {
       showImgVisible: false,
       showIndex: [],
       uploadFile: [],
-      visible: false,
     }
   },
 
@@ -249,7 +278,7 @@ export default {
 
   methods: {
     confirmComment() {
-      if (this.myComment == '' && this.preview0 == '') {
+      if (this.myComment === '' && this.preview0 === '') {
         Toast('请输入评论')
       } else {
         const formData = new FormData()
@@ -286,68 +315,57 @@ export default {
           })
 
         this.myComment = ''
-        this.isShowUploadImage = false
+        this.isShowUploadImageIcon = false
 
         /* 清空上传图片相关 */
         this.cancleImage()
       }
     },
 
-    /* 点击上传图片按钮 */
-    upLoad() {
-      this.inputimg = ''
-      document.getElementById('uploadImg').click()
+    /* 处于评论状态时点击上传图片按钮 */
+    clickUploadImageInputForComment() {
+      this.inputImage = ''
+      this.$refs.uploadImageInputForComment.click()
     },
+
+    /* 处于回复状态时点击上传图片按钮 */
+    clickUploadImageInputForReply() {
+      this.inputImage = ''
+      this.$refs.uploadImageInputForReply.click()
+    },
+
     /* 转换文件类型 */
-    handleInputChange(e) {
-      this.files = []
-      console.log(e.target.files, 'files')
-      const len = e.target.files.length - 1
-      for (let i = len; i > len - 3; i--) {
-        if (event.target.files[i]) {
-          this.files.push(event.target.files[i])
-        }
-      }
-      console.log(this.files)
-      /* 检查文件类型 */
-        if (['jpeg', 'png', 'gif', 'jpg'].indexOf(event.target.files[0].type.split('/')[1]) < 0) {
-          /* 自定义报错方式 */
-          Toast.error('文件类型仅支持 jpeg/png/gif！', 2000, undefined, false)
-          return
-        }
+    handleInputChange(event) {
+      if (event.target.files) {
+        this.files = Array.from(event.target.files)
         this.transformToDataUrl(this.files)
+      }
     },
+
     transformToDataUrl(files) {
       for (let i = 0; i < 3; i++) {
-        const reader = new FileReader()
         if (files[i]) {
-            reader.readAsDataURL(files[i])
-            reader.onload = function (e) {
-              const base64 = this.result
-              const img = new Image()
-              img.src = base64
-            }
-            if (this.preview0 == '') {
-              this.preview0 = URL.createObjectURL(files[i])
-            } else if (this.preview1 == '') {
-              this.preview1 = URL.createObjectURL(files[i])
-            } else {
-              this.preview2 = URL.createObjectURL(files[i])
-            }
+          if (this.preview0 === '') {
+            this.preview0 = URL.createObjectURL(files[i])
+          } else if (this.preview1 === '') {
+            this.preview1 = URL.createObjectURL(files[i])
+          } else {
+            this.preview2 = URL.createObjectURL(files[i])
+          }
         }
       }
     },
 
     /* 确认上传图片 */
     comfirmUpload() {
-      this.visible = false
+      this.isShowUploadImagesDialog = false
       this.uploadFile = this.files
-      this.isShowUploadImage = true
+      this.isShowUploadImageIcon = true
     },
 
     /* 取消上传图片 */
     cancleUpload() {
-      this.visible = false
+      this.isShowUploadImagesDialog = false
       this.cancleImage()
     },
 
@@ -391,7 +409,7 @@ export default {
 
     /* 确认回复 */
     confirmReply() {
-      this.isShowUploadImage = false
+      this.isShowUploadImageIcon = false
       this.rrVisible = false
       this.comfirmUpload()
       for (let i = 0; i < this.uploadFile.length; i++) {
@@ -399,7 +417,7 @@ export default {
       }
       this.replyFormData.append('text', this.replyText)
 
-      if (this.replyText == '' && this.preview0 == '') {
+      if (this.replyText === '' && this.preview0 === '') {
         Toast('请输入回复')
       } else {
         Indicator.open({ position: 'bottom' })
@@ -465,7 +483,7 @@ export default {
         this.approveList = this.commentList[index].replies[i].approve
       }
       /* 检查此评论是否被点赞过（查找list中有没有这个accountId） */
-      if (this.approveList.indexOf(this.accountId) == -1) {
+      if (this.approveList.indexOf(this.accountId) === -1) {
         document.getElementById(`approve${this.commentId}`).style.color = '#2196F3'
         if (document.getElementById(`approvepop${this.commentId}`)) {
           document.getElementById(`approvepop${this.commentId}`).style.color = '#2196F3'
@@ -549,15 +567,13 @@ p {
   margin-right: 10%;
 }
 
-.imgPop {
+.imagesUploadDialog {
   box-sizing: border-box;
-  width: 90%;
+  min-width: 80%;
   min-height: 200px;
   max-height: 400px;
-  margin-right: 5%;
   padding: 10px;
-  text-align: left;
-  border-radius: 3px;
+  border-radius: 5px;
 }
 
 .userPhoto {
