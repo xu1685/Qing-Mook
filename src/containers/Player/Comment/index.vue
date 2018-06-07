@@ -20,7 +20,7 @@
         :src='this.preview0'
       />
       <mt-button
-        style='margin-left: 10px; height: 35px;'
+        style='margin-left: 10px; height: 35px; background-color: #418642; color: #FFF'
         @click='confirmComment()'
       >
         提交
@@ -33,16 +33,13 @@
       v-for='comment in commentList'
       :key='comment.id'
     >
-      <!-- 用户头像名称 -->
       <img
-        class='userPhoto'
-        src='./logo.png'
+        class='avatar'
         :id='"photo" + index'
+        :src='comment.avatar'
       />
-      <span class='name'>{{comment.accountId}}</span>
-      <!-- 回复 点赞等 -->
+      <span class='userName'>{{comment.userName}}</span>
       <div class='replyBtnCell'>
-        <!-- 点赞 -->
         <i
           class='fa fa-thumbs-o-up'
           style='font-size: 20px;'
@@ -54,11 +51,24 @@
       <!-- 评论内容 -->
       <p class='text'>{{comment.text}}</p>
       <div class='imgBox'>
-        <img @click='showImg(img)' v-for='(img,index) in comment.images' class='textImg' :src='img' width='60px' height='60px'>
+        <img
+          class='textImg'
+          width='60px'
+          height='60px'
+          :src='img'
+          v-for='img in comment.images'
+          @click='showImg(img)'
+        >
       </div>
-      <!-- 回复 -->
-      <span style='color: gray;font-size: 12px;'>{{comment.createTime.replace(/[T]/,' ').replace(/\.\S*/,'')}}</span>
-      <span class='replyBtn' @click='replyHandle(index,0,1)'>回复({{ comment.replies.length }})</span>
+      <span style='color: gray;font-size: 12px;'>
+        {{comment.createTime.replace(/T/,' ').replace(/\.\S*$/,'')}}
+      </span>
+      <span
+        class='replyBtn'
+        @click='replyHandle(index,0,1)'
+      >
+        回复({{ comment.replies.length }})
+      </span>
     </div>
     <h3 v-if='!commentList.length' style='color: gray'>暂无评论，快来评论吧！</h3>
 
@@ -70,24 +80,26 @@
     >
       <div>
         <p style='padding-bottom: 10px; color: #555'>最多可上传3张图片</p>
-        <img :src='preview0' v-if='preview0 !== ""' height='70px' style='margin-left: 20px;'>
-        <img :src='preview1' v-if='preview1 !== ""' height='70px' style='margin-left: 20px;'>
-        <img :src='preview2' v-if='preview2 !== ""' height='70px' style='margin-left: 20px;'>
-        <i
-          class='fa fa-plus-square-o'
-          style='font-size: 70px;'
-          v-if='preview2 === ""'
-          @click='clickUploadImageInputForComment'
-        />
-        <input
-          ref='uploadImageInputForComment'
-          accept='image/*'
-          type='file'
-          multiple
-          style='display: none'
-          :value='inputImage'
-          @change='handleInputChange'
-        />
+        <div style='display: flex; align-items: center;'>
+          <img :src='preview0' v-if='preview0 !== ""' height='100px' style='border-radius: 5px; border: solid 1px #DDD; margin-right: 10px;'>
+          <img :src='preview1' v-if='preview1 !== ""' height='100px' style='border-radius: 5px; border: solid 1px #DDD; margin-right: 10px;'>
+          <img :src='preview2' v-if='preview2 !== ""' height='100px' style='border-radius: 5px; border: solid 1px #DDD; margin-right: 10px;'>
+          <i
+            class='fa fa-plus-square-o'
+            style='font-size: 100px; padding-left: 10px; padding-right: 10px; border-radius: 5px; border: solid 1px #DDD;'
+            v-if='preview2 === ""'
+            @click='clickUploadImageInputForComment'
+          />
+          <input
+            ref='uploadImageInputForComment'
+            accept='image/*'
+            type='file'
+            multiple
+            style='display: none'
+            :value='inputImage'
+            @change='handleInputChange'
+          />
+        </div>
         <div style='display: flex; justify-content: center; align-self: center; margin-top: 30px;'>
           <mt-button
             style='margin-right: 10px; padding-left: 30px; padding-right: 30px;'
@@ -119,8 +131,8 @@
       <!-- 评论 -->
       <div style='margin: 10px 20px 0 20px;'>
         <div>
-          <img src='./logo.png' class='userPhoto'>
-          <span class='name'>ID:{{this.commentObj.accountId}}</span>
+          <img src='./logo.png' class='avatar'>
+          <span class='userName'>ID:{{this.commentObj.accountId}}</span>
           <!-- 回复 点赞等 -->
           <div class='replyBtnCell'>
             <!-- 点赞 -->
@@ -141,10 +153,10 @@
       <!-- 回复 -->
       <div style='margin: 10px 20px 0 20px;' v-for='(reply,i) in replyList'>
         <div>
-          <img src='./logo.png' class='userPhoto'>
-          <span class='name' style='font-size: 16px;'>ID:{{reply.accountId}}</span>
+          <img src='./logo.png' class='avatar'>
+          <span class='userName' style='font-size: 16px;'>ID:{{reply.accountId}}</span>
           <span style='font-size: 14px;color:gray'>@:</span>
-          <span class='name' style='font-size: 16px;padding-left: 0'>ID:{{reply.sourceId}}</span>
+          <span class='userName' style='font-size: 16px;padding-left: 0'>ID:{{reply.sourceId}}</span>
           <div class='replyBtnCell'>
             <!-- 点赞reply-->
             <i @click='approveHandle(index,i,2)' :id=''approve' + reply.id' class='fa fa-thumbs-o-up' aria-hidden='true'></i>
@@ -576,7 +588,7 @@ p {
   border-radius: 5px;
 }
 
-.userPhoto {
+.avatar {
   float: left;
   width: 25px;
   height: 25px;
@@ -584,7 +596,7 @@ p {
   border-radius: 50%;
 }
 
-.name {
+.userName {
   font-size: 15px;
   display: inline-block;
   padding: 5px;
