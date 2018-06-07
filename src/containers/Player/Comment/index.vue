@@ -30,27 +30,31 @@
     <!-- 评论容器 -->
     <div
       class='commentCell'
-      v-for='comment in commentList'
+      v-for='(comment, index) in commentList'
       :key='comment.id'
     >
-      <img
-        class='avatar'
-        :id='"photo" + index'
-        :src='comment.avatar'
-      />
-      <span class='userName'>{{comment.userName}}</span>
-      <div class='replyBtnCell'>
-        <i
-          class='fa fa-thumbs-o-up'
-          style='font-size: 20px;'
-          :id='"approve" + comment.id'
-          @click='approveHandle(index,0,1)'
+      <div class='commentTop'>
+        <img
+          class='avatar'
+          :src='comment.avatar'
         />
-        <span>{{comment.approve.length}}</span>
+        <span class='userName'>{{comment.userName}}</span>
+        <div class='approve'>
+          <i
+            class='fa fa-thumbs-o-up'
+            style='font-size: 20px;'
+            :id='"approve" + comment.id'
+            @click='approveHandle(index, 0, 1)'
+          />
+          <span>{{comment.approve.length}}</span>
+        </div>
       </div>
       <!-- 评论内容 -->
       <p class='text'>{{comment.text}}</p>
-      <div class='imgBox'>
+      <div
+        class='imagesBox'
+        v-if='comment.images.length'
+      >
         <img
           class='textImg'
           width='60px'
@@ -60,14 +64,14 @@
           @click='showImg(img)'
         >
       </div>
-      <span style='color: gray;font-size: 12px;'>
-        {{comment.createTime.replace(/T/,' ').replace(/\.\S*$/,'')}}
+      <span style='color: gray; font-size: 12px;'>
+        {{formatTime(comment.createTime)}}
       </span>
       <span
         class='replyBtn'
-        @click='replyHandle(index,0,1)'
+        @click='handleOnReply(index, 0, 1)'
       >
-        回复({{ comment.replies.length }})
+        回复({{comment.replies.length}})
       </span>
     </div>
     <h3 v-if='!commentList.length' style='color: gray'>暂无评论，快来评论吧！</h3>
@@ -136,9 +140,9 @@
           <!-- 回复 点赞等 -->
           <div class='replyBtnCell'>
             <!-- 点赞 -->
-            <i @click='approveHandle(-1,0,1)' :id='"approvepop" + commentObj.id' class='fa fa-thumbs-o-up' aria-hidden='true' style='font-size: 20px;'></i>
+            <i @click='approveHandle(-1, 0, 1)' :id='"approvepop" + commentObj.id' class='fa fa-thumbs-o-up' aria-hidden='true' style='font-size: 20px;'></i>
             <span>{{this.approveL}}</span>
-            <span class='replyBtn' @click='replyHandle(-1,0,1)'>回复</span>
+            <span class='replyBtn' @click='handleOnReply(-1, 0, 1)'>回复</span>
           </div>
           <div style='clear:both;'></div>
         </div>
@@ -159,10 +163,10 @@
           <span class='userName' style='font-size: 16px;padding-left: 0'>ID:{{reply.sourceId}}</span>
           <div class='replyBtnCell'>
             <!-- 点赞reply-->
-            <i @click='approveHandle(index,i,2)' :id=''approve' + reply.id' class='fa fa-thumbs-o-up' aria-hidden='true'></i>
+            <i @click='approveHandle(index, i, 2)' :id=''approve' + reply.id' class='fa fa-thumbs-o-up' aria-hidden='true'></i>
             <span>{{reply.approve.length}}</span>
             <!-- 回复reply -->
-            <span class='replyBtn' @click='replyHandle(-1,i,2)'>回复</span>
+            <span class='replyBtn' @click='handleOnReply(-1, i, 2)'>回复</span>
           </div>
         </div>
         <!-- reply内容 -->
@@ -225,7 +229,10 @@
       class='showImg'
       v-model='showImgVisible'
     >
-      <img :src='showImgUrl' width='100%;' height='100%'>
+      <img
+        style='width: 100%; height: 100%;'
+        :src='showImgUrl'
+      />
     </mt-popup>
   </div>
 </template>
@@ -396,8 +403,7 @@ export default {
     },
 
     /* 点击回复按钮 */
-    replyHandle(index, i, type) {
-      const count = 0
+    handleOnReply(index, i, type) {
       if (index !== -1) {
         this.index = index
       } else {
@@ -520,6 +526,18 @@ export default {
         this.$http.put(`/comments/${this.commentId}/approve`, { approve: false })
       }
     },
+
+    /* 格式化时间 */
+    formatTime(time) {
+      const parseTime = new Date(time)
+
+      return `${parseTime.getFullYear()}-${parseTime.getMonth() + 1}-${parseTime.getDate()} ${this.paddingNumberWithZero(parseTime.getHours())}:${this.paddingNumberWithZero(parseTime.getMinutes())}:${this.paddingNumberWithZero(parseTime.getSeconds())}`
+    },
+
+    /* 针对只有个位的数字，返回一个前置补零的字符串 */
+    paddingNumberWithZero(number) {
+      return number > 9 ? String(number) : `0${number}`
+    },
   },
 }
 
@@ -547,8 +565,41 @@ export default {
   background-color: #EEE;
 }
 
-p {
+.commentTop {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.avatar {
+  float: left;
+  width: 25px;
+  height: 25px;
+  border: 1px solid lightgray;
+  border-radius: 50%;
+}
+
+.userName {
+  font-size: 16px;
+  color: #5082B4;
+  margin-left: 5px;
+}
+
+.approve {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(0, -50%);
+}
+
+.text {
+  padding: 5px 30px;
   word-wrap: break-word;
+}
+
+.imagesBox {
+  padding-left: 30px;
 }
 
 .mint-indicator-wrapper {
@@ -588,32 +639,6 @@ p {
   border-radius: 5px;
 }
 
-.avatar {
-  float: left;
-  width: 25px;
-  height: 25px;
-  border: 1px solid lightgray;
-  border-radius: 50%;
-}
-
-.userName {
-  font-size: 15px;
-  display: inline-block;
-  padding: 5px;
-  color: #607D8B;
-}
-
-.imgBox {
-  display: block;
-  margin-left: 30px;
-}
-
-.text {
-  width: 80%;
-  margin: 0 5px;
-  padding-left: 25px;
-}
-
 .textImg {
   font-size: 14px;
   display: inline-block;
@@ -628,11 +653,6 @@ p {
   font-size: 14px;
   padding: 0 8px;
   color: #60898b;
-}
-
-.replyBtn:hover {
-  cursor: pointer;
-  color: lightblue;
 }
 
 .replyPop {

@@ -17,12 +17,12 @@
         style='width: 30px; height: 30px; border-radius: 50%;'
         :src='teacherInformation.avatar'
       />
-      <span style='color: #666; font-size: 20px;'>
+      <span style='color: #000; font-size: 20px;'>
         {{teacherInformation.name || teacherInformation.nickname}}
       </span>
       <i
         class='fa fa-angle-right'
-        style='color: #666; font-size: 20px;'
+        style='color: #000; font-size: 20px;'
       />
     </router-link>
   </div>

@@ -21,16 +21,27 @@
         v-model='selected'
       >
         <mt-tab-item id='comment'>
-          <span style='font-size: 18px; color: #418642; font-weight: 800;'>评论</span>
+          <span
+            style='font-size: 18px; color: #666; font-weight: 800;'
+            :style='selected === "comment" ? { color: "#418642" } : undefined'
+          >
+            评论
+          </span>
         </mt-tab-item>
         <mt-tab-item id='subtitles'>
-          <span style='font-size: 18px; color: #418642; font-weight: 800;'>字幕</span>
+          <span
+            style='font-size: 18px; color: #666; font-weight: 800;'
+            :style='selected === "subtitles" ? { color: "#418642" } : undefined'
+          >
+            字幕
+          </span>
         </mt-tab-item>
       </mt-navbar>
     </div>
     <mt-tab-container v-model='selected'>
       <mt-tab-container-item id='subtitles'>
         <Subtitles
+          :subtitles='subtitles'
           :activeSubtitleIndex='activeSubtitleIndex'
           :style='{ paddingTop: subtitleContainerPaddingTop ? `${subtitleContainerPaddingTop}px` : undefined }'
         />
@@ -74,6 +85,7 @@ export default {
       score: -1,
       selected: 'comment',
       subtitleContainerPaddingTop: null,
+      subtitles: [],
       teacherInformation: {},
       title: '课程名称',
     }
@@ -133,21 +145,24 @@ export default {
           /* 获取应当播放的 action */
           const action = actions.find((action) => action.id === defaultAction)
 
+          /* 获取对应的字幕数据 */
+          this.subtitles = action.subtitle
+
           /* 计算当前文档的评分 */
           this.score = (star1 + star2 * 2 + star3 * 3 + star4 * 4 + star5 * 5) / (star1 + star2 + star3 + star4 + star5)
           this.score = window.isNaN(this.score) ? -1 : this.score
 
-          // /* 实例化播放器 */
-          // this.player = new Player({
-          //   actionUrl : action.json,
-          //   audioUrl  : action.recording,
-          //   duration  : action.duration,
-          //   element   : document.getElementById('player'),
-          //   imageUrls : pictures,
-          //   mode      : 'mobile',
-          //   size      : action.totalSize,
-          //   subtitles : action.subtitle,
-          // })
+          /* 实例化播放器 */
+          this.player = new Player({
+            actionUrl : action.json,
+            audioUrl  : action.recording,
+            duration  : action.duration,
+            element   : document.getElementById('player'),
+            imageUrls : pictures,
+            mode      : 'mobile',
+            size      : action.totalSize,
+            subtitles : action.subtitle,
+          })
         })
         .catch((error) => {
           if (process.env.NODE_ENV === 'development') {

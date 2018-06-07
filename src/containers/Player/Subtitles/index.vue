@@ -1,6 +1,6 @@
 <template>
   <div class="subtitles">
-    <div class="textline" v-for="(item, index) in subtitle" :class="{onshow: index == activeSubtitleIndex }">
+    <div class="textline" v-for="(item, index) in subtitles" :class="{onshow: index == activeSubtitleIndex }">
       <span class="start">{{formatDuring(item.beginTime)}}</span>
       <span class="wordstext">{{item.text}}</span>
     </div>
@@ -22,6 +22,10 @@ export default {
       type: Number,
       required: true,
     },
+    subtitles: {
+      type: Array,
+      required: true,
+    },
   },
 
   data() {
@@ -34,7 +38,6 @@ export default {
       onshow: '',
       scroll: '',
       count: 0,
-      subtitle: [],
       nowords: false,
     }
   },
@@ -42,7 +45,6 @@ export default {
   created() {
     this.textlines = MockData.subtitles[0].textArr.split('。')
     this.startArr = MockData.subtitles[0].startTime
-    this.pageInit()
     for (let i = 0; i < this.startArr.length; i++) {
       this.timeArr.push(this.formatDuring(this.startArr[i]))
     }
@@ -59,31 +61,16 @@ export default {
   },
 
   methods: {
-    pageInit() {
-      Bus.$on('subtitle', (subtitle) => {
-        this.changeSubtitle(subtitle)
-      })
-    },
-
     formatDuring(mss) {
-        let minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60))
-        let seconds = parseInt((mss % (1000 * 60)) / 1000)
-        if (seconds < 10) {
-          seconds += '0'
-        }
-        if (minutes < 10) {
-          minutes = `0${minutes}`
-        }
-        return `${minutes}:${seconds}`
-    },
-
-    changeSubtitle(subtitle) {
-      this.subtitle = subtitle
-      if (this.subtitle.length == 0) {
-        this.nowords = true
-      } else {
-        this.nowords = false
+      let minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60))
+      let seconds = parseInt((mss % (1000 * 60)) / 1000)
+      if (seconds < 10) {
+        seconds += '0'
       }
+      if (minutes < 10) {
+        minutes = `0${minutes}`
+      }
+      return `${minutes}:${seconds}`
     },
   },
 }
