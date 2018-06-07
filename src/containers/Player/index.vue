@@ -133,16 +133,16 @@ export default {
           this.score = window.isNaN(this.score) ? -1 : this.score
 
           /* 实例化播放器 */
-          // this.player = new Player({
-          //   actionUrl : action.json,
-          //   audioUrl  : action.recording,
-          //   duration  : action.duration,
-          //   element   : document.getElementById('player'),
-          //   imageUrls : pictures,
-          //   mode      : 'mobile',
-          //   size      : action.totalSize,
-          //   subtitles : action.subtitle,
-          // })
+          this.player = new Player({
+            actionUrl : action.json,
+            audioUrl  : action.recording,
+            duration  : action.duration,
+            element   : document.getElementById('player'),
+            imageUrls : pictures,
+            mode      : 'mobile',
+            size      : action.totalSize,
+            subtitles : action.subtitle,
+          })
         })
         .catch((error) => {
           if (process.env.NODE_ENV === 'development') {
@@ -160,7 +160,7 @@ export default {
     },
 
     handleOnSetSubtitleContainerPaddingTop() {
-      this.subtitleContainerPaddingTop = this.$ref.playerWrapper.offsetHeight
+      this.subtitleContainerPaddingTop = this.$refs.playerWrapper.offsetHeight
     },
   },
 

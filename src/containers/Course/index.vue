@@ -50,7 +50,7 @@
 
 <script>
 
-import MyHeader from '../Header'
+import MyHeader from '../MyHeader'
 import Bus from '../../bus.js'
 import { Indicator } from 'mint-ui'
 

@@ -40,7 +40,7 @@
 
 <script>
 
-import MyHeader from '../Header'
+import MyHeader from '../MyHeader'
 import { Indicator } from 'mint-ui'
 import { Toast } from 'mint-ui'
 
