@@ -52,7 +52,6 @@
       </mt-tab-container-item>
       <mt-tab-container-item id='subtitles'>
         <Subtitles
-          ref='subtitle'
           :subtitles='subtitles'
           :activeSubtitleIndex='activeSubtitleIndex'
           :subtitleContainerMarginTop='subtitleContainerMarginTop'
@@ -85,7 +84,7 @@ export default {
       player: {},
       score: -1,
       selected: 'comment',
-      subtitleContainerMarginTop: null,
+      subtitleContainerMarginTop: 0,
       subtitles: [],
       teacherInformation: {},
       title: '课程名称',
@@ -141,6 +140,14 @@ export default {
             const userInformation = accounts.find((user) => user.id === comment.accountId)
             comment.userName = userInformation.name || userInformation.nickname
             comment.avatar = userInformation.avatar
+            comment.replies.forEach((reply) => {
+              const replyUserInformation = accounts.find((user) => user.id === reply.accountId)
+              const originUserInformation = accounts.find((user) => user.id === reply.sourceId)
+              reply.userName = replyUserInformation.name || replyUserInformation.nickname
+              reply.avatar = replyUserInformation.avatar
+              reply.originUserName = originUserInformation.name || originUserInformation.nickname
+              reply.originAvatar = originUserInformation.avatar
+            })
           })
 
           /* 获取应当播放的 action */
@@ -154,16 +161,16 @@ export default {
           this.score = window.isNaN(this.score) ? -1 : this.score
 
           /* 实例化播放器 */
-          this.player = new Player({
-            actionUrl : action.json,
-            audioUrl  : action.recording,
-            duration  : action.duration,
-            element   : document.getElementById('player'),
-            imageUrls : pictures,
-            mode      : 'mobile',
-            size      : action.totalSize,
-            subtitles : action.subtitle,
-          })
+          // this.player = new Player({
+          //   actionUrl : action.json,
+          //   audioUrl  : action.recording,
+          //   duration  : action.duration,
+          //   element   : document.getElementById('player'),
+          //   imageUrls : pictures,
+          //   mode      : 'mobile',
+          //   size      : action.totalSize,
+          //   subtitles : action.subtitle,
+          // })
         })
         .catch((error) => {
           if (process.env.NODE_ENV === 'development') {

@@ -17,7 +17,7 @@
       <img
         width='35px'
         v-if='isShowUploadImageIcon'
-        :src='this.preview0'
+        :src='preview0'
       />
       <mt-button
         style='margin-left: 10px; height: 35px; background-color: #418642; color: #FFF'
@@ -42,14 +42,13 @@
         <div class='approve'>
           <i
             class='fa fa-thumbs-o-up'
-            style='font-size: 20px;'
+            style='font-size: 18px; margin-right: 5px;'
             :id='"approve" + comment.id'
             @click='approveHandle(index, 0, 1)'
           />
           <span>{{comment.approve.length}}</span>
         </div>
       </div>
-      <!-- 评论内容 -->
       <p class='text'>{{comment.text}}</p>
       <div
         class='imagesBox'
@@ -57,8 +56,6 @@
       >
         <img
           class='textImg'
-          width='60px'
-          height='60px'
           :src='img'
           v-for='img in comment.images'
           @click='showImg(img)'
@@ -123,28 +120,35 @@
 
     <!-- 回复的弹框 -->
     <mt-popup
-      v-model='replyVisible'
-      position='right'
       class='replyPop'
-      modal='false'
+      position='right'
+      v-if='Object.keys(commentObj)'
+      v-model='replyVisible'
     >
-      <!-- header -->
       <div>
-        <i class='fa fa-angle-left' aria-hidden='true' @click='replyVisible=false' style='font-size: 40px;font-weight: 200;padding: 5px 18px;'></i>
+        <mt-button
+          style='margin-top: 10px; margin-bottom: 10px; padding-left: 10px; padding-right: 10px;'
+          @click='replyVisible = false'
+        >
+          返回
+        </mt-button>
       </div>
-      <!-- 评论 -->
-      <div style='margin: 10px 20px 0 20px;'>
-        <div>
-          <img src='./logo.png' class='avatar'>
-          <span class='userName'>ID:{{this.commentObj.accountId}}</span>
-          <!-- 回复 点赞等 -->
-          <div class='replyBtnCell'>
-            <!-- 点赞 -->
-            <i @click='approveHandle(-1, 0, 1)' :id='"approvepop" + commentObj.id' class='fa fa-thumbs-o-up' aria-hidden='true' style='font-size: 20px;'></i>
-            <span>{{this.approveL}}</span>
-            <span class='replyBtn' @click='handleOnReply(-1, 0, 1)'>回复</span>
+      <div class='commentCell'>
+        <div class='commentTop'>
+          <img
+            class='avatar'
+            :src='commentObj.avatar'
+          />
+          <span class='userName'>{{commentObj.userName}}</span>
+          <div class='approve'>
+            <i
+              class='fa fa-thumbs-o-up'
+              style='font-size: 18px; margin-right: 5px;'
+              :id='"approvepop" + commentObj.id'
+              @click='approveHandle(-1, 0, 1)'
+            />
+            <span>{{approveL}}</span>
           </div>
-          <div style='clear:both;'></div>
         </div>
         <!-- 头部内容分割 -->
         <p class='text'>{{this.commentObj.text}}</p>
@@ -177,10 +181,9 @@
       </div>
     </mt-popup>
 
-
+    <!-- 回复对话框 -->
     <mt-popup
-      class='reply'
-      position='right'
+      class='imagesUploadDialog'
       v-model='rrVisible'
     >
       <mt-field
@@ -411,16 +414,16 @@ export default {
       }
       this.commentObj = this.commentList[index]
       this.approveL = this.commentObj.approve.length
-      this.replyList = this.commentList[index].replies
+      this.replyList = this.commentObj.replies
       this.replyVisible = true
       this.rrVisible = true
       this.replyFormData = new FormData()
-      this.replyFormData.append('commentId', this.commentList[index].id)
+      this.replyFormData.append('commentId', this.commentObj.id)
 
       if (type === 1) {
-        this.replyFormData.append('sourceId', this.commentList[index].accountId)
+        this.replyFormData.append('sourceId', this.commentObj.accountId)
       } else {
-        this.replyFormData.append('sourceId', this.commentList[index].replies[i].accountId)
+        this.replyFormData.append('sourceId', this.commentObj.replies[i].accountId)
       }
       this.replyIndex = index
     },
@@ -573,7 +576,6 @@ export default {
 }
 
 .avatar {
-  float: left;
   width: 25px;
   height: 25px;
   border: 1px solid lightgray;
@@ -591,6 +593,8 @@ export default {
   top: 50%;
   right: 0;
   transform: translate(0, -50%);
+  display: inline-flex;
+  align-items: center;
 }
 
 .text {
@@ -640,9 +644,20 @@ export default {
 }
 
 .textImg {
+  width: 60px;
+  height: 60px;
   font-size: 14px;
   display: inline-block;
   padding: 5px;
+}
+
+.replyPop {
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+  box-sizing: border-box;
 }
 
 .replyBtnCell {
@@ -653,19 +668,6 @@ export default {
   font-size: 14px;
   padding: 0 8px;
   color: #60898b;
-}
-
-.replyPop {
-  overflow: scroll;
-  width: 100%;
-  height: 100%;
-  text-align: left;
-}
-
-.reply {
-  width: 90%;
-  height: 230px;
-  margin-right: 5%;
 }
 
 .replyInput {

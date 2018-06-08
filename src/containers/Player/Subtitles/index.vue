@@ -1,7 +1,6 @@
 <template>
   <div
     class='subtitles'
-    ref='subtitlesContainer'
     :style='subtitleContainerMarginTop ? { marginTop: `${subtitleContainerMarginTop}px` } : undefined'
   >
     <div
@@ -14,7 +13,12 @@
       <span class='start'>{{formatDuring(subtitle.beginTime)}}</span>
       <span class='wordstext'>{{subtitle.text}}</span>
     </div>
-    <h3 style='color: gray; margin-top: 100px;' v-if='!subtitles.length'>暂无字幕</h3>
+    <h3
+      style='color: gray; margin-top: 100px;'
+      v-if='!subtitles.length'
+    >
+      暂无字幕
+    </h3>
   </div>
 </template>
 
@@ -48,9 +52,9 @@ export default {
   },
 
   updated() {
-    if (this.$refs.activeSubtitle[0]) {
+    if (this.$refs.activeSubtitle && this.$refs.activeSubtitle[0]) {
       const offsetTop = this.$refs.activeSubtitle[0].offsetTop
-      document.documentElement.scrollTop = offsetTop
+      document.documentElement.scrollTop = offsetTop - (window.innerHeight - this.subtitleContainerMarginTop) / 2
     }
   },
 
