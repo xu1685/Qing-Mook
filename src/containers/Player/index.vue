@@ -20,7 +20,10 @@
         class='selectToolBar'
         v-model='selected'
       >
-        <mt-tab-item id='comment'>
+        <mt-tab-item
+          id='comment'
+          :style='selected === "comment" ? { borderBottom: "3px solid #418642" } : undefined'
+        >
           <span
             style='font-size: 18px; color: #666; font-weight: 800;'
             :style='selected === "comment" ? { color: "#418642" } : undefined'
@@ -28,7 +31,10 @@
             评论
           </span>
         </mt-tab-item>
-        <mt-tab-item id='subtitles'>
+        <mt-tab-item
+          id='subtitles'
+          :style='selected === "subtitles" ? { borderBottom: "3px solid #418642" } : undefined'
+        >
           <span
             style='font-size: 18px; color: #666; font-weight: 800;'
             :style='selected === "subtitles" ? { color: "#418642" } : undefined'
@@ -161,16 +167,18 @@ export default {
           this.score = window.isNaN(this.score) ? -1 : this.score
 
           /* 实例化播放器 */
-          this.player = new Player({
-            actionUrl : action.json,
-            audioUrl  : action.recording,
-            duration  : action.duration,
-            element   : document.getElementById('player'),
-            imageUrls : pictures,
-            mode      : 'mobile',
-            size      : action.totalSize,
-            subtitles : action.subtitle,
-          })
+          if (process.env.NODE_ENV === 'production') {
+            this.player = new Player({
+              actionUrl : action.json,
+              audioUrl  : action.recording,
+              duration  : action.duration,
+              element   : document.getElementById('player'),
+              imageUrls : pictures,
+              mode      : 'mobile',
+              size      : action.totalSize,
+              subtitles : action.subtitle,
+            })
+          }
         })
         .catch((error) => {
           if (process.env.NODE_ENV === 'development') {
