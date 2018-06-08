@@ -150,34 +150,72 @@
             <span>{{approveL}}</span>
           </div>
         </div>
-        <!-- 头部内容分割 -->
-        <p class='text'>{{this.commentObj.text}}</p>
-        <div class='imgBox'>
-          <img @click='showImg(img)' v-for='(img,index) in commentObj.images' class='textImg' :src='img' width='60px' height='60px'>
+        <p class='text'>{{commentObj.text}}</p>
+        <div
+          class='imagesBox'
+          v-if='commentObj.images && commentObj.images.length'
+        >
+          <img
+            class='textImg'
+            :src='img'
+            v-for='img in commentObj.images'
+            @click='showImg(img)'
+          >
         </div>
+        <span style='color: gray; font-size: 12px;'>
+          {{formatTime(commentObj.createTime)}}
+        </span>
+        <span
+          class='replyBtn'
+          @click='handleOnReply(-1, 0, 1)'
+        >
+          回复({{replyList.length}})
+        </span>
       </div>
       <hr>
-      <p style='color: gray;padding: 5px;'>共{{this.replyList.length}}条回复</p>
-      <!-- 回复 -->
-      <div style='margin: 10px 20px 0 20px;' v-for='(reply,i) in replyList'>
-        <div>
-          <img src='./logo.png' class='avatar'>
-          <span class='userName' style='font-size: 16px;'>ID:{{reply.accountId}}</span>
-          <span style='font-size: 14px;color:gray'>@:</span>
-          <span class='userName' style='font-size: 16px;padding-left: 0'>ID:{{reply.sourceId}}</span>
-          <div class='replyBtnCell'>
-            <!-- 点赞reply-->
-            <i @click='approveHandle(index, i, 2)' :id=''approve' + reply.id' class='fa fa-thumbs-o-up' aria-hidden='true'></i>
+      <div
+        class='commentCell'
+        v-for='(reply, i) in replyList'
+      >
+        <div class='commentTop'>
+          <img
+            class='avatar'
+            :src='reply.avatar'
+          />
+          <span class='userName'>{{reply.userName}}</span>
+          <span style='font-size: 14px; color:gray; margin-left: 5px; margin-right: 5px;'>@:</span>
+          <span class='userName'>{{reply.originUserName}}</span>
+          <div class='approve'>
+            <i
+              class='fa fa-thumbs-o-up'
+              style='font-size: 18px; margin-right: 5px;'
+              :id='"approve" + reply.id'
+              @click='approveHandle(index, i, 2)'
+            />
             <span>{{reply.approve.length}}</span>
-            <!-- 回复reply -->
-            <span class='replyBtn' @click='handleOnReply(-1, i, 2)'>回复</span>
           </div>
         </div>
-        <!-- reply内容 -->
         <p class='text'>{{reply.text}}</p>
-        <div class='imgBox'>
-          <img @click='showImg(img)' v-for='(img,index) in reply.images' class='textImg' :src='img' width='70px' height='70px'>
+        <div
+          class='imagesBox'
+          v-if='reply.images.length'
+        >
+          <img
+            class='textImg'
+            :src='img'
+            v-for='img in reply.images'
+            @click='showImg(img)'
+          />
         </div>
+        <span style='color: gray; font-size: 12px;'>
+          {{formatTime(reply.createTime)}}
+        </span>
+        <span
+          class='replyBtn'
+          @click='handleOnReply(-1, i, 2)'
+        >
+          回复
+        </span>
       </div>
     </mt-popup>
 
