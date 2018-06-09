@@ -215,7 +215,7 @@ export default {
 
             /* 配置微信的分享到朋友圈、分享给朋友、分享到 QQ 这三个操作 */
             window.jWeixin.onMenuShareAppMessage({
-              title   : '轻慕课',
+              title   : title,
               desc    : title,
               link    : window.encodeURIComponent(window.location.href),
               imgUrl  : coverURL,
@@ -229,7 +229,7 @@ export default {
 
             /* 配置微信的分享到朋友圈、分享给朋友、分享到 QQ 这三个操作 */
             window.jWeixin.onMenuShareQQ({
-              title   : '轻慕课',
+              title   : title,
               desc    : title,
               link    : window.encodeURIComponent(window.location.href),
               imgUrl  : coverURL,
