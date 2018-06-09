@@ -196,46 +196,46 @@ export default {
           /* 处于固定定位的播放器遮盖底部的字幕组件正常显示 */
           this.handleOnSetSubtitleContainerMarginTop()
 
-          /* 配置微信的分享到朋友圈、分享给朋友、分享到 QQ 这三个操作 */
-          window.jWeixin.onMenuShareTimeline({
-            title   : this.title,
-            link    : window.encodeURIComponent(window.location.href),
-            imgUrl  : this.pictures[0],
-            success : function () {
-              alert('分享到朋友圈成功！！！')
-            },
-            fail: function () {
-              alert('分享到朋友圈失败！！！')
-            },
-          })
+          // /* 配置微信的分享到朋友圈、分享给朋友、分享到 QQ 这三个操作 */
+          // window.jWeixin.onMenuShareTimeline({
+          //   title   : this.title,
+          //   link    : window.encodeURIComponent(window.location.href),
+          //   imgUrl  : this.pictures[0],
+          //   success : function () {
+          //     alert('分享到朋友圈成功！！！')
+          //   },
+          //   fail: function () {
+          //     alert('分享到朋友圈失败！！！')
+          //   },
+          // })
 
-          /* 配置微信的分享到朋友圈、分享给朋友、分享到 QQ 这三个操作 */
-          window.jWeixin.onMenuShareAppMessage({
-            title   : '轻慕课',
-            desc    : this.title,
-            link    : window.encodeURIComponent(window.location.href),
-            imgUrl  : this.pictures[0],
-            success : function () {
-              alert('分享给朋友成功！！！')
-            },
-            fail: function () {
-              alert('分享给朋友失败！！！')
-            },
-          })
+          // /* 配置微信的分享到朋友圈、分享给朋友、分享到 QQ 这三个操作 */
+          // window.jWeixin.onMenuShareAppMessage({
+          //   title   : '轻慕课',
+          //   desc    : this.title,
+          //   link    : window.encodeURIComponent(window.location.href),
+          //   imgUrl  : this.pictures[0],
+          //   success : function () {
+          //     alert('分享给朋友成功！！！')
+          //   },
+          //   fail: function () {
+          //     alert('分享给朋友失败！！！')
+          //   },
+          // })
 
-          /* 配置微信的分享到朋友圈、分享给朋友、分享到 QQ 这三个操作 */
-          window.jWeixin.onMenuShareQQ({
-            title   : '轻慕课',
-            desc    : this.title,
-            link    : window.encodeURIComponent(window.location.href),
-            imgUrl  : this.pictures[0],
-            success : function () {
-              alert('分享到 QQ 成功！！！')
-            },
-            fail: function () {
-              alert('分享到 QQ 失败！！！')
-            },
-          })
+          // /* 配置微信的分享到朋友圈、分享给朋友、分享到 QQ 这三个操作 */
+          // window.jWeixin.onMenuShareQQ({
+          //   title   : '轻慕课',
+          //   desc    : this.title,
+          //   link    : window.encodeURIComponent(window.location.href),
+          //   imgUrl  : this.pictures[0],
+          //   success : function () {
+          //     alert('分享到 QQ 成功！！！')
+          //   },
+          //   fail: function () {
+          //     alert('分享到 QQ 失败！！！')
+          //   },
+          // })
         })
     }
   },
