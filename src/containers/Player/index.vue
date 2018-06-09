@@ -87,6 +87,7 @@ export default {
       activeSubtitleIndex: -1,
       comments: [],
       docId: '',
+      pictures: [],
       player: {},
       score: -1,
       selected: 'comment',
@@ -105,6 +106,7 @@ export default {
   },
 
   mounted() {
+    /* 获取当前页面显示所需要的数据 */
     if (this.$route.params.id) {
       this.docId = this.$route.params.id
 
@@ -162,6 +164,8 @@ export default {
           /* 获取对应的字幕数据 */
           this.subtitles = action.subtitle
 
+          this.pictures = pictures
+
           /* 计算当前文档的评分 */
           this.score = (star1 + star2 * 2 + star3 * 3 + star4 * 4 + star5 * 5) / (star1 + star2 + star3 + star4 + star5)
           this.score = window.isNaN(this.score) ? -1 : this.score
@@ -173,7 +177,7 @@ export default {
               audioUrl  : action.recording,
               duration  : action.duration,
               element   : document.getElementById('player'),
-              imageUrls : pictures,
+              imageUrls : this.pictures,
               mode      : 'mobile',
               size      : action.totalSize,
               subtitles : action.subtitle,
@@ -188,7 +192,41 @@ export default {
           }
         })
         .then(() => {
+          /* 等到播放器完成初始化并确定了其尺寸的时候触发，用来给字幕组件设置上外边距，防止 */
+          /* 处于固定定位的播放器遮盖底部的字幕组件正常显示 */
           this.handleOnSetSubtitleContainerMarginTop()
+
+          /* 配置微信的分享到朋友圈、分享给朋友、分享到 QQ 这三个操作 */
+          window.jWeixin.onMenuShareTimeline({
+            title   : this.title,
+            link    : window.encodeURIComponent(window.location.href),
+            imgUrl  : this.pictures[0],
+            success : function () {
+              alert('分享到朋友圈成功！！！')
+            },
+          })
+
+          /* 配置微信的分享到朋友圈、分享给朋友、分享到 QQ 这三个操作 */
+          window.jWeixin.onMenuShareAppMessage({
+            title   : '轻慕课',
+            desc    : this.title,
+            link    : window.encodeURIComponent(window.location.href),
+            imgUrl  : this.pictures[0],
+            success : function () {
+              alert('分享给朋友成功！！！')
+            },
+          })
+
+          /* 配置微信的分享到朋友圈、分享给朋友、分享到 QQ 这三个操作 */
+          window.jWeixin.onMenuShareQQ({
+            title   : '轻慕课',
+            desc    : this.title,
+            link    : window.encodeURIComponent(window.location.href),
+            imgUrl  : this.pictures[0],
+            success : function () {
+              alert('分享到 QQ 成功！！！')
+            },
+          })
         })
     }
   },
