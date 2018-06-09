@@ -204,6 +204,9 @@ export default {
             success : function () {
               alert('分享到朋友圈成功！！！')
             },
+            fail: function () {
+              alert('分享到朋友圈失败！！！')
+            },
           })
 
           /* 配置微信的分享到朋友圈、分享给朋友、分享到 QQ 这三个操作 */
@@ -215,6 +218,9 @@ export default {
             success : function () {
               alert('分享给朋友成功！！！')
             },
+            fail: function () {
+              alert('分享给朋友失败！！！')
+            },
           })
 
           /* 配置微信的分享到朋友圈、分享给朋友、分享到 QQ 这三个操作 */
@@ -225,6 +231,9 @@ export default {
             imgUrl  : this.pictures[0],
             success : function () {
               alert('分享到 QQ 成功！！！')
+            },
+            fail: function () {
+              alert('分享到 QQ 失败！！！')
             },
           })
         })
