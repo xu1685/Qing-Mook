@@ -198,46 +198,37 @@ export default {
 
           const title = this.title
           const coverURL = this.pictures[0]
-
-          alert(title, coverURL, 123)
+          const authorName = this.teacherInformation.name || this.teacherInformation.nickname
+          const authorIntroduction = this.teacherInformation.introduction
 
           window.jWeixin.ready(function() {
-            /* 配置微信的分享到朋友圈、分享给朋友、分享到 QQ 这三个操作 */
+            /* 配置微信的分享到朋友圈操作 */
             window.jWeixin.onMenuShareTimeline({
-              title   : title,
+              title   : `${authorName}-${title}`,
               link    : window.location.href,
               imgUrl  : coverURL,
-              success : function () {
-                alert('分享到朋友圈成功！！！')
-              },
               fail: function () {
                 alert('分享到朋友圈失败！！！')
               },
             })
 
-            /* 配置微信的分享到朋友圈、分享给朋友、分享到 QQ 这三个操作 */
+            /* 配置微信的分享给朋友操作 */
             window.jWeixin.onMenuShareAppMessage({
-              title   : '轻慕课',
-              desc    : title,
+              title   : `${authorName}-${title}`,
+              desc    : `作者简介:${authorIntroduction}`,
               link    : window.location.href,
               imgUrl  : coverURL,
-              success : function () {
-                alert('分享给朋友成功！！！')
-              },
               fail: function () {
                 alert('分享给朋友失败！！！')
               },
             })
 
-            /* 配置微信的分享到朋友圈、分享给朋友、分享到 QQ 这三个操作 */
+            /* 配置微信的分享到 QQ 操作 */
             window.jWeixin.onMenuShareQQ({
-              title   : '轻慕课',
-              desc    : title,
+              title   : `${authorName}-${title}`,
+              desc    : `作者简介:${authorIntroduction}`,
               link    : window.location.href,
               imgUrl  : coverURL,
-              success : function () {
-                alert('分享到 QQ 成功！！！')
-              },
               fail: function () {
                 alert('分享到 QQ 失败！！！')
               },
