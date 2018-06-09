@@ -272,6 +272,11 @@ export default {
   box-sizing: border-box;
 }
 
+.selectToolBar > a {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 .selectToolBar > a:not(:first-child) {
   border-left: solid 1px #EEE;
 }

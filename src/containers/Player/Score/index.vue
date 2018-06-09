@@ -57,7 +57,7 @@ export default {
 <style scoped>
 
 .score {
-  height: 50px;
+  height: 40px;
   padding: 0 10px;
   border-bottom: 1px solid #EEE;
   display: flex;
