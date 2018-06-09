@@ -1,38 +1,38 @@
 <template>
   <div class='container'>
-    <MyHeader :pageName='title' />
+    <MyHeader title='用户个人主页' />
     <div class='information'>
       <div class='message'>
-        <mt-swipe class='mySwipe' :auto='0' :continuous='false'>
-          <mt-swipe-item>
-            <img src='./teacher.jpeg' class='photo'>
-            <h3 style='color:#FFFFFF'>蜗牛老师</h3>
-            <h5 style='color:#c7c7c7'>web前端工程师</h5>
-          </mt-swipe-item>
-          <mt-swipe-item>
-            <h4 style='color: rgb(232, 232, 232)'>这是一段介绍</h4>
-            <p style='color: rgb(232, 232, 232);padding-top: 15px;'>
-              《Sass与Compass实战》共分为10章，旨在完整介绍两个工具：Sass和Compass，从而引领读者通过框架高效地构建样式表，创建动态页面。
-            </p>
-          </mt-swipe-item>
-        </mt-swipe>
+        <div>
+          <img class='photo' :src='teacherInformation.avatar' />
+          <h3 style='color:#FFFFFF;'>{{teacherInformation.name || teacherInformation.nickname}}</h3>
+          <h5 style='color:#C7C7C7;'>{{teacherInformation.introduction}}</h5>
+        </div>
       </div>
-      <img class='backgroundImage' src='./teacher.jpeg'>
+      <img class='backgroundImage' :src='teacherInformation.avatar' />
     </div>
     <div class='courseList'>
-      <div class='coursesCell' v-for='library in libraries'>
-        <router-link :to='"/course/" + library.id' class='link'>
+      <div
+        class='coursesCell'
+        v-for='library in libraries'
+      >
+        <router-link
+          class='link'
+          :to='`/course/${library.id}`'
+        >
           <div class='imgcontainer'>
-           <div class='image'>
-             <img class='image' :src='library.cover' onerror='this.style.display="none"'>
-           </div>
+            <div class='image'>
+              <img
+                class='image'
+                :src='library.cover'
+              />
+            </div>
           </div>
           <div class='msgcontainer'>
             <span class='courseName'>{{library.name}}</span>
             <p class='alt'>{{library.docs.length}}个文档</p>
           </div>
         </router-link>
-        <hr class='hr1'>
       </div>
     </div>
   </div>
@@ -49,26 +49,42 @@ export default {
 
   data() {
     return {
-      id: this.$route.params.id,
+      accountId: this.$route.params.id,
       libraries: [],
-      title: '教师主页',
+      teacherInformation: {},
     }
   },
 
   created() {
-    this.pageInite()
+    Indicator.open('获取用户数据中')
+
+    /* 获取用户数据，显示用户当前所拥有的的课堂 */
+    Promise
+      .all([
+        this.$http.get('/accounts'),
+        this.$http.get('/accounts/docs'),
+      ])
+      .then(([{
+        data: teacherInformation,
+      }, {
+        data: {
+          coopLibraries,
+          libraries,
+        },
+      }]) => {
+        this.teacherInformation = teacherInformation
+        this.libraries = libraries.concat(coopLibraries)
+
+        Indicator.close()
+      })
+      .catch((error) => {
+        throw error
+
+        Indicator.close()
+      })
   },
 
   methods: {
-    pageInite() {
-      Indicator.open()
-      this.$http.get('/accounts/docs')
-        .then((res) => {
-          this.libraries = res.data.libraries
-          Indicator.close()
-        })
-    },
-
     pop() {
       Toast({
         message: '该课程已关闭',
@@ -125,11 +141,6 @@ export default {
   margin-top: 10px;
 }
 
-.mySwipe {
-  width: 100%;
-  height: 200px;
-}
-
 .coursesCell {
   width: 100%;
   height: 80px;
@@ -141,7 +152,8 @@ export default {
   display: flex;
   align-items: center;
   height: 100%;
-  text-decoration: none;
+  padding-bottom: 10px;
+  border-bottom: solid 1px #DDD;
 }
 
 .noclick {
@@ -175,20 +187,13 @@ export default {
   white-space: nowrap;
   font-size: 20px;
   color: black;
+  text-decoration: none;
 }
 
 .alt {
   color: gray;
   font-size: 15px;
   margin-top: 8px;
-}
-
-.hr1 {
-  height:1px;
-  border:none;
-  border-top:1px solid lightgray;
-  margin-top: 10px;
-  margin: 10px 10px 0 10px;
 }
 
 </style>

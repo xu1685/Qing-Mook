@@ -50,8 +50,10 @@ axios.interceptors.response.use(response => response, (error) => {
   return Promise.reject(error)
 })
 
-/* 执行微信 JS-SDK 的初始化操作，需要在 axios 配置好了以后再执行 */
-initWeiXin()
+/* 只有处于生产环境才执行微信 JS-SDK 的初始化操作，并需要在 axios 配置好了以后再执行 */
+if (process.env.NODE_ENV === 'production') {
+  initWeiXin()
+}
 
 Vue.config.productionTip = process.env.NODE_ENV === 'development'
 

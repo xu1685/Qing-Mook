@@ -4,7 +4,7 @@
       <span style='font-size: 16px; font-weight: 800; margin-right: 5px;'>
         评分:
       </span>
-      <span style='font-size: 26px; font-weight: 800;'>
+      <span style='font-size: 16px; font-weight: 800;'>
         {{score === -1 ? '暂无评分' : `${score}/5`}}
       </span>
     </div>
@@ -17,7 +17,7 @@
         style='width: 30px; height: 30px; border-radius: 50%;'
         :src='teacherInformation.avatar'
       />
-      <span style='color: #000; font-size: 20px;'>
+      <span style='color: #000; font-size: 16px;'>
         {{teacherInformation.name || teacherInformation.nickname}}
       </span>
       <i

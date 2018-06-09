@@ -9,10 +9,7 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   routes: [{
-    path: '/',
-    redirect: '/teacher',
-  }, {
-    path: '/teacher',
+    path: '/teacher/:id',
     name: 'teacher',
     component: Teacher,
   }, {
