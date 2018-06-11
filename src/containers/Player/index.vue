@@ -93,6 +93,7 @@ export default {
       activeSubtitleIndex: -1,
       comments: [],
       docId: '',
+      myInformation: {},
       pictures: [],
       player: {},
       score: -1,
@@ -100,9 +101,8 @@ export default {
       subtitleContainerMarginTop: 0,
       subtitles: [],
       teacherInformation: {},
-      myInformation: {},
-      usersInformation: {},
       title: '课程名称',
+      usersInformation: {},
     }
   },
 
