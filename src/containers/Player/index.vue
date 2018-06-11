@@ -53,7 +53,9 @@
         />
         <Comment
           :docId='docId'
-          :comments.sync='comments'
+          :comments='comments'
+          @addCommentSuccess='handleOnAddCommentSuccess'
+          @addReplySuccess='handleOnAddReplySuccess'
         />
       </mt-tab-container-item>
       <mt-tab-container-item id='subtitles'>
@@ -94,6 +96,8 @@ export default {
       subtitleContainerMarginTop: 0,
       subtitles: [],
       teacherInformation: {},
+      myInformation: {},
+      usersInformation: {},
       title: '课程名称',
     }
   },
@@ -134,6 +138,9 @@ export default {
               },
             },
           } = respones
+
+          /* 保存当前所有用户的个人信息 */
+          this.usersInformation = accounts
 
           /* 获取当前文档的作者信息 */
           this.accountId = accountId
@@ -239,6 +246,16 @@ export default {
           }
         })
     }
+
+    /* 获取当前登录用户的个人信息 */
+    this
+      .$http
+      .get('/accounts')
+      .then(({
+        data: myInformation,
+      }) => {
+        this.myInformation = myInformation
+      })
   },
 
   methods: {
@@ -248,6 +265,31 @@ export default {
 
     handleOnSetSubtitleContainerMarginTop() {
       this.subtitleContainerMarginTop = this.$refs.playerWrapper.offsetHeight
+    },
+
+    handleOnAddCommentSuccess(comment) {
+      comment.userName = this.myInformation.name || this.myInformation.nickname
+      comment.avatar = this.myInformation.avatar
+
+      this.comments.unshift(comment)
+    },
+
+    handleOnAddReplySuccess(comment) {
+      this
+        .comments
+        .find((_comment) => _comment.id === comment.id)
+        .replies
+        .forEach((reply) => {
+          /* 只更新补充没有用户信息的回复信息 */
+          if (!reply.userName) {
+            const replyUserInformation = this.usersInformation.find((user) => user.id === reply.accountId)
+            const originUserInformation = this.usersInformation.find((user) => user.id === reply.sourceId)
+            reply.userName = replyUserInformation.name || replyUserInformation.nickname
+            reply.avatar = replyUserInformation.avatar
+            reply.originUserName = originUserInformation.name || originUserInformation.nickname
+            reply.originAvatar = originUserInformation.avatar
+          }
+        })
     },
   },
 }

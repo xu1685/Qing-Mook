@@ -32,6 +32,10 @@ axios.defaults.headers.common.Authorization = token
 
 axios.interceptors.response.use(response => response, (error) => {
   const {
+    config: {
+      method,
+      url,
+    },
     response: {
       status: statusCode,
     } = {},
@@ -39,7 +43,9 @@ axios.interceptors.response.use(response => response, (error) => {
 
   /* 用户目前尚未登录的情况 */
   if (statusCode === 401) {
-    if (window.location.pathname.startsWith('/player/')) {
+    if (method.toUpperCase() === 'GET' && url.endsWith('/accounts')) {
+      console.log('获取用户个人信息失败')
+    } else if (window.location.pathname.startsWith('/player/')) {
       /* 当用户处于播放页面时，跳转之前需要把现在的地址记录下来 */
       const originURL = window.encodeURIComponent(window.location.pathname)
       /* 带着现在的地址跳转到登录页面，等到用户登录以后再跳转回原来的播放页面 */

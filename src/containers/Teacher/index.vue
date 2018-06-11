@@ -59,20 +59,17 @@ export default {
     Indicator.open('获取用户数据中')
 
     /* 获取用户数据，显示用户当前所拥有的的课堂 */
-    Promise
-      .all([
-        this.$http.get('/accounts'),
-        this.$http.get('/accounts/docs'),
-      ])
-      .then(([{
-        data: teacherInformation,
-      }, {
+    this
+      .$http
+      .get(`/players/accounts/${this.accountId}`)
+      .then(({
         data: {
+          accounts,
           coopLibraries,
           libraries,
         },
-      }]) => {
-        this.teacherInformation = teacherInformation
+      }) => {
+        this.teacherInformation = accounts.find((user) => String(user.id) === this.accountId)
         this.libraries = libraries.concat(coopLibraries)
 
         Indicator.close()
@@ -80,7 +77,7 @@ export default {
       .catch((error) => {
         throw error
 
-        Indicator.close()
+        Indicator.close('获取用户数据失败，请稍后重试')
       })
   },
 
@@ -154,6 +151,7 @@ export default {
   height: 100%;
   padding-bottom: 10px;
   border-bottom: solid 1px #DDD;
+  text-decoration: none;
 }
 
 .noclick {
@@ -172,6 +170,7 @@ export default {
   width: 110px;
   height: 100%;
   border-radius: 5px;
+  overflow: hidden;
 }
 
 .msgcontainer {
