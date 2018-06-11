@@ -30,7 +30,7 @@
           </div>
           <div class='msgcontainer'>
             <span class='courseName'>{{library.name}}</span>
-            <p class='alt'>{{library.docs.length}}个文档</p>
+            <p class='alt'>{{documentNumberForEachLibrary[library.id]}}个文档</p>
           </div>
         </router-link>
       </div>
@@ -54,6 +54,7 @@ export default {
   data() {
     return {
       accountId: this.$route.params.id,
+      documentNumberForEachLibrary: {},
       libraries: [],
       teacherInformation: {},
     }
@@ -104,6 +105,16 @@ export default {
 
         Indicator.close('获取用户数据失败，请稍后重试')
       })
+  },
+
+  watch: {
+    libraries() {
+      this.libraries.forEach((library) => {
+        this.documentNumberForEachLibrary[library.id] = library.docs.length + library.chapters.reduce((result, chapter) => {
+          return result + chapter.docs.length
+        }, 0)
+      })
+    },
   },
 
   methods: {
