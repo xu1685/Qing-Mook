@@ -194,39 +194,36 @@ export default {
               subtitles : action.subtitle,
             })
           }
-        })
-        .catch((error) => {
-          if (process.env.NODE_ENV === 'development') {
-            throw error
-          } else {
-            alert('获取数据错误，请检查访问地址')
-          }
-        })
-        .then(() => {
+
           /* 等到播放器完成初始化并确定了其尺寸的时候触发，用来给字幕组件设置上外边距，防止 */
           /* 处于固定定位的播放器遮盖底部的字幕组件正常显示 */
           this.handleOnSetSubtitleContainerMarginTop()
 
+          /* 只有处于生产环境才执行微信 JS-SDK 的初始化操作，并需要在 axios 配置好了以后再执行 */
           if (process.env.NODE_ENV === 'production') {
             const title = this.title
             const coverURL = this.pictures[0]
             const authorName = this.teacherInformation.name || this.teacherInformation.nickname
             const authorIntroduction = this.teacherInformation.introduction
 
-            /* 只有处于生产环境才执行微信 JS-SDK 的初始化操作，并需要在 axios 配置好了以后再执行 */
-            if (process.env.NODE_ENV === 'production') {
-              initWeiXinShareConfig(window.encodeURIComponent(window.location.href))
+            initWeiXinShareConfig(window.encodeURIComponent(window.location.href))
 
-              /* 等待微信 JS-SDK 可以使用后自定义分享相关的操作 */
-              window.jWeixin.ready(function() {
-                configWeiXinShare({
-                  title  : `${authorName}:${title}`,
-                  desc   : `作者简介:${authorIntroduction}`,
-                  link   : window.location.href,
-                  imgUrl : coverURL,
-                })
+            /* 等待微信 JS-SDK 可以使用后自定义分享相关的操作 */
+            window.jWeixin.ready(function() {
+              configWeiXinShare({
+                title  : `${authorName}:${title}`,
+                desc   : `作者简介:${authorIntroduction}`,
+                link   : window.location.href,
+                imgUrl : coverURL,
               })
-            }
+            })
+          }
+        })
+        .catch((error) => {
+          if (process.env.NODE_ENV === 'development') {
+            throw error
+          } else {
+            alert('获取数据错误，请检查访问地址')
           }
         })
     }

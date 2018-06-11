@@ -79,25 +79,23 @@ export default {
 
         Indicator.close()
 
+        /* 只有处于生产环境才执行微信 JS-SDK 的初始化操作 */
         if (process.env.NODE_ENV === 'production') {
           const coverURL = this.teacherInformation.avatar
           const authorName = this.teacherInformation.name || this.teacherInformation.nickname
           const authorIntroduction = this.teacherInformation.introduction
 
-          /* 只有处于生产环境才执行微信 JS-SDK 的初始化操作，并需要在 axios 配置好了以后再执行 */
-          if (process.env.NODE_ENV === 'production') {
-            initWeiXinShareConfig(window.encodeURIComponent(window.location.href))
+          initWeiXinShareConfig(window.encodeURIComponent(window.location.href))
 
-            /* 等待微信 JS-SDK 可以使用后自定义分享相关的操作 */
-            window.jWeixin.ready(function() {
-              configWeiXinShare({
-                title  : `${authorName}的个人主页`,
-                desc   : `个人简介:${authorIntroduction}`,
-                link   : window.location.href,
-                imgUrl : coverURL,
-              })
+          /* 等待微信 JS-SDK 可以使用后自定义分享相关的操作 */
+          window.jWeixin.ready(function() {
+            configWeiXinShare({
+              title  : `${authorName}的个人主页`,
+              desc   : `个人简介:${authorIntroduction}`,
+              link   : window.location.href,
+              imgUrl : coverURL,
             })
-          }
+          })
         }
       })
       .catch((error) => {

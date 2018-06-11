@@ -3,7 +3,7 @@ import axios from 'axios'
 /* 剩余请求次数 */
 let remainRequestNumber = 2
 
-const initWeiXin = (currentURL) => {
+const initWeiXinShareConfig = (currentURL) => {
   /* 首先通过 GET 方法向后端发送配置数据请求信息 */
   axios
     .get(`authentication/signature?url=${currentURL}`)
@@ -123,6 +123,6 @@ export {
   configShareAppMessage,
   configShareQQ,
   configWeiXinShare,
-  initWeiXin,
+  initWeiXinShareConfig,
 }
 /* eslint-disable */
