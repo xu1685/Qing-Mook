@@ -158,7 +158,7 @@ export default {
           /* 等待微信 JS-SDK 可以使用后自定义分享相关的操作 */
           window.jWeixin.ready(function() {
             configWeiXinShare({
-              title  : `${authorName}:${title}课程`,
+              title  : `${authorName}:${title}`,
               desc   : `个人简介:${authorIntroduction}`,
               link   : window.location.href,
               imgUrl : coverURL,
