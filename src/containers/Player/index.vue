@@ -206,6 +206,7 @@ export default {
             const authorName = this.teacherInformation.name || this.teacherInformation.nickname
             const authorIntroduction = this.teacherInformation.introduction
 
+            /* 初始化微信 JS-SDK 配置 */
             initWeiXinShareConfig(window.encodeURIComponent(window.location.href))
 
             /* 等待微信 JS-SDK 可以使用后自定义分享相关的操作 */

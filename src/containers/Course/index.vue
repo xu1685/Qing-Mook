@@ -1,6 +1,6 @@
 <template>
   <div class='coursePage'>
-    <MyHeader title='课堂文档列表' />
+    <MyHeader title='课堂文档' />
     <div class='container'>
       <div style='height: 200px;'>
         <div class='message'>
@@ -82,6 +82,10 @@ import { Indicator } from 'mint-ui'
 import MyHeader from '../MyHeader'
 import Bus from '../../bus.js'
 import defaultClassCover from '../../assets/defaultClassCover.png'
+import {
+  configWeiXinShare,
+  initWeiXinShareConfig,
+} from '../../utils/weixin'
 
 export default {
   name: 'course',
@@ -98,6 +102,7 @@ export default {
       library: {},
       libraryId: this.$route.params.id,
       name: '课堂主页',
+      teacherInformation: {},
       title: '课程列表',
     }
   },
@@ -110,6 +115,7 @@ export default {
       .get(`/players/accounts/${this.accountId}`)
       .then(({
         data: {
+          accounts,
           coopDocs,
           coopLibraries,
           docs,
@@ -120,6 +126,8 @@ export default {
         const allDocs = docs.concat(coopDocs)
 
         this.library = allLibraries.find((library) => library.id === this.libraryId)
+
+        this.teacherInformation = accounts.find((user) => String(user.id) === this.accountId)
 
         this.library.chapters.reduce((result, chapter) => {
           return result.concat(chapter.docs)
@@ -136,6 +144,27 @@ export default {
         })
 
         Indicator.close()
+
+        /* 只有处于生产环境才执行微信 JS-SDK 的初始化操作 */
+        if (process.env.NODE_ENV === 'production') {
+          const title = this.library.name
+          const coverURL = this.library.cover
+          const authorName = this.teacherInformation.name || this.teacherInformation.nickname
+          const authorIntroduction = this.teacherInformation.introduction
+
+          /* 初始化微信 JS-SDK 配置 */
+          initWeiXinShareConfig(window.encodeURIComponent(window.location.href))
+
+          /* 等待微信 JS-SDK 可以使用后自定义分享相关的操作 */
+          window.jWeixin.ready(function() {
+            configWeiXinShare({
+              title  : `${authorName}:${title}课程`,
+              desc   : `个人简介:${authorIntroduction}`,
+              link   : window.location.href,
+              imgUrl : coverURL,
+            })
+          })
+        }
       })
       .catch((error) => {
         if (process.env.NODE_ENV === 'development') {
