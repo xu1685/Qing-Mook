@@ -104,13 +104,13 @@
         <div style='display: flex; justify-content: center; align-self: center; margin-top: 30px;'>
           <mt-button
             style='margin-right: 10px; padding-left: 30px; padding-right: 30px;'
-            @click='comfirmUpload'
+            @click='confirmUploadImages'
           >
             确定
           </mt-button>
           <mt-button
             style='margin-left: 10px; padding-left: 30px; padding-right: 30px;'
-            @click='cancleUpload'
+            @click='cancelUploadImages'
           >
             取消
           </mt-button>
@@ -317,6 +317,7 @@ export default {
       preview0: '',
       preview1: '',
       preview2: '',
+      replyFormData: new FormData(),
       replyId: -1,
       replyIndex: -1,
       replyList: [],
@@ -325,7 +326,6 @@ export default {
       rrVisible: false,
       showImgUrl: '',
       showImgVisible: false,
-      showIndex: [],
       uploadFile: [],
     }
   },
@@ -379,7 +379,7 @@ export default {
         this.isShowUploadImageIcon = false
 
         /* 清空上传图片相关 */
-        this.cancleImage()
+        this.removeUploadImages()
       }
     },
 
@@ -418,20 +418,20 @@ export default {
     },
 
     /* 确认上传图片 */
-    comfirmUpload() {
+    confirmUploadImages() {
       this.isShowUploadImagesDialog = false
       this.uploadFile = this.files
       this.isShowUploadImageIcon = true
     },
 
     /* 取消上传图片 */
-    cancleUpload() {
+    cancelUploadImages() {
       this.isShowUploadImagesDialog = false
-      this.cancleImage()
+      this.removeUploadImages()
     },
 
     /* 删除图片相关 */
-    cancleImage() {
+    removeUploadImages() {
       this.uploadFile = []
       this.files = []
       this.preview0 = ''
@@ -471,32 +471,35 @@ export default {
     confirmReply() {
       this.isShowUploadImageIcon = false
       this.rrVisible = false
-      this.comfirmUpload()
-      for (let i = 0; i < this.uploadFile.length; i++) {
-        this.replyFormData.append('files', this.uploadFile[i])
-      }
-      this.replyFormData.append('text', this.replyText)
+      this.confirmUploadImages()
 
       if (this.replyText === '' && this.preview0 === '') {
         Toast('请输入回复')
       } else {
         Indicator.open({ position: 'bottom' })
+
+        this.uploadFile.forEach((file) => {
+          this.replyFormData.append('files', file)
+        })
+        this.replyFormData.append('text', this.replyText)
+
         this.preview0 = ''
+
         this
           .$http
           .post(`/comments/${this.commentList[this.replyIndex].id}/reply`, this.replyFormData)
           .then((res) => {
             this.replyList = res.data.replies
             this.commentList[this.index].replies = res.data.replies
-            this.cancleImage()
+            this.removeUploadImages()
             this.replyText = ''
+
             Indicator.close()
             Toast({
               message: '回复成功',
               iconClass: 'icon icon-success',
               position: 'bottom',
             })
-            this.showReply(this.replyIndex)
           })
           .catch(() => {
             Indicator.close()
@@ -511,19 +514,9 @@ export default {
 
     /* 取消回复 */
     cancleReply() {
-      this.cancleImage()
+      this.removeUploadImages()
       this.rrVisible = false
       this.replyText = ''
-    },
-
-    /* 显示回复列表 */
-    showReply(index) {
-      if (this.showIndex.indexOf(index) !== -1) {
-        const i = this.showIndex.indexOf(index)
-        this.showIndex.splice(i, 1)
-      } else {
-        this.showIndex.push(index)
-      }
     },
 
     /* 点赞 */
