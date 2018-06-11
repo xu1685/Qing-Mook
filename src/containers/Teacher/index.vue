@@ -18,7 +18,7 @@
       >
         <router-link
           class='link'
-          :to='`/course/${library.id}`'
+          :to='`/course/${library.id}?`'
         >
           <div class='imgcontainer'>
             <div class='image'>

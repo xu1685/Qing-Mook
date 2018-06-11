@@ -72,34 +72,29 @@ export default {
     }
   },
 
-  created() {
-    this.pageInite()
-  },
-
   mounted() {
+    Indicator.open('获取课堂数据中')
+    this
+      .$http
+      .get(`/players/accounts/${this.libraryId}`)
+      .then((res) => {
+        this.allDcos = res.data.docs
+        this.library = res.data.libraries.find(library => library.id === this.libraryId)
+        this.createTime = this.library.createTime.replace('T', ' ').replace(/\.\w+/, '')
+        this.docs = this.library.docs
+        const len = this.allDcos.length
+        for (let i = 0; i < len; i++) {
+          if (this.docs.indexOf(this.allDcos[i].id) != -1 && this.allDcos[i].status == 'open' && this.allDcos[i].transformed == '1' && this.allDcos[i].hasAction) {
+            this.courseList.push(this.allDcos[i])
+          }
+        }
+        this.courseList = this.courseList.reverse()
 
+        Indicator.close()
+      })
   },
 
   methods: {
-    pageInite() {
-      Indicator.open()
-      this.$http.get('/accounts/docs')
-        .then((res) => {
-          this.allDcos = res.data.docs
-          this.library = res.data.libraries.find(library => library.id === this.libraryId)
-          this.createTime = this.library.createTime.replace('T', ' ').replace(/\.\w+/, '')
-          this.docs = this.library.docs
-          const len = this.allDcos.length
-          for (let i = 0; i < len; i++) {
-            if (this.docs.indexOf(this.allDcos[i].id) != -1 && this.allDcos[i].status == 'open' && this.allDcos[i].transformed == '1' && this.allDcos[i].hasAction) {
-              this.courseList.push(this.allDcos[i])
-            }
-          }
-          this.courseList = this.courseList.reverse()
-          Indicator.close()
-        })
-    },
-
     sendIndex() {
       Bus.$emit('index', this.index)
     },
