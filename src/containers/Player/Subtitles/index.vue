@@ -54,7 +54,8 @@ export default {
   updated() {
     if (this.$refs.activeSubtitle && this.$refs.activeSubtitle[0]) {
       const offsetTop = this.$refs.activeSubtitle[0].offsetTop
-      document.documentElement.scrollTop = offsetTop - (window.innerHeight - this.subtitleContainerMarginTop) / 2
+      const clientHeight = this.$refs.activeSubtitle[0].clientHeight
+      document.documentElement.scrollTop = offsetTop - (window.innerHeight - this.subtitleContainerMarginTop - clientHeight) / 2
     }
   },
 
