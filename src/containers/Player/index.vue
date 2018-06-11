@@ -74,11 +74,15 @@
 import '../Player/Player/src/Player.css'
 
 import MyHeader from '../MyHeader'
+import Player from '../Player/Player/src/Player.js'
 import Comment from './Comment'
 import Score from './Score'
 import Subtitles from './Subtitles'
 import Bus from '../../bus.js'
-import Player from '../Player/Player/src/Player.js'
+import {
+  configWeiXinShare,
+  initWeiXinShareConfig,
+} from '../../utils/weixin'
 
 export default {
   name: 'Player',
@@ -209,40 +213,20 @@ export default {
             const authorName = this.teacherInformation.name || this.teacherInformation.nickname
             const authorIntroduction = this.teacherInformation.introduction
 
-            /* 等待微信 JS-SDK 可以使用后自定义分享相关的操作 */
-            window.jWeixin.ready(function() {
-              /* 配置微信的分享到朋友圈操作 */
-              window.jWeixin.onMenuShareTimeline({
-                title   : `${authorName}:${title}`,
-                link    : window.location.href,
-                imgUrl  : coverURL,
-                fail: function () {
-                  alert('分享到朋友圈失败！！！')
-                },
-              })
+            /* 只有处于生产环境才执行微信 JS-SDK 的初始化操作，并需要在 axios 配置好了以后再执行 */
+            if (process.env.NODE_ENV === 'production') {
+              initWeiXinShareConfig(window.encodeURIComponent(window.location.href))
 
-              /* 配置微信的分享给朋友操作 */
-              window.jWeixin.onMenuShareAppMessage({
-                title   : `${authorName}:${title}`,
-                desc    : `作者简介:${authorIntroduction}`,
-                link    : window.location.href,
-                imgUrl  : coverURL,
-                fail: function () {
-                  alert('分享给朋友失败！！！')
-                },
+              /* 等待微信 JS-SDK 可以使用后自定义分享相关的操作 */
+              window.jWeixin.ready(function() {
+                configWeiXinShare({
+                  title  : `${authorName}:${title}`,
+                  desc   : `作者简介:${authorIntroduction}`,
+                  link   : window.location.href,
+                  imgUrl : coverURL,
+                })
               })
-
-              /* 配置微信的分享到 QQ 操作 */
-              window.jWeixin.onMenuShareQQ({
-                title   : `${authorName}:${title}`,
-                desc    : `作者简介:${authorIntroduction}`,
-                link    : window.location.href,
-                imgUrl  : coverURL,
-                fail: function () {
-                  alert('分享到 QQ 失败！！！')
-                },
-              })
-            })
+            }
           }
         })
     }

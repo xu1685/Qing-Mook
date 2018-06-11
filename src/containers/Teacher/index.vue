@@ -43,6 +43,10 @@
 import MyHeader from '../MyHeader'
 import { Indicator } from 'mint-ui'
 import { Toast } from 'mint-ui'
+import {
+  configWeiXinShare,
+  initWeiXinShareConfig,
+} from '../../utils/weixin'
 
 export default {
   name: 'Teacher',
@@ -55,7 +59,7 @@ export default {
     }
   },
 
-  created() {
+  mounted() {
     Indicator.open('获取用户数据中')
 
     /* 获取用户数据，显示用户当前所拥有的的课堂 */
@@ -73,6 +77,27 @@ export default {
         this.libraries = libraries.concat(coopLibraries)
 
         Indicator.close()
+
+        if (process.env.NODE_ENV === 'production') {
+          const coverURL = this.teacherInformation.avatar
+          const authorName = this.teacherInformation.name || this.teacherInformation.nickname
+          const authorIntroduction = this.teacherInformation.introduction
+
+          /* 只有处于生产环境才执行微信 JS-SDK 的初始化操作，并需要在 axios 配置好了以后再执行 */
+          if (process.env.NODE_ENV === 'production') {
+            initWeiXinShareConfig(window.encodeURIComponent(window.location.href))
+
+            /* 等待微信 JS-SDK 可以使用后自定义分享相关的操作 */
+            window.jWeixin.ready(function() {
+              configWeiXinShare({
+                title  : `${authorName}:${title}`,
+                desc   : `作者简介:${authorIntroduction}`,
+                link   : window.location.href,
+                imgUrl : coverURL,
+              })
+            })
+          }
+        }
       })
       .catch((error) => {
         throw error

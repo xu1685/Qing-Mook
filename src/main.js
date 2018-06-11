@@ -4,7 +4,6 @@ import MintUI from 'mint-ui'
 import Vue from 'vue'
 import axios from 'axios'
 import App from './App'
-import initWeiXin from './weixin'
 import router from './router'
 import { wxOAuth2RedirectUrl } from './utils/constants'
 
@@ -55,11 +54,6 @@ axios.interceptors.response.use(response => response, (error) => {
 
   return Promise.reject(error)
 })
-
-/* 只有处于生产环境才执行微信 JS-SDK 的初始化操作，并需要在 axios 配置好了以后再执行 */
-if (process.env.NODE_ENV === 'production') {
-  initWeiXin()
-}
 
 Vue.config.productionTip = process.env.NODE_ENV === 'development'
 
