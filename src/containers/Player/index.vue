@@ -154,11 +154,11 @@ export default {
 
           /* 获取当前文档的评论和回复信息 */
           this.comments = comments
-          this.comments.forEach((comment) => {
+          this.comments.sort((prev, next) => Date.parse(next.createTime) - Date.parse(prev.createTime)).forEach((comment) => {
             const userInformation = accounts.find((user) => user.id === comment.accountId)
             comment.userName = userInformation.name || userInformation.nickname
             comment.avatar = userInformation.avatar
-            comment.replies.forEach((reply) => {
+            comment.replies.sort((prev, next) => Date.parse(next.createTime) - Date.parse(prev.createTime)).forEach((reply) => {
               const replyUserInformation = accounts.find((user) => user.id === reply.accountId)
               const originUserInformation = accounts.find((user) => user.id === reply.sourceId)
               reply.userName = replyUserInformation.name || replyUserInformation.nickname
