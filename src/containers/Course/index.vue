@@ -1,24 +1,18 @@
 <template>
   <div class='coursePage'>
-    <MyHeader title='课堂文档' />
+    <MyHeader title='【课程专辑】' />
     <div class='container'>
-      <div style='height: 200px;'>
-        <div class='message'>
-          <h2 class='coursetitle'>{{this.library.name}}</h2>
-          <span style='color: rgb(199, 199, 199)'>共{{courseList.length}}个可读文档</span>
-        </div>
-        <!-- 黑色透明遮罩 -->
+      <div class='message'>
+        <h2 class='coursetitle'>{{library.name}}</h2>
         <div
-          class='black'
+          class='blackMask'
           :style='{
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
-            backgroundImage: this.library.cover ? `url(${this.library.cover})` : defaultClassCover,
+            backgroundImage: library.isDefault ? `url(${defaultClassCoverSvg})` : (library.cover || defaultClassCoverSvg)
           }'
         />
-        <div class='black' />
-      <!-- 课程卡片 -->
       </div>
       <hr class='hr1'>
       <div class='courseCell' v-for='course in courseList' :key='course.id'>
@@ -80,7 +74,7 @@
 
 import { Indicator } from 'mint-ui'
 import MyHeader from '../MyHeader'
-import defaultClassCover from '../../assets/defaultClassCover.png'
+import defaultClassCoverSvg from '../../assets/defaultClassCover.svg'
 import {
   configWeiXinShare,
   initWeiXinShareConfig,
@@ -96,7 +90,7 @@ export default {
       allDcos: [],
       courseList: [],
       cover: '',
-      defaultClassCover,
+      defaultClassCoverSvg,
       docs: [],
       library: {},
       libraryId: this.$route.params.id,
@@ -157,8 +151,8 @@ export default {
           /* 等待微信 JS-SDK 可以使用后自定义分享相关的操作 */
           window.jWeixin.ready(function() {
             configWeiXinShare({
-              title  : `${authorName}:${title}`,
-              desc   : `个人简介:${authorIntroduction}`,
+              title  : `${authorName}:《${title}》专辑`,
+              desc   : `${authorIntroduction}`,
               link   : window.location.href,
               imgUrl : coverURL,
             })
@@ -201,31 +195,29 @@ export default {
   width: 100%;
 }
 
-.black {
+.blackMask {
   width: 100%;
   height: 200px;
   position: absolute;
-  background-color:rgba(0, 0, 0, 0.48);
-  z-index: 1;
+  z-index: -1;
 }
 
 .message {
+  background-color:rgba(0, 0, 0, 0.48);
   width: 100%;
   height: 200px;
-  position: absolute;
-  top: 40px;
-  z-index: 3;
-  text-align: center
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .coursetitle {
-  margin-top: 40px;
   color: white;
+  overflow: hidden;
+  text-align: center;
   text-overflow: ellipsis;
-  overflow:hidden;
   white-space: nowrap;
   width: 60%;
-  margin-left: 20%;
 }
 
  .courseCell {

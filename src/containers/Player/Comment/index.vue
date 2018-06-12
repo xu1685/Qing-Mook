@@ -66,7 +66,7 @@
       </span>
       <span
         class='replyBtn'
-        @click='handleOnReply(index, 0, 1)'
+        @click='handleOnReply(index, -1, "comment")'
       >
         回复({{comment.replies.length}})
       </span>
@@ -167,7 +167,7 @@
         </span>
         <span
           class='replyBtn'
-          @click='handleOnReply(-1, 0, 1)'
+          @click='handleOnReply(-1, -1, "comment")'
         >
           回复({{replyList.length}})
         </span>
@@ -212,7 +212,7 @@
         </span>
         <span
           class='replyBtn'
-          @click='handleOnReply(-1, i, 2)'
+          @click='handleOnReply(-1, i, "reply")'
         >
           回复
         </span>
@@ -300,10 +300,10 @@ export default {
 
   data() {
     return {
-      approveCount: [],
+      activeCommentIndex: -1,
+      activeReplyIndex: -1,
       approveL: 0,
       approveList: [],
-      change: false,
       commentId: '',
       commentList: this.comments,
       commentObj: {},
@@ -319,9 +319,9 @@ export default {
       preview2: '',
       replyFormData: new FormData(),
       replyId: -1,
-      replyIndex: -1,
       replyList: [],
       replyText: '',
+      replyType: '',
       replyVisible: false,
       rrVisible: false,
       showImgUrl: '',
@@ -333,6 +333,21 @@ export default {
   watch: {
     comments() {
       this.commentList = this.comments
+    },
+
+    commentObj() {
+      if (Object.keys(this.commentObj)) {
+        this.approveL = this.commentObj.approve.length
+        this.replyList = this.commentObj.replies
+
+        this.replyFormData = new FormData()
+        this.replyFormData.append('commentId', this.commentObj.id)
+        if (this.replyType === 'comment') {
+          this.replyFormData.append('sourceId', this.commentObj.accountId)
+        } else {
+          this.replyFormData.append('sourceId', this.commentObj.replies[this.activeReplyIndex].accountId)
+        }
+      }
     }
   },
 
@@ -444,27 +459,28 @@ export default {
       this.showImgVisible = true
     },
 
-    /* 点击回复按钮 */
+    /* 点击回复按钮（这个函数写的什么几把玩意儿） */
+    /* 当 index 非负， i 为 -1，type 为 comment 时，表示当前点击回复按钮的操作是在评论列表中触发的，index 表示被回复的评论的数组下标 */
+    /* 当 index 为 -1，i 为 -1，type 为 comment 时，表示当前点击回复按钮的操作是在回复对话框中评论的下面触发的 */
+    /* 当 index 为 -1，i 非负，type 为 reply 时，表示当前点击回复按钮的操作是在回复对话框回复列表中触发的，index 表示被回复的回复的数组下标 */
     handleOnReply(index, i, type) {
+      /* 设置处于活动状态的评论 */
       if (index !== -1) {
-        this.index = index
-      } else {
-        index = this.index
+        this.activeCommentIndex = index
       }
-      this.commentObj = this.commentList[index]
-      this.approveL = this.commentObj.approve.length
-      this.replyList = this.commentObj.replies
+
+      /* 设置处于活动状态的回复 */
+      if (i !== -1) {
+        this.activeReplyIndex = i
+      }
+
+      /* 设置回复的类型，目前分为回复评论和回复回复 */
+      this.replyType = type
+
+      this.commentObj = this.commentList[this.activeCommentIndex]
+
       this.replyVisible = true
       this.rrVisible = true
-      this.replyFormData = new FormData()
-      this.replyFormData.append('commentId', this.commentObj.id)
-
-      if (type === 1) {
-        this.replyFormData.append('sourceId', this.commentObj.accountId)
-      } else {
-        this.replyFormData.append('sourceId', this.commentObj.replies[i].accountId)
-      }
-      this.replyIndex = index
     },
 
     /* 确认回复 */
@@ -487,10 +503,13 @@ export default {
 
         this
           .$http
-          .post(`/comments/${this.commentList[this.replyIndex].id}/reply`, this.replyFormData)
-          .then((res) => {
-            this.replyList = res.data.replies
-            this.commentList[this.index].replies = res.data.replies
+          .post(`/comments/${this.commentList[this.activeCommentIndex].id}/reply`, this.replyFormData)
+          .then((respones) => {
+            this.replyList = respones.data.replies
+            this.commentList[this.index].replies = respones.data.replies
+
+            this.$emit('addReplySuccess', respones.data)
+
             this.removeUploadImages()
             this.replyText = ''
 

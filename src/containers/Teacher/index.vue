@@ -1,13 +1,11 @@
 <template>
   <div class='container'>
-    <MyHeader title='用户个人主页' />
+    <MyHeader title='【个人主页】' />
     <div class='information'>
       <div class='message'>
-        <div>
-          <img class='photo' :src='teacherInformation.avatar' />
-          <h3 style='color:#FFFFFF;'>{{teacherInformation.name || teacherInformation.nickname}}</h3>
-          <h5 style='color:#C7C7C7;'>{{teacherInformation.introduction}}</h5>
-        </div>
+        <img class='photo' :src='teacherInformation.avatar' />
+        <h3 style='color:#FFFFFF;'>{{teacherInformation.name || teacherInformation.nickname}}</h3>
+        <h5 style='color:#C7C7C7;'>{{teacherInformation.introduction}}</h5>
       </div>
       <img class='backgroundImage' :src='teacherInformation.avatar' />
     </div>
@@ -94,7 +92,7 @@ export default {
           window.jWeixin.ready(function() {
             configWeiXinShare({
               title  : `${authorName}的个人主页`,
-              desc   : `个人简介:${authorIntroduction}`,
+              desc   : authorIntroduction,
               link   : window.location.href,
               imgUrl : coverURL,
             })
@@ -151,7 +149,10 @@ export default {
   width: 100%;
   height: 100%;
   background-color:rgba(0, 0, 0, 0.48);
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .backgroundImage {
@@ -172,7 +173,6 @@ export default {
   height: 70px;
   border-radius: 50%;
   border: 1px solid lightgray;
-  margin-top: 10px;
 }
 
 .coursesCell {
