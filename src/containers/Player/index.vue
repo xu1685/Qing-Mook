@@ -261,7 +261,7 @@ export default {
       comment.userName = this.myInformation.name || this.myInformation.nickname
       comment.avatar = this.myInformation.avatar
 
-      comment.replies.forEach((reply) => {
+      comment.replies.sort((prev, next) => Date.parse(next.createTime) - Date.parse(prev.createTime)).forEach((reply) => {
         /* 加入回复者和被回复者的个人信息 */
         const replyUserInformation = this.usersInformation.find((user) => user.id === reply.accountId)
         const originUserInformation = this.usersInformation.find((user) => user.id === reply.sourceId)

@@ -11,12 +11,12 @@
       <i
         class='fa fa-picture-o'
         style='font-size: 20px;'
-        v-if='!isShowUploadImageIcon'
+        v-if='!preview0'
         @click='isShowUploadImagesDialog = true'
       />
       <img
         width='35px'
-        v-if='isShowUploadImageIcon'
+        v-if='preview0'
         :src='preview0'
       />
       <mt-button
@@ -122,7 +122,7 @@
     <mt-popup
       class='replyPop'
       position='right'
-      v-if='Object.keys(commentObj)'
+      v-if='Object.keys(commentObj).length'
       v-model='replyVisible'
     >
       <div>
@@ -153,7 +153,7 @@
         <p class='text'>{{commentObj.text}}</p>
         <div
           class='imagesBox'
-          v-if='commentObj.images && commentObj.images.length'
+          v-if='commentObj.images.length'
         >
           <img
             class='textImg'
@@ -307,11 +307,10 @@ export default {
       commentId: '',
       commentList: this.comments,
       commentObj: {},
-      files: [],
       images: [],
       index: -1,
       inputImage: '',
-      isShowUploadImageIcon: false,
+      /* 是否显示底部评论工具条的 */
       isShowUploadImagesDialog: false,
       myComment: '',
       preview0: '',
@@ -334,13 +333,13 @@ export default {
     comments() {
       this.commentList = this.comments
 
-      if (this.activeCommentIndex !== -1) {
+      if (this.activeCommentIndex !== -1 && this.replyVisible) {
         this.commentObj = this.commentList[this.activeCommentIndex]
       }
     },
 
     commentObj() {
-      if (Object.keys(this.commentObj)) {
+      if (Object.keys(this.commentObj).length) {
         this.approveL = this.commentObj.approve.length
         this.replyList = this.commentObj.replies
 
@@ -352,7 +351,13 @@ export default {
           this.replyFormData.append('sourceId', this.commentObj.replies[this.activeReplyIndex].accountId)
         }
       }
-    }
+    },
+
+    replyVisible() {
+      if (!this.replyVisible) {
+        this.commentObj = {}
+      }
+    },
   },
 
   methods: {
@@ -363,9 +368,9 @@ export default {
         const formData = new FormData()
         formData.append('text', this.myComment)
         formData.append('docId', this.docId)
-        for (let i = 0; i < this.uploadFile.length; i++) {
-          formData.append('files', this.uploadFile[i])
-        }
+        this.uploadFile.forEach((file) => {
+          formData.append('files', file)
+        })
 
         /* 显示上传评论提示 */
         Indicator.open('发表评论中')
@@ -399,9 +404,6 @@ export default {
           })
 
         this.myComment = ''
-        this.isShowUploadImageIcon = false
-
-        /* 清空上传图片相关 */
         this.removeUploadImages()
       }
     },
@@ -421,30 +423,22 @@ export default {
     /* 转换文件类型 */
     handleInputChange(event) {
       if (event.target.files) {
-        this.files = Array.from(event.target.files)
-        this.transformToDataUrl(this.files)
-      }
-    },
-
-    transformToDataUrl(files) {
-      for (let i = 0; i < 3; i++) {
-        if (files[i]) {
+        this.uploadFile = Array.from(event.target.files)
+        this.uploadFile.forEach((file) => {
           if (this.preview0 === '') {
-            this.preview0 = URL.createObjectURL(files[i])
+            this.preview0 = window.URL.createObjectURL(file)
           } else if (this.preview1 === '') {
-            this.preview1 = URL.createObjectURL(files[i])
+            this.preview1 = window.URL.createObjectURL(file)
           } else {
-            this.preview2 = URL.createObjectURL(files[i])
+            this.preview2 = window.URL.createObjectURL(file)
           }
-        }
+        })
       }
     },
 
     /* 确认上传图片 */
     confirmUploadImages() {
       this.isShowUploadImagesDialog = false
-      this.uploadFile = this.files
-      this.isShowUploadImageIcon = true
     },
 
     /* 取消上传图片 */
@@ -456,7 +450,6 @@ export default {
     /* 删除图片相关 */
     removeUploadImages() {
       this.uploadFile = []
-      this.files = []
       this.preview0 = ''
       this.preview1 = ''
       this.preview2 = ''
@@ -493,7 +486,6 @@ export default {
 
     /* 确认回复 */
     confirmReply() {
-      this.isShowUploadImageIcon = false
       this.rrVisible = false
       this.confirmUploadImages()
 
