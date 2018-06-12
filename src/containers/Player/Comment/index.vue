@@ -333,6 +333,10 @@ export default {
   watch: {
     comments() {
       this.commentList = this.comments
+
+      if (this.activeCommentIndex !== -1) {
+        this.commentObj = this.commentList[this.activeCommentIndex]
+      }
     },
 
     commentObj() {
@@ -364,7 +368,7 @@ export default {
         }
 
         /* 显示上传评论提示 */
-        Indicator.open()
+        Indicator.open('发表评论中')
 
         this
           .$http
@@ -372,22 +376,26 @@ export default {
           .then((respones) => {
             /* 触发提交评论成功事件，更新外部传入的评论数据 */
             this.$emit('addCommentSuccess', respones.data)
-          }).then(() => {
+          })
+          .then(() => {
             /* 关闭上传评论提示 */
             Indicator.close()
-
             Toast({
               message: '评论成功',
               iconClass: 'fa fa-check',
             })
-          }).catch(() => {
-            /* 关闭上传评论提示 */
-            Indicator.close()
-
-            Toast({
-              message: '评论失败',
-              iconClass: 'fa fa-exclamation-triangle',
-            })
+          })
+          .catch((error) => {
+            if (process.env.NODE_ENV === 'development') {
+              throw error
+            } else {
+              /* 关闭上传评论提示 */
+              Indicator.close()
+              Toast({
+                message: '评论失败',
+                iconClass: 'fa fa-exclamation-triangle',
+              })
+            }
           })
 
         this.myComment = ''
@@ -492,7 +500,7 @@ export default {
       if (this.replyText === '' && this.preview0 === '') {
         Toast('请输入回复')
       } else {
-        Indicator.open({ position: 'bottom' })
+        Indicator.open('发表回复中')
 
         this.uploadFile.forEach((file) => {
           this.replyFormData.append('files', file)
@@ -505,28 +513,30 @@ export default {
           .$http
           .post(`/comments/${this.commentList[this.activeCommentIndex].id}/reply`, this.replyFormData)
           .then((respones) => {
-            this.replyList = respones.data.replies
-            this.commentList[this.index].replies = respones.data.replies
-
             this.$emit('addReplySuccess', respones.data)
 
-            this.removeUploadImages()
             this.replyText = ''
+            this.replyFormData = new FormData()
+            this.removeUploadImages()
 
+            /* 关闭上传评论提示 */
             Indicator.close()
             Toast({
               message: '回复成功',
               iconClass: 'icon icon-success',
-              position: 'bottom',
             })
           })
-          .catch(() => {
-            Indicator.close()
-            Toast({
-              message: '回复失败',
-              iconClass: 'icon icon-success',
-              position: 'bottom',
-            })
+          .catch((error) => {
+            if (process.env.NODE_ENV === 'development') {
+              throw error
+            } else {
+              /* 关闭上传评论提示 */
+              Indicator.close()
+              Toast({
+                message: '回复失败',
+                iconClass: 'fa fa-exclamation-triangle',
+              })
+            }
           })
       }
     },

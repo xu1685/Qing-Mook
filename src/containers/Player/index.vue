@@ -256,21 +256,20 @@ export default {
     },
 
     handleOnAddReplySuccess(comment) {
-      this
-        .comments
-        .find((_comment) => _comment.id === comment.id)
-        .replies
-        .forEach((reply) => {
-          /* 只更新补充没有用户信息的回复信息 */
-          if (!reply.userName) {
-            const replyUserInformation = this.usersInformation.find((user) => user.id === reply.accountId)
-            const originUserInformation = this.usersInformation.find((user) => user.id === reply.sourceId)
-            reply.userName = replyUserInformation.name || replyUserInformation.nickname
-            reply.avatar = replyUserInformation.avatar
-            reply.originUserName = originUserInformation.name || originUserInformation.nickname
-            reply.originAvatar = originUserInformation.avatar
-          }
-        })
+      console.log('测试')
+
+      comment.replies.forEach((reply) => {
+        /* 补充没有用户信息的回复 */
+        const replyUserInformation = this.usersInformation.find((user) => user.id === reply.accountId)
+        const originUserInformation = this.usersInformation.find((user) => user.id === reply.sourceId)
+        reply.userName = replyUserInformation.name || replyUserInformation.nickname
+        reply.avatar = replyUserInformation.avatar
+        reply.originUserName = originUserInformation.name || originUserInformation.nickname
+        reply.originAvatar = originUserInformation.avatar
+      })
+
+      const commentIndex = this.comments.findIndex((_comment) => _comment.id === comment.id)
+      this.comments[commentIndex] = comment
     },
   },
 }
