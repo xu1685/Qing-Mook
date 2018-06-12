@@ -14,7 +14,7 @@ export default class Player {
         color: action.color,
         endTime: action.endTime ? Math.round(window.parseFloat(action.endTime) * 10) * 100 : undefined,
         id: action.id,
-        points: action.points ? action.points.map(point => [window.parseFloat(point.x), window.parseFloat(point.y)]) : undefined,
+        points: action.points ? action.points.map((point) => [window.parseFloat(point.x), window.parseFloat(point.y)]) : undefined,
         startTime: Math.round(window.parseFloat(action.startTime) * 10) * 100,
         target: action.target,
         type: action.type,
@@ -72,9 +72,7 @@ export default class Player {
       /* 语音文件加载状态 */
       audioLoadStatus: 'initial',
       /* 图集加载状态 */
-      imagesLoaded: new Array(imageUrls.length, false),
-      /* 播放器能否开始播放 */
-      canPlay: false,
+      isImagesLoaded: new Array(imageUrls.length, false),
       /* setTimeout注册动作的返回值，暂停时需取消已注册的动作 */
       nextAction: null,
       nextActionIndex: 0,
@@ -83,7 +81,7 @@ export default class Player {
       /* 使用这个注册动画 */
       animationObj: null,
       /* 播放器处于暂停或播放状态 */
-      halt: true,
+      isHalted: true,
       /* 播放器是否正在等候加载 */
       isLoading: true,
       /* 是否处于网页全屏 */
@@ -111,10 +109,12 @@ export default class Player {
       /* 播放器的初始宽度，用于退出全屏时进行恢复 */
       initialWidth: element.offsetWidth,
       /* 用于记录加载完成后如何恢复状态，分别为正在等待加载的页码和加载成功后恢复的时刻 */
-      wating: {
+      waiting: {
         waitingPage: null,
         waitingTime: null,
       },
+      /* 使用hammerJS添加移动端事件时创建的hammer */
+      hammers: null,
     }
     /* html模板 */
     this.template = {
@@ -131,19 +131,23 @@ export default class Player {
             </div>
           </div>
           <div class="player-section-right">
-            <button class="${`player-section player-button player-toggle-captions${this.state.isCaptionsOpen ? ' is-active' : ''}`}" title="打开字幕">
+            <button class="${'player-section player-button player-toggle-captions' + (this.state.isCaptionsOpen ? ' is-active' : '')}" title="打开字幕">
               <svg viewBox="0 0 24 24" style="display: inline-block; fill: currentcolor; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;">
                 <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 12h4v2H4v-2zm10 6H4v-2h10v2zm6 0h-4v-2h4v2zm0-4H10v-2h10v2z"></path>
               </svg>
             </button>
-            <button class="player-section player-button player-page-fullscreen" title="网页全屏">
+            ${
+            mode === 'desktop' ?
+            `<button class="player-section player-button player-page-fullscreen" title="网页全屏">
               <svg viewBox="0 0 24 24" style="display: inline-block; fill: currentcolor; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;">
                 <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"></path>
               </svg>
               <svg viewBox="0 0 24 24" style="display: none; fill: currentcolor; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;">
                 <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"></path>
               </svg>
-            </button>
+            </button>`
+            : ''
+            }
             <button class="player-section player-button player-fullscreen" title="进入全屏">
               <svg viewBox="0 0 24 24" style="display: inline-block; fill: currentcolor; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;">
                 <path d="M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6z"></path>
@@ -184,9 +188,8 @@ export default class Player {
         </div>
       `,
     }
-    this.handleAudioLoaded = this.handleAudioLoaded.bind(this)
-    this.loadSource = this.loadSource.bind(this)
     this.fetchActions()
+    this.fetchImages()
   }
 
   fetchActions() {
@@ -199,6 +202,7 @@ export default class Player {
         /* 对数据进行格式化处理 */
         this.actionData = Player.formatActionData(response.data)
         this.renderContainer()
+        this.renderImages()
       })
       .catch((error) => {
         throw error
@@ -225,52 +229,54 @@ export default class Player {
 
     const container = document.createElement('div')
     container.className = 'player-image-container'
-    /* 获取到渲染节点的实际宽度，并将该宽度设置为播放器宽度 */
+
+    /* 播放器高度由宽度按比例计算得出 */
     const containerWidth = playerContainer.offsetWidth
-    /* 以上面设置的播放器宽度为基准，动态调整播放器的高度，使播放器的宽高比与录制区域的宽高 */
-    /* 比相同 */
     const containerHeight = containerWidth * windowHeight / windowWidth
     container.style.width = `${containerWidth}px`
     container.style.height = `${containerHeight}px`
 
-    /* 渲染正在加载的提示 */
-    const loadTipElem = Player.renderString(container, loadTip)
     playerContainer.appendChild(container)
 
+    /* 渲染正在加载的提示 */
+    const loadTipElem = Player.renderStringToNode(container, loadTip)
+
+    /* 保存常用的dom节点 */
     this.domRefs.loadTip = loadTipElem
     this.domRefs.imageContainer = container
     this.domRefs.loading = loadTipElem.querySelector('.player-loading')
 
+    /* 通知徐子菁此时可以获得播放器的宽高属性了 */
     const event = new CustomEvent('actionsLoaded')
     playerContainer.dispatchEvent(event)
 
+    this.fetchSource = this.fetchSource.bind(this)
     /* 如果为移动端，则显示当前需要下载的资源的大小而不是直接下载资源 */
     const loadButton = loadTipElem.querySelector('.player-load-button')
     if (mode === 'mobile') {
-      loadButton.addEventListener('click', this.loadSource)
+      loadButton.addEventListener('click', this.fetchSource)
     } else {
-      this.loadSource()
+      this.fetchSource()
     }
   }
 
-  loadSource() {
+  fetchSource() {
     const {
       loadTip,
     } = this.domRefs
 
     /* 获取音频资源 */
-    this.loadAudio()
-    /* 获取图片资源 */
-    this.loadImages()
+    this.fetchAudio()
 
     /* 隐藏加载资源按钮，显示正在加载提示 */
     loadTip.firstElementChild.style.display = 'none'
     loadTip.lastElementChild.style.display = 'block'
   }
 
-  loadAudio() {
+  fetchAudio() {
     const audioElement = document.createElement('audio')
 
+    this.handleAudioLoaded = this.handleAudioLoaded.bind(this)
     audioElement.addEventListener('canplay', this.handleAudioLoaded)
     audioElement.addEventListener('canplaythrough', this.handleAudioLoaded)
     audioElement.addEventListener('loadeddata', this.handleAudioLoaded)
@@ -283,9 +289,10 @@ export default class Player {
     this.state.audioLoadStatus = 'loading'
   }
 
-  loadImages() {
+  fetchImages() {
     const imageNameRegExp = /p(\d+)\.png$/
 
+    /* 传入的图片链接可能是乱序的，将其按照p1.png，p2.png的顺序排序 */
     const imageUrls = this.options.imageUrls.sort((prev, next) => {
       const prevImageOrder = Number(prev.match(imageNameRegExp)[1])
       const nextImageOrder = Number(next.match(imageNameRegExp)[1])
@@ -298,13 +305,16 @@ export default class Player {
     const imageWidth = this.domRefs.playerContainer.offsetWidth
 
     /* 生成图片节点,并请求第一张图片,待第一张请求成功再请求其他图片 */
-    this.domRefs.images = imageUrls.map((imageUrl, index) => {
+    this.handleImageLoaded = this.handleImageLoaded.bind(this)
+    this.domRefs.images = imageUrls.map(() => {
       const imageElement = new Image(imageWidth)
-      /* 改变图片下载完成事件处理程序的指定方式 */
-      imageElement.addEventListener('load', this.handleImageLoaded.bind(this, index))
+      imageElement.addEventListener('load', this.handleImageLoaded)
       return imageElement
     })
-    this.domRefs.images[0].addEventListener('load', this.handleFirstImageLoaded.bind(this))
+
+    /* 请求第一张图片 */
+    this.handleFirstImageLoaded = this.handleFirstImageLoaded.bind(this)
+    this.domRefs.images[0].addEventListener('load', this.handleFirstImageLoaded)
     this.domRefs.images[0].src = imageUrls[0]
   }
 
@@ -319,8 +329,10 @@ export default class Player {
     })
   }
 
-  handleImageLoaded(index) {
-    this.state.imagesLoaded[index] = true
+  handleImageLoaded(e) {
+    const imagePattern = /p(\d+)\.png$/
+    const index = parseInt(e.target.src.match(imagePattern)[1], 10)
+    this.state.isImagesLoaded[index] = true
   }
 
   handleAudioLoaded() {
@@ -330,24 +342,34 @@ export default class Player {
 
   checkSrcLoadStatus() {
     /* 如果音频加载完成且第一张图片加载完成，播放器可以开始播放 */
-    if (this.state.audioLoadStatus === 'finish' && this.state.imagesLoaded[0] && !this.state.canPlay) {
+    if (this.state.audioLoadStatus === 'finish' && this.state.isImagesLoaded[0] && !this.state.canPlay) {
       this.state.canPlay = true
+
+      /* 移除加载提示 */
       this.setLoadingTipStatus(false)
+
       /* 图片和语音都已经加载完成，可以初始化页面的 HTML 结构了 */
       this.initHtml()
       this.bindEvents()
+
+      /* 选择使用的画布 */
       this.setDrawTarget()
+
+      /* 设置两个画布分别使用的缩放比例 */
+      this.setPropotions()
+
       /* 将播放进度调整到开头 */
       this.changeCurrentTime(0)
+
       if (this.options.autoPlay) {
         this.togglePlay()
       }
+
       this.showPlayerControl()
     }
   }
 
   initHtml() {
-    this.renderImages()
     this.renderCanvas()
     this.renderPlayerControl()
     this.renderCaptions()
@@ -355,6 +377,7 @@ export default class Player {
     this.renderDraft()
   }
 
+  /* 设置加载状态，并根据状态显示或隐藏加载提示 */
   setLoadingTipStatus(status) {
     this.state.isLoading = status
     this.domRefs.loading.style.display = this.state.isLoading ? 'block' : 'none'
@@ -365,19 +388,20 @@ export default class Player {
       images,
       imageContainer,
     } = this.domRefs
+
     /* 挂载图片节点，置于canvas之下 */
     this.domRefs.pages = []
-    /* 在循环中频繁操作 DOM 是很费时的，最好将要添加的 DOM 元素先添加到一个文档片段中，最 */
-    /* 后一次性添加到文档中 */
+
     const fragment = document.createDocumentFragment()
     images.forEach((image) => {
       const section = document.createElement('section')
       section.classList.add('player-image-section')
-      /* 图片撑满画布宽度，高度自适应 */
+
       image.classList.add('player-image')
       section.appendChild(image)
-      this.domRefs.pages.push(section)
+
       fragment.appendChild(section)
+      this.domRefs.pages.push(section)
     })
     imageContainer.appendChild(fragment)
   }
@@ -385,17 +409,19 @@ export default class Player {
   renderCanvas() {
     const canvas = document.createElement('canvas')
     this.domRefs.canvas = canvas
+
     const {
       imageContainer,
     } = this.domRefs
-    /* canvas的宽和高等于底图容器，注意这里需修改canvas的width和height，而非style */
+
     this.setCanvasSize(imageContainer.offsetWidth)
     canvas.classList.add('player-canvas')
+
     imageContainer.appendChild(canvas)
+
     const ctx = canvas.getContext('2d')
     ctx.lineCap = 'round'
     this.state.contexts.push(ctx)
-    this.setPropotions()
   }
 
   renderAudio() {
@@ -412,15 +438,12 @@ export default class Player {
       domRefs: {
         playerContainer,
       },
-      options: {
-        mode,
-      },
       template: {
         playerControl: playerControlTemplate,
       },
     } = this
 
-    const playerControl = Player.renderString(playerContainer, playerControlTemplate)
+    const playerControl = Player.renderStringToNode(playerContainer, playerControlTemplate)
 
     /* 将控制条中点节点添加到domRefs中 */
     this.domRefs.playerControl = playerControl
@@ -434,17 +457,13 @@ export default class Player {
     this.domRefs.progressbar = playerControl.querySelector('.player-progressbar')
     this.domRefs.preview = playerControl.querySelector('.player-preview')
     this.domRefs.progressHandle = playerControl.querySelector('.player-progressbar-handle')
-    if (mode === 'mobile') {
-      this.domRefs.pageFullscreen.style.display = 'none'
-    }
   }
 
   renderCaptions() {
     const {
       playerContainer,
-      playerControl,
     } = this.domRefs
-    const captionsNode = Player.renderString(playerContainer, this.template.captions)
+    const captionsNode = Player.renderStringToNode(playerContainer, this.template.captions)
     if (!this.state.isCaptionsOpen) {
       captionsNode.style.display = 'none'
     }
@@ -452,18 +471,20 @@ export default class Player {
   }
 
   renderDraft() {
-    const draft = Player.renderString(this.domRefs.imageContainer, this.template.draft)
+    const draft = Player.renderStringToNode(this.domRefs.imageContainer, this.template.draft)
+
     const ctx = draft.getContext('2d')
     ctx.lineCap = 'round'
     this.state.contexts.push(ctx)
+
     this.domRefs.draft = draft
+
     this.setDraftSize()
   }
 
   bindEvents() {
     const {
       audio,
-      canvas,
       fullscreen,
       pageFullscreen,
       playState,
@@ -474,17 +495,25 @@ export default class Player {
       captions,
       loadTip,
     } = this.domRefs
+
     this.handlePlayButtonClick = this.handlePlayButtonClick.bind(this)
     this.handleFullscreenClick = this.handleFullscreenClick.bind(this)
     this.handleCaptionsMove = this.handleCaptionsMove.bind(this)
     this.showPlayerControl = this.showPlayerControl.bind(this)
     this.handleCaptionsDown = this.handleCaptionsDown.bind(this)
     this.handleCaptionsUp = this.handleCaptionsUp.bind(this)
-    this.toggleFullscreen = this.toggleFullscreen.bind(this)
-    this.togglePageFullscreen = this.togglePageFullscreen.bind(this)
+    this.handlePageFullscreenClick = this.handlePageFullscreenClick.bind(this)
     this.handleProgressbarOver = this.handleProgressbarOver.bind(this)
     this.handleProgressbarleave = this.handleProgressbarleave.bind(this)
     this.handleSeekMousedown = this.handleSeekMousedown.bind(this)
+    this.handleTimeUpdate = this.handleTimeUpdate.bind(this)
+    this.handleEnded = this.handleEnded.bind(this)
+    this.handleFullscreenChange = this.handleFullscreenChange.bind(this)
+    this.handleCaptionButtonClick = this.handleCaptionButtonClick.bind(this)
+    this.handleProgressbarClick = this.handleProgressbarClick.bind(this)
+    this.handleRotateScreen = this.handleRotateScreen.bind(this)
+    this.handleWindowResize = this.handleWindowResize.bind(this)
+
     /* 添加PC端事件 */
     if (this.options.mode === 'desktop') {
       playerControl.addEventListener('mouseenter', this.showPlayerControl)
@@ -492,49 +521,67 @@ export default class Player {
       loadTip.addEventListener('mouseenter', this.showPlayerControl)
       loadTip.addEventListener('mousemove', this.showPlayerControl)
       loadTip.addEventListener('click', this.handlePlayButtonClick)
-      fullscreen.addEventListener('click', this.toggleFullscreen)
-      pageFullscreen.addEventListener('click', this.togglePageFullscreen)
+      pageFullscreen.addEventListener('click', this.handlePageFullscreenClick)
       progressbarWrapper.addEventListener('mouseover', this.handleProgressbarOver)
       progressbarWrapper.addEventListener('mouseleave', this.handleProgressbarleave)
       progressbarWrapper.addEventListener('mousemove', this.handleProgressbarOver)
       progressHandle.addEventListener('mousedown', this.handleSeekMousedown)
       captions.addEventListener('mousedown', this.handleCaptionsDown)
     }
+
     /* 添加公共事件 */
-    audio.addEventListener('timeupdate', this.handleTimeUpdate.bind(this))
-    audio.addEventListener('ended', this.handleEnded.bind(this))
+    audio.addEventListener('timeupdate', this.handleTimeUpdate)
+    audio.addEventListener('ended', this.handleEnded)
+
     playState.addEventListener('click', this.handlePlayButtonClick)
-    fscreen.addEventListener('fullscreenchange', this.handleFullscreenChange.bind(this))
-    toggleCaptionsButton.addEventListener('click', this.toggleCaptions.bind(this))
-    progressbarWrapper.addEventListener('click', this.handleProgressbarClick.bind(this))
-    window.addEventListener('orientationchange', this.handleRotateScreen.bind(this))
-    window.addEventListener('resize', this.handleWindowResize.bind(this))
+    fscreen.addEventListener('fullscreenchange', this.handleFullscreenChange)
+    fullscreen.addEventListener('click', this.handleFullscreenClick)
+    toggleCaptionsButton.addEventListener('click', this.handleCaptionButtonClick)
+    progressbarWrapper.addEventListener('click', this.handleProgressbarClick)
+    window.addEventListener('orientationchange', this.handleRotateScreen)
+    window.addEventListener('resize', this.handleWindowResize)
+
     /* 添加移动端事件 */
-    this.handlePlayerTap = this.handlePlayerTap.bind(this)
-    this.handleProgressPanStart = this.handleProgressPanStart.bind(this)
-    this.handleProgressPanMove = this.handleProgressPanMove.bind(this)
-    this.handleCaptionsPress = this.handleCaptionsPress.bind(this)
-    this.handleCaptionsPressUp = this.handleCaptionsPressUp.bind(this)
-    this.handleCaptionsPanMove = this.handleCaptionsPanMove.bind(this)
-    const handleHammer = new Hammer(progressHandle)
-    handleHammer.on('panstart', this.handleProgressPanStart)
-    handleHammer.on('panleft panright', this.handleProgressPanMove)
-    const captionsHammer = new Hammer(captions)
-    captionsHammer.get('pan').set({
-      direction: Hammer.DIRECTION_ALL,
-    })
-    captionsHammer.get('press').set({
-      time: 500,
-    })
-    captionsHammer.on('press', this.handleCaptionsPress)
-    captionsHammer.on('panleft panright panup pandown', this.handleCaptionsPanMove)
-    captionsHammer.on('panend', this.handleCaptionsPressUp)
-    const fullscreenHammer = new Hammer(fullscreen)
-    fullscreenHammer.on('tap', this.toggleFullscreen)
-    const loadTipHammer = new Hammer(loadTip)
-    loadTipHammer.on('tap', this.handlePlayerTap)
-    loadTipHammer.on('panstart', this.handleProgressPanStart)
-    loadTipHammer.on('panleft panright', this.handleProgressPanMove)
+    if (this.options.mode === 'mobile') {
+      this.handlePlayerTap = this.handlePlayerTap.bind(this)
+      this.handleProgressPanStart = this.handleProgressPanStart.bind(this)
+      this.handleProgressPanMove = this.handleProgressPanMove.bind(this)
+      this.handleCaptionsPress = this.handleCaptionsPress.bind(this)
+      this.handleCaptionsPressUp = this.handleCaptionsPressUp.bind(this)
+      this.handleCaptionsPanMove = this.handleCaptionsPanMove.bind(this)
+      this.handlePlayerDoubleTap = this.handlePlayerDoubleTap.bind(this)
+
+      const handleHammer = new Hammer(progressHandle)
+      handleHammer.on('panstart', this.handleProgressPanStart)
+      handleHammer.on('panleft panright', this.handleProgressPanMove)
+
+      const captionsHammer = new Hammer(captions)
+      captionsHammer.get('pan').set({
+        direction: Hammer.DIRECTION_ALL,
+      })
+      captionsHammer.get('press').set({
+        time: 500,
+      })
+      captionsHammer.on('press', this.handleCaptionsPress)
+      captionsHammer.on('panleft panright panup pandown', this.handleCaptionsPanMove)
+      captionsHammer.on('panend', this.handleCaptionsPressUp)
+
+      const loadTipHammer = new Hammer.Manager(loadTip)
+      loadTipHammer.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }))
+      loadTipHammer.add(new Hammer.Tap({ event: 'singletap' }))
+      loadTipHammer.get('doubletap').recognizeWith('singletap')
+      loadTipHammer.get('singletap').requireFailure('doubletap')
+      loadTipHammer.on('singletap', this.handlePlayerTap)
+      loadTipHammer.on('doubletap', this.handlePlayerDoubleTap)
+      loadTipHammer.on('panstart', this.handleProgressPanStart)
+      loadTipHammer.on('panleft panright', this.handleProgressPanMove)
+
+      this.state.hammers = {
+        handleHammer,
+        captionsHammer,
+        loadTipHammer,
+      }
+    }
   }
 
   handleCaptionsPress() {
@@ -674,15 +721,7 @@ export default class Player {
     document.removeEventListener('mousemove', this.handleSeekMousemove)
     document.removeEventListener('mouseup', this.handleSeekMouseup)
   }
-  /* 全屏状态时点击控制条之外的部分都会暂停 */
-  handleFullscreenClick(e) {
-    const {
-      playerControl,
-    } = this.domRefs
-    if (playerControl !== e.target && !(playerControl.contains(e.target))) {
-      this.handlePlayButtonClick(e)
-    }
-  }
+
   /* 根据全屏时屏幕尺寸计算播放器需放大到的尺寸 */
   getFullscreenSize() {
     /* 重设播放器的高宽，使之撑满屏幕 */
@@ -769,7 +808,11 @@ export default class Player {
     const {
       propotions,
     } = this.state
+
+    /* 课件画布同录制时的比例，该画布的宽度等于容器宽度 */
     propotions[0] = imageContainer.offsetWidth / windowWidth
+
+    /* 草稿纸画布同录制时的比例，该画布的高度等于容器高度 */
     propotions[1] = imageContainer.offsetHeight / draftHeight
   }
 
@@ -812,7 +855,7 @@ export default class Player {
     captions.style.fontSize = `${this.options.captionFontSize * propotion}px`
   }
 
-  toggleFullscreen() {
+  handleFullscreenClick() {
     const {
       playerContainer,
     } = this.domRefs
@@ -823,7 +866,7 @@ export default class Player {
     }
   }
 
-  togglePageFullscreen() {
+  handlePageFullscreenClick() {
     const {
       playerContainer,
       pageFullscreen,
@@ -847,7 +890,7 @@ export default class Player {
     }
   }
 
-  toggleCaptions() {
+  handleCaptionButtonClick() {
     const {
       isCaptionsOpen,
     } = this.state
@@ -886,6 +929,7 @@ export default class Player {
     canvas.height = Math.max(height, playerContainer.offsetHeight)
   }
 
+  /* 根据此时播放器的大小设置草稿纸的尺寸，注意setPropotions函数需在此之前调用 */
   setDraftSize() {
     const {
       draft,
@@ -964,16 +1008,19 @@ export default class Player {
     const {
       playerControl,
     } = this.domRefs
-    if (this.hidePlayerControl) {
-      window.clearTimeout(this.hidePlayerControl)
+    const {
+      hidePlayerControl,
+    } = this.state
+    if (hidePlayerControl) {
+      window.clearTimeout(hidePlayerControl)
     }
     playerControl.classList.remove('fade-out')
     playerControl.style.opacity = '1'
-    this.hidePlayerControl = window.setTimeout(this.fadeOutPlayerControl.bind(this), 3000)
+    this.state.hidePlayerControl = window.setTimeout(this.fadeOutPlayerControl.bind(this), 3000)
   }
 
   fadeOutPlayerControl() {
-    if (!(this.state.halt)) {
+    if (!(this.state.isHalted)) {
       this.domRefs.playerControl.classList.add('fade-out')
     }
   }
@@ -994,14 +1041,18 @@ export default class Player {
     this.togglePlay()
   }
 
+  handlePlayerDoubleTap() {
+    this.togglePlay()
+  }
+
   togglePlay() {
     const {
       playState,
     } = this.domRefs
-    this[this.state.halt ? 'play' : 'halt']()
-    this.state.halt = !(this.state.halt)
-    playState.title = this.state.halt ? '播放' : '暂停'
-    playState.firstElementChild.className = this.state.halt ? 'fa fa-play' : 'fa fa-pause'
+    this[this.state.isHalted ? 'play' : 'halt']()
+    this.state.isHalted = !(this.state.isHalted)
+    playState.title = this.state.isHalted ? '播放' : '暂停'
+    playState.firstElementChild.className = this.state.isHalted ? 'fa fa-play' : 'fa fa-pause'
     this.showPlayerControl()
   }
 
@@ -1020,7 +1071,7 @@ export default class Player {
   /* 用于缓冲结束时继续播放 */
   continue() {
     this.setLoadingTipStatus(false)
-    if (!this.state.halt) {
+    if (!this.state.isHalted) {
       this.domRefs.audio.play()
     }
   }
@@ -1062,7 +1113,7 @@ export default class Player {
         audio,
       },
       state: {
-        imagesLoaded,
+        isImagesLoaded,
       },
     } = this
     /* 调整音频时间秒 */
@@ -1071,7 +1122,7 @@ export default class Player {
 
     /* 若该时刻的图片还未加载完成，待加载完成再进行动作 */
     const page = this.getPageByTime(time)
-    if (!imagesLoaded[page]) {
+    if (!isImagesLoaded[page]) {
       this.waitPageLoading(page, time)
       return
     }
@@ -1098,7 +1149,7 @@ export default class Player {
     } else {
       this.state.nextActionIndex = -1
     }
-    if (!(this.state.halt)) {
+    if (!(this.state.isHalted)) {
       this.registerNextAction()
       this.registerNextAnimation()
     }
@@ -1469,7 +1520,7 @@ export default class Player {
       return
     }
 
-    if (!this.state.imagesLoaded[targetPage]) {
+    if (!this.state.isImagesLoaded[targetPage]) {
       this.waitPageLoading(targetPage, action.startTime - 1)
       return
     }
@@ -1546,9 +1597,7 @@ export default class Player {
       const action = actions[i]
       if (action.type === 'draft') {
         isdraftOpen = (action.status === 'open')
-        continue
-      }
-      if (isdraftOpen) {
+      } else if (isdraftOpen) {
         res.push(action)
       }
     }
@@ -1739,7 +1788,7 @@ export default class Player {
   }
 
   /* 渲染 string 表示的 HTML 元素并将之插入到第一个参数所指向的元素中，之后返回该元素 */
-  static renderString(parent, string) {
+  static renderStringToNode(parent, string) {
     const elem = document.createElement('div')
     elem.innerHTML = string
     /* 注意调用appenChild会将之从原来的parent节点remove掉,并附加在新parent的最后 */
@@ -1751,11 +1800,89 @@ export default class Player {
     this.state.subtitles = subtitles
   }
 
-  /* 将播放器节点从dom树中移除 */
   unmount() {
     const {
       playerContainer,
+      audio,
+      fullscreen,
+      pageFullscreen,
+      playState,
+      progressbarWrapper,
+      playerControl,
+      progressHandle,
+      toggleCaptionsButton,
+      captions,
+      loadTip,
+      images,
     } = this.domRefs
-    playerContainer.parentNode.removeChild(playerContainer)
+    const {
+      nextAction,
+      animation,
+      hidePlayerControl,
+    } = this.state
+
+    /* 将播放器从dom树中移除 */
+    while (playerContainer.firstChild) {
+      playerContainer.removeChild(playerContainer.firstChild)
+    }
+
+    /* 移除PC端事件 */
+    if (this.options.mode === 'desktop') {
+      playerControl.removeEventListener('mouseenter', this.showPlayerControl)
+      playerControl.removeEventListener('mousemove', this.showPlayerControl)
+      loadTip.removeEventListener('mouseenter', this.showPlayerControl)
+      loadTip.removeEventListener('mousemove', this.showPlayerControl)
+      loadTip.removeEventListener('click', this.handlePlayButtonClick)
+      pageFullscreen.removeEventListener('click', this.handlePageFullscreenClick)
+      progressbarWrapper.removeEventListener('mouseover', this.handleProgressbarOver)
+      progressbarWrapper.removeEventListener('mouseleave', this.handleProgressbarleave)
+      progressbarWrapper.removeEventListener('mousemove', this.handleProgressbarOver)
+      progressHandle.removeEventListener('mousedown', this.handleSeekMousedown)
+      captions.removeEventListener('mousedown', this.handleCaptionsDown)
+    }
+
+    /* 移除公共事件 */
+    audio.removeEventListener('timeupdate', this.handleTimeUpdate)
+    audio.removeEventListener('ended', this.handleEnded)
+    audio.removeEventListener('canplay', this.handleAudioLoaded)
+    audio.removeEventListener('canplaythrough', this.handleAudioLoaded)
+    audio.removeEventListener('loadeddata', this.handleAudioLoaded)
+    audio.removeEventListener('loadedmetadata', this.handleAudioLoaded)
+
+    playState.removeEventListener('click', this.handlePlayButtonClick)
+    fullscreen.removeEventListener('click', this.handleFullscreenClick)
+    fscreen.removeEventListener('fullscreenchange', this.handleFullscreenChange)
+    toggleCaptionsButton.removeEventListener('click', this.handleCaptionButtonClick)
+    progressbarWrapper.removeEventListener('click', this.handleProgressbarClick)
+    window.removeEventListener('orientationchange', this.handleRotateScreen)
+    window.removeEventListener('resize', this.handleWindowResize)
+
+    images[0].removeEventListener('load', this.handleFirstImageLoaded)
+
+    if (this.options.mode === 'mobile') {
+      // 移除移动端事件
+      const {
+        handleHammer,
+        captionsHammer,
+        loadTipHammer,
+      } = this.state.hammers
+
+      handleHammer.destroy()
+      captionsHammer.destroy()
+      loadTipHammer.destroy()
+
+      if (this.options.mode === 'mobile') {
+        const loadButton = loadTip.querySelector('.player-load-button')
+        loadButton.removeEventListener('click', this.fetchSource)
+      }
+    }
+
+    /* 清除使用setTimeout, requestAnimation注册的操作 */
+    /* 无需判断clearTimeout的参数是否为null，因为即使传入错误的值也不会抛出异常 */
+    window.clearTimeout(hidePlayerControl)
+    window.clearTimeout(nextAction)
+    if (animation) {
+      window.cancelAnimationFrame(animation)
+    }
   }
 }
