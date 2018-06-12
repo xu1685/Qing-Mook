@@ -147,7 +147,7 @@ export default {
 
           /* 获取当前文档的作者信息 */
           this.accountId = accountId
-          this.teacherInformation = accounts.find((user) => user.id === this.accountId)
+          this.teacherInformation = this.usersInformation.find((user) => user.id === this.accountId)
 
           /* 获取当前文档信息 */
           this.title = name
@@ -155,12 +155,12 @@ export default {
           /* 获取当前文档的评论和回复信息 */
           this.comments = comments
           this.comments.sort((prev, next) => Date.parse(next.createTime) - Date.parse(prev.createTime)).forEach((comment) => {
-            const userInformation = accounts.find((user) => user.id === comment.accountId)
+            const userInformation = this.usersInformation.find((user) => user.id === comment.accountId)
             comment.userName = userInformation.name || userInformation.nickname
             comment.avatar = userInformation.avatar
             comment.replies.sort((prev, next) => Date.parse(next.createTime) - Date.parse(prev.createTime)).forEach((reply) => {
-              const replyUserInformation = accounts.find((user) => user.id === reply.accountId)
-              const originUserInformation = accounts.find((user) => user.id === reply.sourceId)
+              const replyUserInformation = this.usersInformation.find((user) => user.id === reply.accountId)
+              const originUserInformation = this.usersInformation.find((user) => user.id === reply.sourceId)
               reply.userName = replyUserInformation.name || replyUserInformation.nickname
               reply.avatar = replyUserInformation.avatar
               reply.originUserName = originUserInformation.name || originUserInformation.nickname
@@ -249,6 +249,7 @@ export default {
     },
 
     handleOnAddCommentSuccess(comment) {
+      /* 加入评论者的个人信息 */
       comment.userName = this.myInformation.name || this.myInformation.nickname
       comment.avatar = this.myInformation.avatar
 
@@ -256,10 +257,12 @@ export default {
     },
 
     handleOnAddReplySuccess(comment) {
-      console.log('测试')
+      /* 加入评论者的个人信息 */
+      comment.userName = this.myInformation.name || this.myInformation.nickname
+      comment.avatar = this.myInformation.avatar
 
       comment.replies.forEach((reply) => {
-        /* 补充没有用户信息的回复 */
+        /* 加入回复者和被回复者的个人信息 */
         const replyUserInformation = this.usersInformation.find((user) => user.id === reply.accountId)
         const originUserInformation = this.usersInformation.find((user) => user.id === reply.sourceId)
         reply.userName = replyUserInformation.name || replyUserInformation.nickname
@@ -269,7 +272,7 @@ export default {
       })
 
       const commentIndex = this.comments.findIndex((_comment) => _comment.id === comment.id)
-      this.comments[commentIndex] = comment
+      this.comments.splice(commentIndex, 1, comment)
     },
   },
 }
