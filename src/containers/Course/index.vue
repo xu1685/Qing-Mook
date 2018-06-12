@@ -10,7 +10,7 @@
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
-            backgroundImage: library.isDefault ? `url(${defaultClassCoverSvg})` : (library.cover || defaultClassCoverSvg)
+            backgroundImage: library.isDefault ? `url(${defaultClassCoverPng})` : (library.cover || defaultClassCoverPng)
           }'
         />
       </div>
@@ -74,7 +74,7 @@
 
 import { Indicator } from 'mint-ui'
 import MyHeader from '../MyHeader'
-import defaultClassCoverSvg from '../../assets/defaultClassCover.svg'
+import defaultClassCoverPng from '../../assets/defaultClassCover.png'
 import {
   configWeiXinShare,
   initWeiXinShareConfig,
@@ -90,7 +90,7 @@ export default {
       allDcos: [],
       courseList: [],
       cover: '',
-      defaultClassCoverSvg,
+      defaultClassCoverPng,
       docs: [],
       library: {},
       libraryId: this.$route.params.id,

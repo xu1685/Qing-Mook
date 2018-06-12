@@ -543,7 +543,7 @@ export default {
     /* 点赞 */
     approveHandle(index, i, type) {
       if (index === -1) {
-        index = this.index
+        index = this.activeCommentIndex
       }
       if (type === 1) {
         /* 点赞评论 */

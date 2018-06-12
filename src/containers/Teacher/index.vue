@@ -22,7 +22,7 @@
             <div class='image'>
               <img
                 class='image'
-                :src='library.isDefault ? defaultClassCoverSvg : (library.cover || defaultClassCoverSvg)'
+                :src='library.isDefault ? defaultClassCoverPng : (library.cover || defaultClassCoverPng)'
               />
             </div>
           </div>
@@ -45,7 +45,7 @@ import {
   configWeiXinShare,
   initWeiXinShareConfig,
 } from '../../utils/weixin'
-import defaultClassCoverSvg from '../../assets/defaultClassCover.svg'
+import defaultClassCoverPng from '../../assets/defaultClassCover.png'
 
 export default {
   name: 'Teacher',
@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       accountId: this.$route.params.id,
-      defaultClassCoverSvg,
+      defaultClassCoverPng,
       documentNumberForEachLibrary: {},
       libraries: [],
       teacherInformation: {},
