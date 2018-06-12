@@ -54,8 +54,11 @@
         <Comment
           :docId='docId'
           :comments='comments'
+          :userType='userType'
           @addCommentSuccess='handleOnAddCommentSuccess'
           @addReplySuccess='handleOnAddReplySuccess'
+          @handleOnDeleteComment='handleOnDeleteComment'
+          @handleOnDeleteReply='handleOnDeleteReply'
         />
       </mt-tab-container-item>
       <mt-tab-container-item id='subtitles'>
@@ -72,6 +75,8 @@
 <script>
 
 import '../Player/Player/src/Player.css'
+
+import { Indicator } from 'mint-ui'
 
 import MyHeader from '../MyHeader'
 import Player from '../Player/Player/src/Player.js'
@@ -239,6 +244,23 @@ export default {
       })
   },
 
+  computed: {
+    userType() {
+      if (
+        this.myInformation &&
+        Object.keys(this.myInformation).length
+      ) {
+        /* 当前登录用户是当前文档的上传者 */
+        if (this.myInformation.id === this.teacherInformation) {
+          return 'master'
+        }
+        /* 当前登录用户不是当前文档的上传者，返回当前登录用户的 ID */
+        return this.myInformation.id
+      }
+      return ''
+    },
+  },
+
   methods: {
     handleOnSubtitleChange(event) {
       this.activeSubtitleIndex = event.detail.subtitleIndex
@@ -273,6 +295,52 @@ export default {
 
       const commentIndex = this.comments.findIndex((_comment) => _comment.id === comment.id)
       this.comments.splice(commentIndex, 1, comment)
+    },
+
+    handleOnDeleteComment(commentId) {
+      Indicator.open('删除评论中')
+
+      this
+        .$http
+        .delete(`/comments/${commentId}`)
+        .then(() => {
+          Indicator.close()
+          const commentIndex = this.comments.findIndex((_comment) => _comment.id === commentId)
+          this.comments.splice(commentIndex, 1)
+        })
+        .catch((error) => {
+          Indicator.close()
+
+          if (process.env.NODE_ENV === 'development') {
+            throw error
+          } else {
+            alert('删除评论失败，请稍后重试')
+          }
+        })
+    },
+
+    handleOnDeleteReply(commentId, replyId) {
+      Indicator.open('删除回复中')
+
+      this
+        .$http
+        .delete(`/comments/${commentId}/reply/${replyId}`)
+        .then(() => {
+          Indicator.close()
+
+          const comment = this.comments.find((_comment) => _comment.id === commentId)
+          const replyIndex = comment.replies.findIndex((reply) => reply.id === replyId)
+          comment.replies.splice(replyIndex, 1)
+        })
+        .catch((error) => {
+          Indicator.close()
+
+          if (process.env.NODE_ENV === 'development') {
+            throw error
+          } else {
+            alert('删除回复失败，请稍后重试')
+          }
+        })
     },
   },
 }

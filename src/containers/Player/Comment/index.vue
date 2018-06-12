@@ -70,6 +70,13 @@
       >
         回复({{comment.replies.length}})
       </span>
+      <span
+        class='deleteBtn'
+        v-if='userType === "master" || userType === comment.accountId'
+        @click='handleOnDeleteComment(comment.id)'
+      >
+        删除
+      </span>
     </div>
     <h3 v-if='!commentList.length' style='color: gray'>暂无评论，快来评论吧！</h3>
 
@@ -216,6 +223,13 @@
         >
           回复
         </span>
+        <span
+          class='deleteBtn'
+          v-if='userType === "master" || userType === reply.accountId'
+          @click='handleOnDeleteReply(commentObj.id, reply.id)'
+        >
+          删除
+        </span>
       </div>
     </mt-popup>
 
@@ -296,6 +310,10 @@ export default {
       type: Array,
       required: true,
     },
+    userType: {
+      type: [String, Number],
+      required: true,
+    },
   },
 
   data() {
@@ -372,7 +390,6 @@ export default {
           formData.append('files', file)
         })
 
-        /* 显示上传评论提示 */
         Indicator.open('发表评论中')
 
         this
@@ -383,7 +400,6 @@ export default {
             this.$emit('addCommentSuccess', respones.data)
           })
           .then(() => {
-            /* 关闭上传评论提示 */
             Indicator.close()
             Toast({
               message: '评论成功',
@@ -394,7 +410,6 @@ export default {
             if (process.env.NODE_ENV === 'development') {
               throw error
             } else {
-              /* 关闭上传评论提示 */
               Indicator.close()
               Toast({
                 message: '评论失败',
@@ -594,6 +609,14 @@ export default {
     paddingNumberWithZero(number) {
       return number > 9 ? String(number) : `0${number}`
     },
+
+    handleOnDeleteComment(commentId) {
+      this.$emit('handleOnDeleteComment', commentId)
+    },
+
+    handleOnDeleteReply(commentId, replyId) {
+      this.$emit('handleOnDeleteReply', commentId, replyId)
+    },
   },
 }
 
@@ -717,6 +740,7 @@ export default {
   float: right;
 }
 
+.deleteBtn,
 .replyBtn {
   font-size: 14px;
   padding: 0 8px;
