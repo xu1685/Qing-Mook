@@ -3,9 +3,14 @@ import 'mint-ui/lib/style.css'
 import MintUI from 'mint-ui'
 import Vue from 'vue'
 import axios from 'axios'
+import copy from 'copy-to-clipboard'
 import App from './App'
 import router from './router'
 import { wxOAuth2RedirectUrl } from './utils/constants'
+
+/* 检测当前页面所处的浏览器环境 */
+const browser = require('./utils/browser')
+const $browser = new browser.Browser(window.navigator.userAgent)
 
 let token
 
@@ -29,6 +34,7 @@ if (result) {
 axios.defaults.baseURL = '/api/v1'
 axios.defaults.headers.common.Authorization = token
 
+/* 设置请求拦截器，拦截所有的 401 请求，并在需要授权的时候跳转到微信授权跳转地址 */
 axios.interceptors.response.use(response => response, (error) => {
   const {
     config: {
@@ -45,10 +51,22 @@ axios.interceptors.response.use(response => response, (error) => {
     if (method.toUpperCase() === 'GET' && url.endsWith('/accounts')) {
       console.log('获取用户个人信息失败')
     } else if (window.location.pathname.startsWith('/player/')) {
-      /* 当用户处于播放页面时，跳转之前需要把现在的地址记录下来 */
+      /* 当用户处于播放页面时，跳转之前需要把现在的地址记录下来，等到用户登录以后再跳转回原来的播放页面 */
       const originURL = window.encodeURIComponent(window.location.pathname)
-      /* 带着现在的地址跳转到登录页面，等到用户登录以后再跳转回原来的播放页面 */
-      window.location.assign(wxOAuth2RedirectUrl.replace(/\{\{.*?\}\}/, originURL))
+
+      /* 微信授权跳转地址 */
+      const redirectURL = wxOAuth2RedirectUrl.replace(/\{\{.*?\}\}/, originURL)
+
+      if ($browser.browser === 'Wechat') {
+        /* 如果当前浏览器是微信浏览器，那么就直接跳转到微信授权地址 */
+        window.location.assign(redirectURL)
+      } else {
+        if (copy(redirectURL, {
+          message: '请复制下面的链接地址到微信中打开'
+        })) {
+          alert('请在微信中打开，链接地址已经复制到剪贴板')
+        }
+      }
     }
   }
 
@@ -58,6 +76,9 @@ axios.interceptors.response.use(response => response, (error) => {
 Vue.config.productionTip = process.env.NODE_ENV === 'development'
 
 Vue.prototype.$http = axios
+
+/* 记录当前页面所处浏览器环境 */
+Vue.prototype.$browser = $browser
 
 Vue.use(MintUI)
 

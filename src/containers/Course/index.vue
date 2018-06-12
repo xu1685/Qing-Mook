@@ -80,7 +80,6 @@
 
 import { Indicator } from 'mint-ui'
 import MyHeader from '../MyHeader'
-import Bus from '../../bus.js'
 import defaultClassCover from '../../assets/defaultClassCover.png'
 import {
   configWeiXinShare,

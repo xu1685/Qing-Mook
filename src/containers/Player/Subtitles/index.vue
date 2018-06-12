@@ -24,8 +24,6 @@
 
 <script>
 
-const browser = require('../../../utils/browser')
-
 export default {
   name: 'Subtitles',
 
@@ -46,7 +44,6 @@ export default {
 
   data() {
     return {
-      browser: {},
       count: 0,
       scroll: '',
       text: '',
@@ -54,15 +51,11 @@ export default {
     }
   },
 
-  mounted() {
-    this.browser = new browser.Browser(window.navigator.userAgent)
-  },
-
   updated() {
     if (this.$refs.activeSubtitle && this.$refs.activeSubtitle[0]) {
       const offsetTop = this.$refs.activeSubtitle[0].offsetTop
       const clientHeight = this.$refs.activeSubtitle[0].clientHeight
-      if (this.browser.os === 'iOS') {
+      if (this.$browser.os === 'iOS') {
         document.body.scrollTop = offsetTop - (window.innerHeight - this.subtitleContainerMarginTop - clientHeight) / 2
       } else {
         document.documentElement.scrollTop = offsetTop - (window.innerHeight - this.subtitleContainerMarginTop - clientHeight) / 2

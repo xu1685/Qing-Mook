@@ -78,7 +78,6 @@ import Player from '../Player/Player/src/Player.js'
 import Comment from './Comment'
 import Score from './Score'
 import Subtitles from './Subtitles'
-import Bus from '../../bus.js'
 import {
   configWeiXinShare,
   initWeiXinShareConfig,
