@@ -354,9 +354,9 @@ export default {
         this
           .$http
           .post('/comments/', formData)
-          .then((res) => {
+          .then((respones) => {
             /* 触发提交评论成功事件，更新外部传入的评论数据 */
-            this.$emit('addCommentSuccess', res.data)
+            this.$emit('addCommentSuccess', respones.data)
           }).then(() => {
             /* 关闭上传评论提示 */
             Indicator.close()
