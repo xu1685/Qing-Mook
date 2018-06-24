@@ -4,8 +4,188 @@
 		"selected_items":
 		[
 			[
+				"repl",
+				"replyId"
+			],
+			[
+				"find",
+				"findIndex"
+			],
+			[
+				"com",
+				"commentId〔variable〕"
+			],
+			[
+				"v-",
+				"v-if"
+			],
+			[
+				"user",
+				"userType"
+			],
+			[
+				"req",
+				"required"
+			],
+			[
+				"ac",
+				"activeCommentIndex"
+			],
+			[
+				"commen",
+				"commentObj"
+			],
+			[
+				"a",
+				"alert"
+			],
+			[
+				"na",
+				"navigator〔namespace〕"
+			],
+			[
+				"acc",
+				"accounts"
+			],
+			[
+				"back",
+				"background〔variable〕"
+			],
+			[
+				"for",
+				"forEach"
+			],
+			[
 				"librar",
-				"library"
+				"libraryId"
+			],
+			[
+				"w",
+				"weixin.js"
+			],
+			[
+				"comment",
+				"commentId〔variable〕"
+			],
+			[
+				"accou",
+				"accountId"
+			],
+			[
+				"re",
+				"remainRequestNumber"
+			],
+			[
+				"borde",
+				"border-box\tbox-sizing"
+			],
+			[
+				"box",
+				"box-sizing\tproperty"
+			],
+			[
+				"sub",
+				"subtitle"
+			],
+			[
+				"parse",
+				"parseTime〔variable〕"
+			],
+			[
+				"word",
+				"word-break\tproperty"
+			],
+			[
+				"tran",
+				"transform\tproperty"
+			],
+			[
+				"app",
+				"approve"
+			],
+			[
+				"ali",
+				"align-items\tproperty"
+			],
+			[
+				"comne",
+				"comment"
+			],
+			[
+				"so",
+				"solid"
+			],
+			[
+				"fw",
+				"font-weight\tproperty"
+			],
+			[
+				"marg",
+				"margin-top\tproperty"
+			],
+			[
+				"bo",
+				"border-box\tbox-sizing"
+			],
+			[
+				"bos",
+				"box-sizing\tproperty"
+			],
+			[
+				"comm",
+				"commentList"
+			],
+			[
+				"border",
+				"border-radius\tproperty"
+			],
+			[
+				"teach",
+				"teacherInformation"
+			],
+			[
+				"sc",
+				"score"
+			],
+			[
+				"comme",
+				"comments"
+			],
+			[
+				"typ",
+				"type〔variable〕"
+			],
+			[
+				"P",
+				"Player.js"
+			],
+			[
+				"subtitle",
+				"subtitleIndex"
+			],
+			[
+				"doc",
+				"docId"
+			],
+			[
+				"defa",
+				"defaultAction"
+			],
+			[
+				"de",
+				"defaultAction"
+			],
+			[
+				"font",
+				"font-size\tproperty"
+			],
+			[
+				"s",
+				"style"
+			],
+			[
+				"con",
+				"constants.js"
 			],
 			[
 				"bb",
@@ -32,10 +212,6 @@
 				"padding\tproperty"
 			],
 			[
-				"ali",
-				"align-self\tproperty"
-			],
-			[
 				"bl",
 				"border-left\tproperty"
 			],
@@ -44,20 +220,12 @@
 				"border-bottom\tproperty"
 			],
 			[
-				"P",
-				"PlayerPage.vue"
-			],
-			[
 				"aud",
 				"audio"
 			],
 			[
 				"ima",
 				"images"
-			],
-			[
-				"ac",
-				"actions"
 			],
 			[
 				"nex",
@@ -124,10 +292,6 @@
 				"isShowLoginDialog〔variable〕"
 			],
 			[
-				"typ",
-				"typeof〔keyword〕"
-			],
-			[
 				"subs",
 				"subscribeToken"
 			],
@@ -138,14 +302,6 @@
 			[
 				"isR",
 				"isRequired"
-			],
-			[
-				"acc",
-				"accountId〔variable〕"
-			],
-			[
-				"repl",
-				"reply"
 			],
 			[
 				"handle",
@@ -204,14 +360,6 @@
 				"imageElement"
 			],
 			[
-				"commen",
-				"commentContent"
-			],
-			[
-				"comme",
-				"commentContent"
-			],
-			[
 				"hand",
 				"handleOnAddImagesWithComment"
 			],
@@ -222,10 +370,6 @@
 			[
 				"star",
 				"starStatus〔variable〕"
-			],
-			[
-				"sub",
-				"subtitleHeight〔variable〕"
 			],
 			[
 				"node",
@@ -288,16 +432,8 @@
 				"fromJS"
 			],
 			[
-				"com",
-				"comments"
-			],
-			[
 				"cdm",
 				"cdm\tReact: componentDidMount() {…}"
-			],
-			[
-				"sc",
-				"scu\tReact: shouldComponentUpdate(np, ns) {…}"
 			],
 			[
 				"this",
@@ -306,10 +442,6 @@
 			[
 				"cwu",
 				"cwun\tReact: componentWillUnmount() {…}"
-			],
-			[
-				"doc",
-				"documentElement〔variable〕"
 			],
 			[
 				"par",
@@ -324,10 +456,6 @@
 				"cdup\tReact: componentDidUpdate(pp, ps) {…}"
 			],
 			[
-				"con",
-				"console\tceshi"
-			],
-			[
 				"get",
 				"getReplyContainerSize〔variable〕"
 			],
@@ -338,10 +466,6 @@
 			[
 				"cwup",
 				"cwup\tReact: componentWillUpdate(np, ns) {…}"
-			],
-			[
-				"tran",
-				"transition\tproperty"
 			],
 			[
 				"spa",
@@ -362,10 +486,6 @@
 			[
 				"tal",
 				"ta-l\ttext-align: left;"
-			],
-			[
-				"s",
-				"space-between\tjustify-content"
 			],
 			[
 				"class",
@@ -394,126 +514,6 @@
 			[
 				"mat",
 				"matchs〔variable〕"
-			],
-			[
-				"ma",
-				"matchs"
-			],
-			[
-				"js",
-				"js/"
-			],
-			[
-				"min",
-				"min-height\tproperty"
-			],
-			[
-				"flex",
-				"flex-start\talign-content"
-			],
-			[
-				"rg",
-				"rgba()\tbackground-color"
-			],
-			[
-				"d",
-				"dotted\tborder-left"
-			],
-			[
-				"wb",
-				"word-break\tproperty"
-			],
-			[
-				"mw",
-				"min-width\tproperty"
-			],
-			[
-				"cdu",
-				"cdup\tReact: componentDidUpdate(pp, ps) {…}"
-			],
-			[
-				"isHas",
-				"isHasMountPlayer"
-			],
-			[
-				"play",
-				"playerSrc"
-			],
-			[
-				"imm",
-				"immutableObjectEmpty〔variable〕"
-			],
-			[
-				"clea",
-				"clearTimeout〔function〕"
-			],
-			[
-				"upload",
-				"uploadStatus"
-			],
-			[
-				"cd",
-				"cdup\tReact: componentDidUpdate(pp, ps) {…}"
-			],
-			[
-				"fun",
-				"function〔keyword〕"
-			],
-			[
-				"docuem",
-				"documents〔variable〕"
-			],
-			[
-				"docu",
-				"documents"
-			],
-			[
-				"comment",
-				"commentPictureFile"
-			],
-			[
-				"lib",
-				"libraries"
-			],
-			[
-				"cwr",
-				"cwr\tReact: componentWillReceiveProps(np) {…}"
-			],
-			[
-				"accou",
-				"accountIdOfComment"
-			],
-			[
-				"coomen",
-				"commentContent"
-			],
-			[
-				"spac",
-				"space-between"
-			],
-			[
-				"comm",
-				"commentContent"
-			],
-			[
-				"dele",
-				"deleteAll"
-			],
-			[
-				"sele",
-				"selectedLibraries"
-			],
-			[
-				"onl",
-				"onlyDeleteLibrary"
-			],
-			[
-				"li",
-				"libraries"
-			],
-			[
-				"F",
-				"FlatButton"
 			]
 		]
 	},
@@ -548,20 +548,32 @@
 		"selected_items":
 		[
 			[
-				"sublime",
-				"Preferences: SublimeLinter Settings"
+				"ssvu",
+				"Set Syntax: Vue Component"
+			],
+			[
+				"sshtml",
+				"Set Syntax: HTML"
+			],
+			[
+				"sscss",
+				"Set Syntax: SCSS"
+			],
+			[
+				"sublimelint",
+				"SublimeLinter: Reload SublimeLinter and its Plugins"
 			],
 			[
 				"sublimelinter",
+				"SublimeLinter: Reload SublimeLinter and its Plugins"
+			],
+			[
+				"sublime",
 				"Preferences: SublimeLinter Settings"
 			],
 			[
 				"pcl",
 				"Package Control: List Packages"
-			],
-			[
-				"sshtml",
-				"Set Syntax: HTML"
 			],
 			[
 				"ssjv",
@@ -644,7 +656,7 @@
 	},
 	"console":
 	{
-		"height": 181.0,
+		"height": 751.0,
 		"history":
 		[
 			"import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d39e33b79698005270310898eea76'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
@@ -662,31 +674,55 @@
 	"expanded_folders":
 	[
 		"/Users/kang/Documents/Project/QingMOOC-Mobile",
-		"/Users/kang/Documents/Project/QingMOOC-Mobile/build",
-		"/Users/kang/Documents/Project/QingMOOC-Mobile/src"
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/containers",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/containers/Player",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/containers/Player/Comment"
 	],
 	"file_history":
 	[
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/build/index.ejs",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/containers/Player/Comment/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/containers/Player/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/containers/Player/Score/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/containers/Course/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/containers/Teacher/index.vue",
+		"/Users/kang/Downloads/代码更新部署.txt",
+		"/Users/kang/Downloads/browser-master/index.html",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/containers/Player/Subtitles/index.vue",
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/main.js",
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/package.json",
-		"/Users/kang/Downloads/代码更新部署.txt",
-		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Teacher/index.vue",
+		"/Users/kang/Downloads/browser-master/README.md",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/utils/weixin.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/router/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/weixin.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/index.html",
+		"/Users/kang/Downloads/FE-Study-master/caixiaozhi/Blog2/index.php",
+		"/Users/kang/Documents/Project/Documents/助教事务/人工智能方向选题.md",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/containers/MyHeader/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/containers/Player/Player/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/utils/constants.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/.gitignore",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/utils/utils.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/containers/Login/index.vue",
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Course/index.vue",
-		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Player/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/config/index.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/.eslintrc.js",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/.eslint",
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Player/Subtitles/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/App.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/QingMOOC-Mobile.sublime-project",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/README.md",
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/build/index.ejs",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Teacher/index.vue",
+		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Player/index.vue",
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Player/Player/index.vue",
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Player/Words/index.vue",
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Player/Score/index.vue",
-		"/Users/kang/Documents/Project/QingMOOC-Mobile/config/index.js",
-		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/App.vue",
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Header/index.vue",
-		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/router/index.js",
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/Player/Comment/index.vue",
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/.eslintrc",
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/playerPage/PlayerPage.vue",
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/teacher/teacher.vue",
-		"/Users/kang/Documents/Project/QingMOOC-Mobile/index.html",
 		"/Users/kang/.eslintrc",
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/bus.js",
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/build/build.js",
@@ -701,7 +737,6 @@
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/playerPage/score/score.vue",
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/playerPage/words/words.vue",
 		"/Users/kang/Documents/Project/QingMOOC-Mobile/src/components/header/Header.vue",
-		"/Users/kang/Documents/Project/QingMOOC-Mobile/QingMOOC-Mobile.sublime-project",
 		"/Users/kang/Documents/Project/Player/index.js",
 		"/Users/kang/Documents/Project/Player/src/Player.css",
 		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/Player/src/Player.js",
@@ -773,28 +808,7 @@
 		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/utils/schemas.js",
 		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/utils/selectors.js",
 		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/reducers/users.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/reducers/replies.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Class/selector.js",
-		"/Users/kang/Downloads/用户信息.md",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Class/styles.scss",
-		"/Users/kang/Library/Application Support/Sublime Text 3/Packages/User/Default (OSX).sublime-keymap",
-		"/Users/kang/Library/Application Support/Sublime Text 3/Packages/DashDoc/DashDoc.sublime-settings",
-		"/Users/kang/Library/Application Support/Sublime Text 3/Packages/User/DashDoc.sublime-settings",
-		"/Users/kang/Library/Application Support/Sublime Text 3/Packages/DashDoc/Default (OSX).sublime-keymap",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/Subtitles/index.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Player/Subtitle/index.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/Document/selector.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/components/ImageCropper/styles.scss",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/User/AccountInformation/styles.scss",
-		"/Users/kang/Downloads/控制脚本文件3.json",
-		"/Users/kang/Downloads/subtitles.js",
-		"/Users/kang/Downloads/7c382427046dc7aae9727ce24c78e071.json",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/User/sources.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/containers/User/actions.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-imported-component/dist/Component.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-imported-component/dist/index.js",
-		"/Users/kang/Documents/Project/QingMOOC-Frontend/node_modules/react-imported-component/package.json",
-		"/Users/kang/Documents/Project/weizhujiao-frontend/src/components/ClassroomInfoEditCard/ClassroomInfoEditCardCore.js"
+		"/Users/kang/Documents/Project/QingMOOC-Frontend/app/reducers/replies.js"
 	],
 	"find":
 	{
@@ -815,134 +829,134 @@
 		"case_sensitive": true,
 		"find_history":
 		[
-			"location",
-			"\\$http",
-			"courseId",
-			"courseIndex",
-			"message",
-			"libraries",
-			"course",
-			"backgroundImage",
-			"content",
-			"container",
-			"\"",
-			"title",
-			"words",
-			"playerWrapper",
-			";$",
-			"(?<=\\S)\\{$",
-			"(?<=\\s)\\{$",
-			"(?=\\s)\\{$",
-			"\\$http",
-			"fixed",
-			"Subtitles",
-			"Words",
-			"watch",
-			"MockData",
-			"timeArr",
-			"startArr",
-			"textlines",
-			"timeArr",
-			"formatDuring",
-			"startArr",
-			"textlines",
-			"MockData",
-			"Words",
-			"om '../Header'\nimport Comment from './Comment'\nimport Player from './Player'\nimport Score from './Score'\nimport Subtitles from './Subtitl",
-			"Words",
-			"BScroll",
-			"(?<=\\S)\\{$",
-			"(?<=\\b)\\{$",
-			"\\{",
-			"{",
-			"\\{",
-			"\\{$",
-			"(?=\\b)\\{$",
-			"(?<=\\b)\\{$",
-			"(?<=\\s)\\{$",
-			"(?=\\s)\\{$",
-			"\"",
-			"subtitles",
-			"commentAndSubtitleToolBar",
-			"isfixed",
-			"block",
-			"documentName",
-			"player",
-			"header",
-			"none",
-			"block",
-			"isFixed",
-			"isfixed",
-			"isShowSubtitles",
-			"message",
-			"isShowSubtitles",
-			"isnone",
-			"commentBar",
-			"wordsBar",
-			"isnone",
-			"Height",
-			"screenWidth",
-			"screenHeight",
-			"screenWidth",
-			"screenHeight",
-			"screenWidth",
-			"that",
-			"screenWidth",
-			"isnone",
-			"Height",
-			"block",
-			"Height",
-			"change",
-			"pageInit",
-			"myname",
-			"subtitle",
-			"$emit",
-			"Bus",
-			"myPlayer",
-			"myplayer",
-			"ge',\n      'docId',",
-			";$",
-			"(\\S)\\{$",
-			"(\\S)\\{￥",
-			"(\\S)\\{",
-			"(?=\\b)\\{$",
-			"message",
-			"selected",
-			"barfix",
-			"commentAndSubtitleToolBar",
-			"bar",
-			"pagePath",
-			"data",
-			"course",
-			"\\{$",
-			";$",
-			"docId",
-			"smallImg",
-			"path",
-			"courseIndex",
-			"back",
-			"left",
-			"slot",
-			"path",
-			"pagePath",
-			";$",
-			"fixed",
-			"wordsBar",
-			"MyHeader",
-			"selected",
-			"commentBar",
-			"wordsBar",
-			"mt-tab-container",
-			"myname",
-			"<",
-			"myname",
-			"course",
-			"TabItem",
-			"Bus",
+			"handleOnDeleteReply",
 			"Indicator",
+			"Toast",
+			"handleOnDeleteComment",
+			"handleOnDeleteReply",
+			"commentId",
+			"handleOnDeleteComment",
+			"handleOnDelete",
+			"userType",
+			"teacherInformation",
+			"myInformation",
+			"replyBtn",
+			"this\\.index",
+			"approveHandle",
+			"defaultClassCoverPng",
+			"defaultClassCoverSvg",
+			"Object.keys",
+			"prev",
+			"createObjectURL",
+			"replyVisible",
+			"removeUploadImages",
+			"files",
+			"URL.",
+			"uploadFile",
+			"files",
+			"handleInputChange",
+			"inputImage",
+			"clickUploadImageInputForReply",
+			"confirmReply",
+			"confirmUploadImages",
+			"uploadFile",
+			"removeUploadImages",
+			"isShowUploadImageIcon",
+			"isShowUploadImagesDialog",
+			"preview0",
+			"isShowUploadImageIcon",
+			"rrVisible",
+			"replyVisible",
+			"paddingNumberWithZero",
+			"transformToDataUrl",
+			"handleInputChange",
+			"avatar",
+			"commentObj",
+			"accounts",
+			"usersInformation",
+			"commentIndex",
+			"Indicator",
+			"handleOnAddReplySuccess",
+			"addReplySuccess",
+			"commentList",
+			"comments",
+			"commentIndex",
+			"handleOnAddReplySuccess",
+			"Indicator",
+			"replyFormData",
+			"removeUploadImages",
+			"replyText",
+			"replyFormData",
+			"blackMask",
+			"defaultClassCover",
+			"coursetitle",
+			"message",
+			"black",
+			"photo",
+			"message",
+			"commentObj",
+			"handleOnReply",
+			"index",
+			"replyType",
+			"activeCommentIndex",
+			"activeReplyIndex",
+			"replyIndex",
+			"0",
+			"handleOnReply",
+			"activeCommentIndex",
+			"commentObj",
+			"handleOnReply",
+			"commentObj",
+			"commentList",
+			"commentId",
+			"      ",
+			"change",
+			"approveList",
+			"approveL",
+			"approveCount",
+			"res",
+			"browser",
+			"wxOAuth2RedirectUrl",
+			"Bus",
+			"bus",
+			"browser",
+			"iOS",
+			"configWeiXinShare",
+			"margin",
+			"msg",
+			";",
+			"this",
+			"star5",
+			"score",
+			"coursePage",
+			"black",
+			"link",
+			" aria-hidden='true'",
+			"sendIndex",
+			"Bus\\.",
+			"sendIndex",
+			"black",
 			"\"",
-			"PlayerPage",
-			"header"
+			"courseList",
+			"createTime",
+			"allDcos",
+			"true",
+			"handleOnSetSubtitleContainerMarginTop",
+			"initWeiXin",
+			"initWeiXinShareConfig",
+			"false",
+			"configWeiXinShare",
+			"pageInite",
+			"configShareQQ",
+			"作者",
+			"avatar",
+			"initWeiXinShareConfig",
+			"initWeiXin",
+			"！！！",
+			"image",
+			"weixin",
+			"handleOnReply",
+			"replyVisible"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -953,6 +967,8 @@
 			"",
 			" {",
 			"",
+			" {",
+			"",
 			"$1 {",
 			"  {",
 			" {"
@@ -960,7 +976,7 @@
 		"reverse": false,
 		"show_context": true,
 		"use_buffer2": true,
-		"whole_word": false,
+		"whole_word": true,
 		"wrap": true
 	},
 	"groups":
@@ -1004,7 +1020,7 @@
 	"menu_visible": true,
 	"output.SublimeLinter":
 	{
-		"height": 134.0
+		"height": 605.0
 	},
 	"output.SublimeLinter Messages":
 	{

@@ -7,7 +7,7 @@
         <h3 style='color:#FFFFFF;'>{{teacherInformation.name || teacherInformation.nickname}}</h3>
         <h5 style='color:#C7C7C7;'>{{teacherInformation.introduction}}</h5>
       </div>
-      <img class='backgroundImage' :src='teacherInformation.avatar' />
+      <img class='backgroundImage' :src='teacherInformation.cover || defaultTeacherCover' />
     </div>
     <div class='courseList'>
       <div
@@ -46,6 +46,7 @@ import {
   initWeiXinShareConfig,
 } from '../../utils/weixin'
 import defaultClassCoverPng from '../../assets/defaultClassCover.png'
+import defaultTeacherCover from '../../assets/bigLogo.png'
 
 export default {
   name: 'Teacher',
@@ -54,6 +55,7 @@ export default {
     return {
       accountId: this.$route.params.id,
       defaultClassCoverPng,
+      defaultTeacherCover,
       documentNumberForEachLibrary: {},
       libraries: [],
       teacherInformation: {},
