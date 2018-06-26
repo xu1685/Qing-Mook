@@ -566,7 +566,11 @@ export default class Player {
       captionsHammer.on('panleft panright panup pandown', this.handleCaptionsPanMove)
       captionsHammer.on('panend', this.handleCaptionsPressUp)
 
-      const loadTipHammer = new Hammer.Manager(loadTip)
+      const loadTipHammer = new Hammer.Manager(loadTip, {
+        recognizers: [
+          [Hammer.Pan],
+        ],
+      })
       loadTipHammer.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }))
       loadTipHammer.add(new Hammer.Tap({ event: 'singletap' }))
       loadTipHammer.get('doubletap').recognizeWith('singletap')
@@ -1778,6 +1782,7 @@ export default class Player {
       }
     }
     const event = new CustomEvent('subtitlechange', {
+      bubbles: true,
       detail: {
         hasSubtitle,
         subtitleIndex: res,
