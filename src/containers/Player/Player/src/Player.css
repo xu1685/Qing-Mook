@@ -196,7 +196,7 @@
   border: 1px solid white;
   border-radius: 5px;
   outline: none;
-  background: transparent;
+  background:rgb(70, 69, 69);
 }
 
 .player-load-button > i {
