@@ -348,15 +348,15 @@ export default class Player {
       /* 移除加载提示 */
       this.setLoadingTipStatus(false)
 
+      /* 设置两个画布分别使用的缩放比例 */
+      this.setPropotions()
+
       /* 图片和语音都已经加载完成，可以初始化页面的 HTML 结构了 */
       this.initHtml()
       this.bindEvents()
 
       /* 选择使用的画布 */
       this.setDrawTarget()
-
-      /* 设置两个画布分别使用的缩放比例 */
-      this.setPropotions()
 
       /* 将播放进度调整到开头 */
       this.changeCurrentTime(0)
