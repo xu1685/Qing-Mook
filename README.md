@@ -19,11 +19,5 @@ npm run build
 npm run build --report
 ```
 
-使用说明：
-该项目注册为移动端微信注册，pc没有注册通道
-可以使用下面账号查看：
-账号： 842458343@qq.com
-密码： Circus..
-
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
