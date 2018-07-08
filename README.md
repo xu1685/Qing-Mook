@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 # qing-mook
 
 > A Vue.js project
@@ -20,10 +19,11 @@ npm run build
 npm run build --report
 ```
 
+使用说明：
+该项目注册为移动端微信注册，pc没有注册通道
+可以使用下面账号查看：
+账号： 842458343@qq.com
+密码： Circus..
+
+
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
-=======
-#QingMOOC-Mobile
->>>>>>> 258ef18079ccd14dc6425475b5abc66460b1f15c
-=======
-# Qing-Mook
->>>>>>> 651262ff20c532a65990910015d8b667329c320e
