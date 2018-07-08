@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 
 # qing-mook
+=======
+# QingMOOC-Mobile
+>>>>>>> 0c485eb9ed9f0e2f43986df68de4e29cc7dd1a44
 
 > A Vue.js project
 

@@ -1,8 +1,9 @@
 .DS_Store
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+/.vscode/
+node_modules
+npm-debug.log
+package-lock.json
+QingMOOC-Mobile.sublime-workspace
 
 # Editor directories and files
 .idea

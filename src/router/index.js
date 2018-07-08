@@ -1,39 +1,24 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import PlayerPage from '../components/playerPage/PlayerPage'
-import Course from '../components/course/Course'
-import Teacher from '../components/teacher/Teacher'
+import Course from '../containers/Course'
+import Player from '../containers/Player'
+import Teacher from '../containers/Teacher'
 
 Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  routes: [
-    {
-      path: '/player/:id',
-      name: 'playerPage',
-      component: PlayerPage
-    },
-    {
-      path: '/player/',
-      name: 'playerPage',
-      component: PlayerPage
-    },
-    {
-      path: '/course/:id',
-      name: 'course',
-      component: Course
-    },
-    {
-      path: '/teacher/',
-      name: 'teacher',
-      component: Teacher
-    },
-    {
-      path: '/',
-      name: 'teacher',
-      component: Teacher
-    }
-
-  ]
+  routes: [{
+    path: '/teacher/:id',
+    name: 'teacher',
+    component: Teacher,
+  }, {
+    path: '/course/:id',
+    name: 'course',
+    component: Course,
+  }, {
+    path: '/player/:id',
+    name: 'player',
+    component: Player,
+  }],
 })

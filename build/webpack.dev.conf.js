@@ -39,14 +39,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       : false,
     publicPath: config.dev.assetsPublicPath,
     proxy: config.dev.proxyTable,
-    // proxy: [
-    //   {
-    //     context: ['/api/'],
-    //     target: 'http://192.168.3.110:3000',//http://192.168.3.110:3000
-    //     changeOrigin: true,
-    //     secure: true
-    //   },
-    // ],
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,

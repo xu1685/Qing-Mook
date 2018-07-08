@@ -1,7 +1,6 @@
 <template>
-  <div id="app">
-
-    <router-view/>
+  <div id='app'>
+    <router-view />
   </div>
 </template>
 
@@ -9,22 +8,20 @@
 
 export default {
   name: 'App',
-  data(){
-    return{
-
-    }
-  }
 }
+
 </script>
 
 <style>
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   width: 100%;
 }
 
-a{ text-decoration:none; }
 </style>
