@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # qing-mook
 
 > A Vue.js project
@@ -23,3 +24,6 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 =======
 #QingMOOC-Mobile
 >>>>>>> 258ef18079ccd14dc6425475b5abc66460b1f15c
+=======
+# Qing-Mook
+>>>>>>> 651262ff20c532a65990910015d8b667329c320e
